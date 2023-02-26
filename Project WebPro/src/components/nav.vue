@@ -1,59 +1,40 @@
-<template lang="">
-        <div style="background-color: black;">
-        <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5  dark:bg-white">
-            <div class="container flex flex-wrap items-center justify-between mx-auto">
-              <a href="#" class="flex items-center">
-                <img src="https://freepngimg.com/thumb/book/6-2-book-png-7.png" class="h-6 mr-1 sm:h-9" alt="logo" />
-                <span class="text-lg self-center text-xl font-semibold whitespace-nowrap dark:text-red-700">RomeBoss
-                  BookStore</span>
-              </a>
-              <button data-collapse-toggle="navbar-default" type="button"
-                class="inline-flex items-center pl-3 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                aria-controls="navbar-default" aria-expanded="false">
-                <span class="sr-only">Open main menu</span>
-                <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clip-rule="evenodd"></path>
-                </svg>
-              </button>
-              <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-                <ul
-                  class="flex flex-col p-4 mt-4  rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
-                  <li>
-                    <a href="#"
-                      class=" text-lg block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-red-500 md:p-0 dark:text-white"
-                      aria-current="page">Rome</a>
-                  </li>
-                  <li>
-                    <a href="#"
-                      class=" text-lg block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-red-500 md:p-0 dark:text-gray-400 md:dark:hover:md:text-red-500 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">Genre</a>
-                  </li>
-                  <li>
-                    <a href="#"
-                      class="text-lg block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-red-500 md:p-0 dark:text-gray-400 md:dark:hover:md:text-red-500 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">Store
-                      Locator</a>
-                  </li>
-                  <li>
-                    <a href="#"
-                      class="text-lg block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-red-500 md:p-0 dark:text-gray-400 md:dark:hover:md:text-red-500 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">Login</a>
-                  </li>
-                  <!-- <li>
-                    <a href="#" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-red-500 md:p-0 dark:text-gray-400 md:dark:hover:md:text-red-500 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">Contact</a>
-                  </li> -->
-                </ul>
-              </div>
-            </div>
-          </nav>
+<script setup>
+import { ref } from 'vue'
 
-    </div>
-</template>
-<script>
-export default {
+defineProps({
+  msg: String,
+})
 
-}
+const count = ref(0)
 </script>
-<style lang="">
 
+<template>
+  <h1>{{ msg }}</h1>
+
+  <div class="card">
+    <button type="button" @click="count++">count is {{ count }}</button>
+    <p>
+      Edit
+      <code>components/HelloWorld.vue</code> to test HMR
+    </p>
+  </div>
+
+  <p>
+    Check out
+    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
+      >create-vue</a
+    >, the official Vue + Vite starter
+  </p>
+  <p>
+    Install
+    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
+    in your IDE for a better DX
+  </p>
+  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+</template>
+
+<style scoped>
+  .read-the-docs {
+    color: #888;
+  }
 </style>

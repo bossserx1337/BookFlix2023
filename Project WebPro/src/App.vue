@@ -5,7 +5,7 @@ import nav from './components/nav.vue'
 
 <template>
   <div>
-    <nav />
+    <nav></nav>
     <HelloWorld msg="Vite + Vue" />
   </div>
 </template>
