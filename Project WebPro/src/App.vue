@@ -1,8 +1,8 @@
 <template>
-  <div class="">
+  <div class="bg-black">
     <Nav></Nav>
-    <div>
-      หนังสือยอดฮิต
+    <div class="pl-5 font-bold text-white font-mono">
+      Popular on Bookflix
     </div>
     <ListBook />
     <div>
