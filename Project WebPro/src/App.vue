@@ -1,26 +1,29 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import nav from './components/nav.vue'
-</script>
-
 <template>
-  <div>
-    <nav></nav>
-    <HelloWorld msg="Vite + Vue" />
+  <div class="">
+    <Nav></Nav>
+    <!-- <ListBook /> -->
+    <Genre />
   </div>
 </template>
 
+
+<script>
+import Nav from './components/Nav.vue'
+import ListBook from './components/ListBook.vue'
+import Genre from './components/Genre.vue'
+export default {
+  name: 'App',
+  components: {
+    Nav,
+    ListBook,
+    Genre
+
+  },
+  computed: {
+    // ...mapGetters(['getAuthUser'])
+  },
+}
+</script>
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
