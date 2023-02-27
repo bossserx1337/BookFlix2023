@@ -1,8 +1,20 @@
 <template>
   <div class="">
     <Nav></Nav>
-    <!-- <ListBook /> -->
-    <Genre />
+    <div>
+      หนังสือยอดฮิต
+    </div>
+    <ListBook />
+    <div>
+      หนังสือมังงะ
+    </div>
+    <ListBook />
+    <div>
+      หนังสือนิยาย
+    </div>
+    <ListBook />
+
+    <!-- <Genre /> -->
   </div>
 </template>
 
