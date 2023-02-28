@@ -37,15 +37,11 @@
             <a href="#"
               class="text-lg block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-orange-300 md:p-0 dark:text-dark md:dark:hover:md:text-orange-300 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">My Favorite</a>
           </li>
-          <!-- <li>
-            <a href="#"
-              class="text-lg block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-orange-300 md:p-0 dark:text-dark md:dark:hover:md:text-orange-300 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">Login</a>
-          </li> -->
+          <li>
+            <router-link to="/sign"
+              class="text-lg block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:md:text-orange-300 md:p-0 dark:text-dark md:dark:hover:md:text-orange-300 dark:hover:bg-gray-700 dark:hover:md:text-red-500 md:dark:hover:bg-transparent">My Favorite</router-link>
+          </li>
 
-          <!-- <a href="#" class="flex items-center">
-        <img src="https://freepngimg.com/thumb/book/6-2-book-png-7.png" class="h-6 mr-1 sm:h-9" alt="logo" />
-        <span class="text-lg self-center font-semibold whitespace-nowrap dark:text-dark">BOOKFLIX</span>
-      </a> -->
         </ul>
 
       </div>
@@ -55,7 +51,7 @@
 
 <script>
 export default {
-  
+
 }
 </script>
 
