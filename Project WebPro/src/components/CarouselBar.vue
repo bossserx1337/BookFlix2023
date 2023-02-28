@@ -1,67 +1,45 @@
 <template>
-  <div id="animation-carousel" class="relative" data-carousel="static">
-    <!-- Carousel wrapper -->
-    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-      <!-- Item 1 -->
-      <div class="hidden duration-200 ease-linear" data-carousel-item>
-        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
-          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators m-3">
+      <button type="button" style="padding:3px;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+        class="active btn btn-light ml-2" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" style="padding:3px;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        class="btn btn-light ml-2" aria-label="Slide 2"></button>
+      <button type="button" style="padding:3px;" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+        class="btn btn-light ml-2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active" style="max-height: 500px;" data-bs-interval="10000">
+        <img src="https://www.phoenixnext.com/pub/media/banner/tmp/_LN_Tokidoki_Russia_Vol.4.5_EC_4__1.jpg" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+        </div>
       </div>
-      <!-- Item 2 -->
-      <div class="hidden duration-200 ease-linear" data-carousel-item>
-        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
-          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      <div class="carousel-item" style="max-height: 500px;" data-bs-interval="5000">
+        <img src="https://www.phoenixnext.com/pub/media/brand/tmp/_LN_Spy_KVEC-min_1_.jpg" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+        </div>
       </div>
-      <!-- Item 3 -->
-      <div class="hidden duration-200 ease-linear" data-carousel-item="active">
-        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
-          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-      <!-- Item 4 -->
-      <div class="hidden duration-200 ease-linear" data-carousel-item>
-        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
-          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-      <!-- Item 5 -->
-      <div class="hidden duration-200 ease-linear" data-carousel-item>
-        <img src="https://i.pinimg.com/originals/10/91/94/1091948c6b80b65b9eef8c163f0ae42a.jpg"
-          class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      <div class="carousel-item" style="max-height: 500px;" data-bs-interval="9000">
+        <img src="https://www.phoenixnext.com/pub/media/banner/tmp/_LN_Kanojo_NTR_Vol.2_EC.jpg" class="d-block w-100" alt="...">
+        <div class="carousel-caption d-none d-md-block">
+        </div>
       </div>
     </div>
-    <!-- Slider controls -->
-    <button type="button"
-      class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      data-carousel-prev>
-      <span
-        class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-        <svg aria-hidden="true" class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
-          stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        <span class="sr-only">Previous</span>
-      </span>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
     </button>
-    <button type="button"
-      class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-      data-carousel-next>
-      <span
-        class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-        <svg aria-hidden="true" class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
-          stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
-        <span class="sr-only">Next</span>
-      </span>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
     </button>
-</div></template>
-
+  </div>
+</template>
 <script>
-import books from '../data/book.json'
+
 export default {
-  data() {
-    return {
-      books: books
-    }
-  },
+name: 'EventBar',
 }
 </script>
