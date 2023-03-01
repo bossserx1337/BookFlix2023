@@ -1,9 +1,13 @@
 <template>
-  <h1>Sign</h1>
 </template>
 
 <script>
+import Navbar from '../components/Nav.vue'
 export default {
+  name: 'Sign',
+  components: {
+    Navbar
+  },
 
 }
 </script>
