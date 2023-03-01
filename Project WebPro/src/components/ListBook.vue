@@ -11,7 +11,9 @@
                 <img :src='book.image'>
             </div>
             <div>
-                add Favorite
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" @click="addtofav(book)">
+  favorite
+</button>
             </div>
 
         </div>
@@ -25,13 +27,22 @@ export default {
     data() {
         return {
             books: books,
+            fav : []
         }
     },
     methods: {
+        addtofav(item){
+                if(this.fav.includes(item)){
+                        this.fav[this.fav.indexOf(item)].quantity++
+                    }else{
+                        item.quantity = 1
+                        this.fav.push(item)
 
+            }
+            localStorage.setItem("book", JSON.stringify(this.fav))
     },
 
-}
+}}
 </script>
 
 <style>

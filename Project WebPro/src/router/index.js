@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from "../pages/Home.vue";
 import Sign from "../pages/Sign.vue";
 import Notfound from "../pages/404.vue";
+import Fav from "../pages/Fav.vue";
 const routes = [
     {
         path: '/',
@@ -15,6 +16,11 @@ const routes = [
         path: '/:pathMatch(.*)*',
         component: Notfound
     }
+    ,
+        {
+            path: '/fav',
+        component: Fav
+        }
 ]
 
 

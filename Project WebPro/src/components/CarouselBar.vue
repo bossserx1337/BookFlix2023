@@ -9,8 +9,8 @@
         class="btn btn-light ml-2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
-      <div class="carousel-item active" style="max-height: 500px;" data-bs-interval="10000">
-        <img src="https://www.phoenixnext.com/pub/media/banner/tmp/_LN_Tokidoki_Russia_Vol.4.5_EC_4__1.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-item active" style="max-height: 720px;" data-bs-interval="10000">
+        <img src="https://mcdn.wallpapersafari.com/medium/64/20/L3dsjz.jpg" class="d-block w-100 h-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
         </div>
       </div>
