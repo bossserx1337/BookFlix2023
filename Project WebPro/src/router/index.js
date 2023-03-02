@@ -3,6 +3,7 @@ import Home from "../pages/Home.vue";
 import Sign from "../pages/Sign.vue";
 import Notfound from "../pages/404.vue";
 import Fav from "../pages/Fav.vue";
+import Profile from "../pages/Profile.vue";
 const routes = [
     {
         path: '/',
@@ -20,6 +21,11 @@ const routes = [
         {
             path: '/fav',
         component: Fav
+        }
+        ,
+        {
+            path: '/Profile',
+            component: Profile
         }
 ]
 

@@ -34,9 +34,7 @@
               <MenuButton
                 class=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full"
-                  src="https://scontent.fbkk28-1.fna.fbcdn.net/v/t1.6435-9/119496372_1766919473484620_8619278332967664460_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=dbeb18&_nc_eui2=AeE_1qAIp3SVl0aDB-Jytjh76n16ajSPG5zqfXpqNI8bnOlLMHXe6k6LImULmCEouVYC8j_fbPfnykc97W9ddXPE&_nc_ohc=MFhbHNRokLAAX9dBwEw&tn=dgKvQPOiEsqVmOrq&_nc_ht=scontent.fbkk28-1.fna&oh=00_AfC0xHGYL9Xgr-5I262Xy_0P2ZnFAnv50hOYzgUB3bZrvg&oe=6426EDD1"
-                  alt="" />
+                <img :src='userdata.prof_img' class="h-8 w-8 rounded-full">
               </MenuButton>
             </div>
             <transition enter-active-class="transition ease-out duration-100"
@@ -46,11 +44,11 @@
               <MenuItems
                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <MenuItem v-slot="{ active }">
-                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
+                <a href="/profile" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
                   Profile</a>
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
-                <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+                <a href="/" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" @click="logout()">Sign out</a>
                 </MenuItem>
               </MenuItems>
             </transition>
@@ -72,6 +70,7 @@ export default {
   name: 'Nav',
   data() {
     return {
+      userdata : [],
       navigation: [
         { name: 'Home', href: '/', current: false },
         { name: 'MyFav', href: '/fav', current: false },
@@ -85,7 +84,21 @@ export default {
       return useRoute()
     }
   },
+  methods : {
+    logout(){
+      localStorage.removeItem('userdata');
+      window.location.href = "/sign"
+    }
+  },
+  created(){
+              this.userdata=  JSON.parse(localStorage.getItem("userdata"))
+
+
+          }
+
+
 }
+
 </script>
 <style>
   .router-link-active{
