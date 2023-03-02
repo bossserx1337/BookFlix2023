@@ -1,5 +1,5 @@
 <template>
-  <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+  <Disclosure as="nav" class="bg-white" v-slot="{ open }">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -13,15 +13,15 @@
         </div>
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex flex-shrink-0 items-center">
-            <img class="block h-8 w-auto lg:hidden" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+            <img class="block h-8 w-auto lg:hidden" src="https://img.genial.ly/5eaaade40a067c22f66426e4/f8c73acc-4e63-4e1e-8f11-3f5f209ff9bd.png"
               alt="Your Company" />
-            <img class="hidden h-8 w-auto lg:block" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+            <img class="hidden h-8 w-auto lg:block" src="https://img.genial.ly/5eaaade40a067c22f66426e4/f8c73acc-4e63-4e1e-8f11-3f5f209ff9bd.png"
               alt="Your Company" />
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <router-link v-for="item in navigation" :key="item.name" :to="item.href"
-                class="text-gray-300 hover:bg-gray-600  hover:text-white , rounded-md px-3 py-2 text-sm font-medium"
+                class="text-black   hover:text-white , rounded-md px-3 py-2 text-md font-medium"
                 aria-current='page'>{{ item.name }}</router-link>
             </div>
           </div>
@@ -32,7 +32,7 @@
           <Menu as="div" class="relative ml-3">
             <div>
               <MenuButton
-                class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                class=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="sr-only">Open user menu</span>
                 <img class="h-8 w-8 rounded-full"
                   src="https://scontent.fbkk28-1.fna.fbcdn.net/v/t1.6435-9/119496372_1766919473484620_8619278332967664460_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=dbeb18&_nc_eui2=AeE_1qAIp3SVl0aDB-Jytjh76n16ajSPG5zqfXpqNI8bnOlLMHXe6k6LImULmCEouVYC8j_fbPfnykc97W9ddXPE&_nc_ohc=MFhbHNRokLAAX9dBwEw&tn=dgKvQPOiEsqVmOrq&_nc_ht=scontent.fbkk28-1.fna&oh=00_AfC0xHGYL9Xgr-5I262Xy_0P2ZnFAnv50hOYzgUB3bZrvg&oe=6426EDD1"
@@ -75,7 +75,7 @@ export default {
       navigation: [
         { name: 'Home', href: '/', current: false },
         { name: 'MyFav', href: '/fav', current: false },
-        { name: 'Sign', href: '/sign', current: false },
+        { name: 'Sign In', href: '/sign', current: false },
       ]
 
     }
@@ -89,7 +89,10 @@ export default {
 </script>
 <style>
   .router-link-active{
-    background-color: #0f172d;
-    color: #ffffff;
+    text-decoration-line: underline;;
+    color: black;
+    text-decoration-color: rgb(248 113 113);
+    text-underline-offset: 8px;
+    text-decoration-thickness: 3px;
   }
 </style>

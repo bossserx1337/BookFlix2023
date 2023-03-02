@@ -5,28 +5,32 @@
 
     <!-- drop down -->
 
-    <label for="genre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Genre</label>
+
+    <label for="genre" class="block mb-2 text-lg font-medium text-gray-900 dark:text-black bg-white">Select Genre</label>
     <select id="genre" v-model="genre"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        class="text-center  bg-amber-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Choose a genre</option>
         <option v-for="(genre, index ) in genrelists" :key="index" :value="genre">{{ genre }}</option>
     </select>
 
 
 
-
     <!-- list Book -->
-    <div class="flex gap-5 flex-row overflow-x-scroll py-3 ">
+
+    <label for="genre" class="block mb-2 text-2xl font-medium text-gray-900 dark:text-black bg-white text-center">New Arrival</label>
+
+    <div class="flex gap-5 flex-row overflow-x-scroll py-6 bg-white ml-40 mr-20">
+
 
         <!-- template for book -->
         <div v-for="(book, index) in books" :key='index' v-show="book.genre.includes(genre.toLowerCase()) || genre == 'Choose a genre'"
-            class="flex basis-1/4 flex-col h-full scroll-smooth shadow-md rounded-md mr-15 cursor-pointer hover:shadow-lg bg-stone-100 ">
+            class="flex basis-48 flex-col h-full scroll-smooth shadow-md  mr-15 cursor-pointer hover:shadow-lg bg-white">
 
-            <div class="h-50 w-full rounded-lg shadow-md items-center justify-center overflow-hidden">
+            <div class="h-50 w-full shadow-md items-center justify-center overflow-hidden">
                 <img :src='book.image'>
             </div>
             <div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full w-full"
+                <button class="bg-slate-900  hover:bg-blue-700 text-white font-bold py-2 px-4  w-full"
                     @click="addtofav(book)">
                     favorite
                 </button>
@@ -63,7 +67,12 @@ export default {
         },
         searchBook() {
 
-        }
+        },
+
+    },
+    created(){
+                this.fav=  JSON.parse(localStorage.getItem("book"))
+
 
     }
 }
