@@ -19,6 +19,7 @@
   },
   created(){
                 this.fav=  JSON.parse(localStorage.getItem("book"))
+                this.userdata=  JSON.parse(localStorage.getItem("userdata"))
     },
     components: {
       Navbar,

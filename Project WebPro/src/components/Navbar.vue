@@ -86,15 +86,15 @@ export default {
   },
   methods : {
     logout(){
-      localStorage.removeItem('userdata');
+      localStorage.removeItem('userdata')
       window.location.href = "/sign"
     }
   },
-  created(){
-              this.userdata=  JSON.parse(localStorage.getItem("userdata"))
+  // created(){
+  //   this.userdata=  JSON.parse(localStorage.getItem("userdata"))
 
 
-          }
+  //         }
 
 
 }
