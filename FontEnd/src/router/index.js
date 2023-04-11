@@ -4,6 +4,7 @@ import Sign from "../pages/Sign.vue";
 import Notfound from "../pages/404.vue";
 import Fav from "../pages/Fav.vue";
 import Profile from "../pages/Profile.vue";
+import Signup from "../pages/Signup.vue";
 const routes = [
     {
         path: '/',
@@ -11,6 +12,7 @@ const routes = [
     },
     {
         path: '/sign',
+        name: 'login',
         component: Sign
     },
     {
@@ -18,15 +20,22 @@ const routes = [
         component: Notfound
     }
     ,
-        {
-            path: '/fav',
+    {
+        path: '/fav',
         component: Fav
-        }
-        ,
-        {
-            path: '/Profile',
-            component: Profile
-        }
+    }
+    ,
+    {
+        path: '/Profile',
+        component: Profile
+    }
+    ,
+    {
+        path: '/Signup',
+        name: 'signup',
+        component: Signup
+    }
+
 ]
 
 
