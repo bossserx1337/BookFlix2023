@@ -14,7 +14,7 @@ router.post('/signup', async (req, res, next) => {
         const [check_email, fields] = await conn.query("SELECT * FROM customer WHERE customer_email=?;", [email]);
 
         if (check_email.length > 0) {
-            // return  res.status(400).send('Email already exists' );
+            return  res.status(400).send('Email already exists' );
         }
         const results = await conn.query("INSERT INTO customer(customer_password, customer_firstN, customer_lastN, customer_email, customer_phone) VALUES(?,?,?,?,?);", [
             password,

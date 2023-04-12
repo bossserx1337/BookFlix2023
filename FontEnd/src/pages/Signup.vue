@@ -129,9 +129,14 @@ export default {
                         Swal.fire({
                             icon: 'success',
                             title: "Congratulations! You've successfully created your account.",
-                            confirmButtonText: `<a href="/sign" ">Go Login</a>`,
+                            confirmButtonText: `Go Login`,
 
-                        })
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // redirect to sign in page
+                                this.$router.push('/sign');
+                            }
+                        });
                     }
 
                 } catch (error) {
