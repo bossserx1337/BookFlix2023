@@ -4,7 +4,7 @@ const pool = require("../config");
 router = express.Router();
 
 router.post('/signup', async (req, res, next) => {
-    const { firstName, lastName, username, email, phoneNumber, password } = req.body;
+    const { firstName, lastName, email, phoneNumber, password } = req.body;
 
     const conn = await pool.getConnection();
     // Begin transaction
@@ -14,13 +14,9 @@ router.post('/signup', async (req, res, next) => {
         const [check_email, fields] = await conn.query("SELECT * FROM customer WHERE customer_email=?;", [email]);
 
         if (check_email.length > 0) {
-            console.log('Email already exists in database');
-
-            return  res.status(400).send('Email already exists' );
+            // return  res.status(400).send('Email already exists' );
         }
-        const results = await conn.query("INSERT INTO customer(customer_id, customer_username, customer_password, customer_firstN, customer_lastN, customer_email, customer_phone) VALUES(?,?,?,?,?,?,?);", [
-            3,
-            username,
+        const results = await conn.query("INSERT INTO customer(customer_password, customer_firstN, customer_lastN, customer_email, customer_phone) VALUES(?,?,?,?,?);", [
             password,
             firstName,
             lastName,
@@ -41,17 +37,30 @@ router.post('/signup', async (req, res, next) => {
 });
 
 
-// router.get("/signin", async function (req, res, next) {
-//     try {
+router.post('/signin', async (req, res) => {
+    const { email, password } = req.body;
 
-//         let [rows, fields] = await pool.query(`SELECT * FROM admin`)
+    const conn = await pool.getConnection();
 
-//         return res.json({
-//             admin: rows
-//         });
-//     } catch (err) {
-//         return next(err)
-//     }
-// });
+    try {
+      const [result, fields] = await conn.query(
+        "SELECT * FROM users WHERE email = ? AND password = ?",
+        [email, password]
+      );
 
+      if (result.length > 0) {
+        // User exists with correct email and password
+        const user = result[0];
+        res.status(200).json({ message: 'Sign in successful', user});
+      } else {
+        // Invalid email or password
+        res.status(401).json({ message: 'Invalid email or password' });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'An error occurred while processing your request' });
+    } finally {
+      conn.release();
+    }
+  });
 exports.router = router;

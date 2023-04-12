@@ -21,15 +21,7 @@
                 <p v-if="formErrors.lastName" class="text-red-500 text-xs italic">{{ formErrors.lastName }}</p>
             </div>
         </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="username">
-                Username
-            </label>
-            <input v-model="form.username" :class="{ 'border-red-500': formErrors.username }"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="username" type="text" placeholder="Username" />
-            <p v-if="formErrors.username" class="text-red-500 text-xs italic">{{ formErrors.username }}</p>
-        </div>
+
         <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="email">
                 Email Address
@@ -82,13 +74,15 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2'
+
+
 export default {
     data() {
         return {
             form: {
                 firstName: '',
                 lastName: '',
-                username: '',
                 email: '',
                 phoneNumber: '',
                 password: '',
@@ -107,9 +101,7 @@ export default {
             if (!this.form.lastName) {
                 errors.lastName = 'Please enter your last name.';
             }
-            if (!this.form.username) {
-                errors.username = 'Please enter a username.';
-            }
+
             if (!this.form.email) {
                 errors.email = 'Please enter your email address.';
             }
@@ -130,13 +122,25 @@ export default {
         async submitForm() {
             if (this.validateForm()) {
                 try {
-                    const response = await axios.post('http://localhost:3000/signup',this.form);
+                    const response = await axios.post('http://localhost:3000/signup', this.form);
+                    console.log(response);
                     if (response.status === 200) {
                         this.formSubmitted = true;
-                        console.log('Form submitted successfully');
+                        Swal.fire({
+                            icon: 'success',
+                            title: "Congratulations! You've successfully created your account.",
+                            confirmButtonText: `<a href="/sign" ">Go Login</a>`,
+
+                        })
                     }
+
                 } catch (error) {
-                    console.log(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: `${error.response.data}`,
+                        footer: 'this email is used already'
+                    })
                 }
             }
         },
