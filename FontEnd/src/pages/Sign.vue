@@ -29,15 +29,17 @@ export default {
   methods: {
     async signIn() {
       try {
-        const response = await axios.post('/signin', {
+        const response = await axios.post('http://localhost:3000/signin', {
           email: this.email,
           password: this.password,
         });
+        this.$store.commit('login', this.email);
         console.log(response.data);
+        console.log();
+        this.$router.push('/package');
         // redirect to another page or show a success message
       } catch (error) {
         console.error(error.response.data);
-        alert(error.response.data);
       }
     },
   },

@@ -5,6 +5,7 @@ import Notfound from "../pages/404.vue";
 import Fav from "../pages/Fav.vue";
 import Profile from "../pages/Profile.vue";
 import Signup from "../pages/Signup.vue";
+import Package from "../pages/Package.vue";
 const routes = [
     {
         path: '/',
@@ -35,6 +36,13 @@ const routes = [
         name: 'signup',
         component: Signup
     }
+    ,
+    {
+        path: '/package',
+        name: 'package',
+        component: Package
+    }
+
 
 ]
 

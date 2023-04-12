@@ -44,7 +44,7 @@ router.post('/signin', async (req, res) => {
 
     try {
       const [result, fields] = await conn.query(
-        "SELECT * FROM users WHERE email = ? AND password = ?",
+        "SELECT * FROM customer WHERE customer_email = ? AND customer_password = ?",
         [email, password]
       );
 

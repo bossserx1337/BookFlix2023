@@ -5,7 +5,6 @@
 
   <script>
   import navbar from '../components/Navbar.vue'
-  import userdata from "../data/user.json";
   export default {
     name: 'App',
     components: {
@@ -14,13 +13,12 @@
     data () {
       return {
 
-        userdata : []
       }
     },
     methods: {
     },
     created(){
-              this.userdata=  JSON.parse(localStorage.getItem("userdata"))
+      
 
 
           }
