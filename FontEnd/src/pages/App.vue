@@ -1,4 +1,4 @@
-<template>
+<template >
   <navbar/>
   <router-view>
   </router-view>

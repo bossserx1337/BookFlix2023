@@ -122,7 +122,7 @@ export default {
         async submitForm() {
             if (this.validateForm()) {
                 try {
-                    const response = await axios.post('http://localhost:3000/signup', this.form);
+                    const response = await axios.post('http://localhost:3001/signup', this.form);
                     console.log(response);
                     if (response.status === 200) {
                         this.formSubmitted = true;

@@ -6,6 +6,7 @@ import Fav from "../pages/Fav.vue";
 import Profile from "../pages/Profile.vue";
 import Signup from "../pages/Signup.vue";
 import Package from "../pages/Package.vue";
+import addbook from  "../pages/Addbook.vue";
 const routes = [
     {
         path: '/',
@@ -41,7 +42,13 @@ const routes = [
         path: '/package',
         name: 'package',
         component: Package
+    },
+    {
+        path: '/addbook',
+        name: 'addbook',
+        component: addbook
     }
+
 
 
 ]

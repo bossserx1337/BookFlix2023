@@ -29,13 +29,19 @@ export default {
   methods: {
     async signIn() {
       try {
-        const response = await axios.post('http://localhost:3000/signin', {
+        const response = await axios.post('http://localhost:3001/signin', {
           email: this.email,
           password: this.password,
         });
         this.$store.commit('login', this.email);
         console.log(response.data);
         console.log();
+        Swal.fire({
+                            icon: 'success',
+                            title: "Congratulations! You've successfully Login",
+                            confirmButtonText: `Go Login`,
+
+                        })
         this.$router.push('/package');
         // redirect to another page or show a success message
       } catch (error) {
