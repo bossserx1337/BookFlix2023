@@ -80,7 +80,10 @@ export default {
       this.$router.push('/sign')
     }
   },
-
+  created(){
+    this.$store.commit('initializeStore')
+    
+  },
 
 
 }
