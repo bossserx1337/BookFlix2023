@@ -7,6 +7,7 @@ import Profile from "../pages/Profile.vue";
 import Signup from "../pages/Signup.vue";
 import Package from "../pages/Package.vue";
 import addbook from  "../pages/Addbook.vue";
+import approve from  "../pages/approve.vue";
 const routes = [
     {
         path: '/',
@@ -47,6 +48,11 @@ const routes = [
         path: '/addbook',
         name: 'addbook',
         component: addbook
+    },
+    {
+        path: '/approve',
+        name: 'approve',
+        component: approve
     }
 
 

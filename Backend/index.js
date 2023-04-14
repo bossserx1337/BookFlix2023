@@ -15,6 +15,7 @@ const indexRouter = require('./routes/index')
 const adminRouter = require('./routes/admin')
 const signRouter = require('./routes/sign')
 const bookRouter = require('./routes/book')
+const packageRouter = require('./routes/package')
 
 
 
@@ -22,6 +23,7 @@ app.use(indexRouter.router)
 app.use(adminRouter.router)
 app.use(signRouter.router)
 app.use(bookRouter.router)
+app.use(packageRouter.router)
 
 app.listen(3001, () => {
   console.log(`Example app listening at http://localhost:3001`)
