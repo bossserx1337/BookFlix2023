@@ -1,6 +1,6 @@
 CREATE TABLE `Publisher` (
-  `pub_id` INT(10),
-  `pub_name` VARCHAR(255),
+  `pub_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `pub_name` VARCHAR(255) NOT NULL,
   `pub_phone` VARCHAR(255),
   `pub_url` VARCHAR(255),
   PRIMARY KEY (`pub_id`),
@@ -8,21 +8,21 @@ CREATE TABLE `Publisher` (
 );
 
 CREATE TABLE `Author` (
-  `author_id` INT(10),
-  `author_fn` VARCHAR(255),
-  `author_ln` VARCHAR(255),
+  `author_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `author_fn` VARCHAR(255) NOT NULL,
+  `author_ln` VARCHAR(255) NOT NULL,
   `author_alias` VARCHAR(255),
   PRIMARY KEY (`author_id`),
   KEY `NN` (`author_fn`, `author_ln`, `author_alias`)
 );
 
 CREATE TABLE `Book` (
-  `book_id` INT(10),
-  `book_name` VARCHAR(255),
+  `book_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `book_name` VARCHAR(255) NOT NULL,
   `book_desc` VARCHAR(255),
   `book_img` VARCHAR(255),
-  `author_id` INT(10),
-  `pub_id` INT(10),
+  `author_id` INT(10) NOT NULL,
+  `pub_id` INT(10) NOT NULL,
   PRIMARY KEY (`book_id`),
   FOREIGN KEY (`pub_id`) REFERENCES `Publisher`(`pub_id`),
   FOREIGN KEY (`author_id`) REFERENCES `Author`(`author_id`),
@@ -30,45 +30,47 @@ CREATE TABLE `Book` (
 );
 
 CREATE TABLE `favorite` (
-  `fav_id` INT(10) AUTO_INCREMENT,
-  `user_id` INT(10),
-  `book_id` INT(10),
+  `fav_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) NOT NULL,
+  `book_id` INT(10) NOT NULL,
   PRIMARY KEY (`fav_id`),
   FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`),
   KEY `AUTO_INCREMENT` (`fav_id`)
 );
 
 CREATE TABLE `Chapter` (
-  `chapter_id` INT(10),
-  `book_id` INT(10),
-  `chapter_content` VARCHAR(255),
+  `chapter_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `book_id` INT(10) NOT NULL,
+  `chapter_content` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`chapter_id`),
   FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`),
   KEY `NN` (`chapter_content`)
 );
 
 CREATE TABLE `Book Type` (
-  `book_type_id` INT(10),
-  `book_type_name` VARCHAR(255),
+  `book_type_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `book_type_name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`book_type_id`),
   KEY `NN` (`book_type_name`)
 );
 
 CREATE TABLE `Book with Type` (
-  `book_id` INT(10) ,
-  `book_type_id` INT(10),
+  `book_id` INT(10) NOT NULL,
+  `book_type_id` INT(10) NOT NULL,
   FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`),
-  FOREIGN KEY (`book_type_id`) REFERENCES `Book Type`(`book_type_id`)
+  FOREIGN KEY (`book_type_id`) REFERENCES `Book Type`(`book_type_id`),
+  PRIMARY KEY (`book_id`, `book_type_id`)
 );
 
 CREATE TABLE `buy_history` (
-  `history_id` INT(10),
-  `user_id` INT(10),
-  `book_id` INT(10),
+  `history_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(10) NOT NULL,
+  `book_id` INT(10) NOT NULL,
   `his_page` INT(10),
   PRIMARY KEY (`history_id`),
   FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`)
 );
+
 
 CREATE TABLE `Customer` (
   `customer_id` INT(10) AUTO_INCREMENT,
@@ -93,7 +95,7 @@ CREATE TABLE `Customer` (
 );
 
 CREATE TABLE `package` (
-  `pack_id` INT(10),
+  `pack_id` INT(10) AUTO_INCREMENT,
   `price` INT(10),
   `pack_name` VARCHAR(255),
   PRIMARY KEY (`pack_id`),
@@ -101,10 +103,10 @@ CREATE TABLE `package` (
 );
 
 CREATE TABLE `buy_package` (
-  `pay_id` INT(10),
+  `pay_id` INT(10) AUTO_INCREMENT,
   `pack_id` INT(10),
-  `pack_start` Date,
-  `pack_end` Date,
+  `pack_start` DATE,
+  `pack_end` DATE,
   `customer_id` INT(10),
   `pay_bill` VARCHAR(255),
   PRIMARY KEY (`pay_id`),
@@ -122,3 +124,78 @@ CREATE TABLE `Admin` (
   KEY `UQ` (`admin_email`)
 );
 
+
+
+INSERT INTO Publisher (pub_id, pub_name, pub_phone, pub_url)
+VALUES (1, 'Yen Press', '123-456-7890', 'https://yenpress.com'),
+(2, 'VIZ Media', '555-555-5555', 'https://www.viz.com/');
+
+INSERT INTO Author (author_id, author_fn, author_ln, author_alias)
+VALUES (1, 'Koogi', '', ''),
+(2, 'Kousuke Oono', '', ''),
+(3, 'Yana Toboso', '', '');
+
+INSERT INTO Book (book_id, book_name, book_desc, book_img, author_id, pub_id)
+VALUES (1, 'Killing Stalking', 'A psychological horror manhwa about a stalker and his obsession with a young man.', 'https://yenpress.com/wp-content/uploads/2017/02/ks2.jpg', 1, 1),
+(2, 'The Way of the Househusband', 'A comedic manga about a former yakuza member who becomes a househusband.', 'https://www.viz.com/-/media/product-promotions/2022/01-january/way-of-the-househusband/wothh-banner.jpg?h=600', 2, 1),
+(3, 'Black Butler', 'A supernatural manga about a demon butler serving a young boy.', 'https://yenpress.com/wp-content/uploads/2017/02/bc2.jpg', 3, 1);
+
+INSERT INTO favorite (user_id, book_id)
+VALUES (1, 1),
+(2, 2);
+
+INSERT INTO Chapter (chapter_id, book_id, chapter_content)
+VALUES (1, 1, 'Chapter 1'),
+(2, 1, 'Chapter 2'),
+(3, 1, 'Chapter 3'),
+(4, 2, 'Chapter 1'),
+(5, 2, 'Chapter 2'),
+(6, 2, 'Chapter 3'),
+(7, 3, 'Chapter 1'),
+(8, 3, 'Chapter 2'),
+(9, 3, 'Chapter 3');
+
+INSERT INTO `Book Type` (book_type_id, book_type_name)
+VALUES (1, 'Horror'),
+(2, 'Comedy'),
+(3, 'Supernatural');
+
+INSERT INTO `Book with Type` (book_id, book_type_id)
+VALUES (1, 1),
+(2, 2),
+(3, 3);
+
+INSERT INTO buy_history (user_id, book_id, his_page)
+VALUES (1, 1, 20),
+(2, 2, 10);
+
+INSERT INTO package (pack_id, price, pack_name)
+VALUES (1, 10, 'Standard'),
+(2, 20, 'Premium');
+
+INSERT INTO User (user_id, user_email, user_password, user_first_name, user_last_name, user_dob)
+VALUES (1, 'johndoe@example.com', 'password123', 'John', 'Doe', '1990-01-01'),
+(2, 'janedoe@example.com', 'securepassword', 'Jane', 'Doe', '1995-05-05');
+
+INSERT INTO Payment (pay_id, user_id, pack_id, pay_date)
+VALUES (1, 1, 1, '2022-01-01'),
+(2, 2, 2, '2022-02-01');
+
+INSERT INTO Review (review_id, book_id, user_id, review_content, review_rating)
+VALUES (1, 1, 1, 'This is a very intense and well-written horror story. Highly recommended!', 5),
+(2, 2, 2, 'The Way of the Househusband is hilarious and heartwarming. I loved it!', 4),
+(3, 3, 1, 'Black Butler is a classic manga with amazing art and storytelling.', 4);
+
+INSERT INTO Book with Tag (book_id, tag_id)
+VALUES (1, 1),
+(1, 2),
+(2, 3),
+(3, 4),
+(3, 5);
+
+INSERT INTO Tag (tag_id, tag_name)
+VALUES (1, 'Horror'),
+(2, 'Psychological'),
+(3, 'Comedy'),
+(4, 'Supernatural'),
+(5, 'Fantasy');
