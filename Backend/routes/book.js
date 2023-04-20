@@ -31,7 +31,7 @@ router.post('/addbook' , async function (req, res, next) {
     let results = await conn.query(
       "INSERT INTO book( book_id,book_name, book_desc, book_img, author_id, pub_id) VALUES(?, ?, ?, ?, ?, ?);",
       [ 1, bookname, bookdesc, bookimg, authorid, pubid ]
-    ) 
+    )
     console.log(results)
 
 
@@ -45,5 +45,7 @@ router.post('/addbook' , async function (req, res, next) {
     conn.release();
   }
 });
+
+
 
 exports.router = router;

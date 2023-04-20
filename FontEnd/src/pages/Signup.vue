@@ -134,7 +134,7 @@ export default {
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 // redirect to sign in page
-                                this.$router.push('/sign');
+                                this.$router.push('/package');
                             }
                         });
                     }

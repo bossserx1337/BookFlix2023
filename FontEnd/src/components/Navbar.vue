@@ -25,7 +25,7 @@
               <MenuButton
                 class=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="sr-only">Open user menu</span>
-                <img :src='userdata.prof_img' class="h-8 w-8 rounded-full">
+                <img :src='(userdata.prof_img) ? userdata.prof_img: "https://pbs.twimg.com/profile_images/1545631138953437184/Bky7FePS_400x400.jpg"' class="h-8 w-8 rounded-full">
               </MenuButton>
             </div>
             <transition enter-active-class="transition ease-out duration-100"
@@ -35,8 +35,8 @@
               <MenuItems
                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <MenuItem v-slot="{ active }">
-                <a  href="/profile" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
-                  Profile</a>
+                <router-link to="/profile" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your
+                  Profile</router-link>
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
                 <a to="/sign" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" @click="logout()">Sign out</a>
@@ -56,7 +56,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 </script>
 <script>
 import { useRoute } from 'vue-router'
-import { computed } from 'vue'
+
 export default {
   name: 'Nav',
   data() {
@@ -82,7 +82,7 @@ export default {
   },
   created(){
     this.$store.commit('initializeStore')
-    
+
   },
 
 

@@ -7,7 +7,7 @@
       </div>
     </div>
   </div> <h1 v-for="user in userinfo" :key="user.customer_id"> welcome {{  user.customer_firstN}}</h1>
-  
+
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       books: null,
-      email: '', 
+      email: '',
       userinfo : null// add blogs variable
 
     };
@@ -43,14 +43,14 @@ export default {
         console.log(err);
       });
     this.email = localStorage.getItem("email");
-    axios.get(`http://localhost:3001/userinfo/${this.email}`)
-      .then((response) => {
-        this.userinfo = response.data.userinfo;
-        console.log(this.userinfo[0].customer_id);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios.get(`http://localhost:3000/userinfo/${this.email}`)
+    //   .then((response) => {
+    //     this.userinfo = response.data.userinfo;
+    //     console.log(this.userinfo[0].customer_id);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
   },
   components: { RouterLink }
@@ -58,6 +58,6 @@ export default {
 
 
 </script>
-  
+
 <style>
 </style>

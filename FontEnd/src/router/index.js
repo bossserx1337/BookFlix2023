@@ -8,6 +8,9 @@ import Signup from "../pages/Signup.vue";
 import Package from "../pages/Package.vue";
 import addbook from  "../pages/Addbook.vue";
 import approve from  "../pages/approve.vue";
+import editbook from "../pages/editbook.vue";
+import DetailBook from "../pages/DetailBook.vue";
+import DetailChapter from "../pages/DetailChapter.vue";
 const routes = [
     {
         path: '/',
@@ -53,6 +56,21 @@ const routes = [
         path: '/approve',
         name: 'approve',
         component: approve
+    },
+    {
+        path: '/editbook',
+        name: 'editbook',
+        component: editbook
+    },
+    {
+        path: '/DetailBook',
+        name: 'DetailBook',
+        component: DetailBook
+    },
+    {
+        path: '/DetailChapter',
+        name: 'DetailChapter',
+        component: DetailChapter
     }
 
 

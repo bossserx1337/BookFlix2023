@@ -17,13 +17,20 @@ router.get("/admin", async function (req, res, next) {
 });
 router.get("/userinfo/:email", async function (req, res, next) {
   try {
-    let [rows , fields] = await pool.query(`SELECT * FROM customer where customer_email = ? `,  req.params.email)
+    let [customer] = await pool.query(`SELECT * FROM customer where customer_email = ? `,  req.params.email)
+    if(customer.length > 0){
+      return res.json( {
+        userinfo: customer
+      });
+    }
 
-    console.log(rows)
-    return res.json( {
-    
-     userinfo: rows
-    });
+    let [admin] = await pool.query(`SELECT * FROM admin where admin_email = ? `,  req.params.email)
+    if(admin.length > 0){
+      return res.json( {
+        userinfo: admin
+      });
+    }
+    return res.status(400).json({ message: 'User not found' });
   } catch (err) {
     return next(err)
   }
@@ -35,7 +42,7 @@ router.get('/buypackage', async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-}); 
+});
 router.put('/customer', async (req, res, next) => {
 console.log(req.body)
   const conn = await pool.getConnection();

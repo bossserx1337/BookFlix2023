@@ -37,6 +37,7 @@ CREATE TABLE `Book` (
   `book_img` VARCHAR(255),
   `author_id` INT(10),
   `pub_id` INT(10),
+
   PRIMARY KEY (`book_id`),
   FOREIGN KEY (`pub_id`) REFERENCES `Publisher`(`pub_id`),
   FOREIGN KEY (`author_id`) REFERENCES `Author`(`author_id`),
@@ -45,12 +46,11 @@ CREATE TABLE `Book` (
 
 DROP TABLE IF EXISTS `favorite`;
 CREATE TABLE `favorite` (
-  `fav_id` INT(10),
-  `user_id` INT(10),
+  `fav_id` INT(10) AUTO_INCREMENT,
+  `customer_id` INT(10),
   `book_id` VARCHAR(255),
   PRIMARY KEY (`fav_id`),
-  FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`),
-  KEY `AUTO_INCREMENT` (`fav_id`)
+  FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`)
 );
 
 DROP TABLE IF EXISTS `Chapter`;
@@ -81,8 +81,8 @@ CREATE TABLE `Book_with_Type` (
 
 DROP TABLE IF EXISTS `buy_history`;
 CREATE TABLE `buy_history` (
-  `history_id` INT(10),
-  `user_id` INT(10),
+  `history_id` INT(10) auto_increment,
+  `customer_id` INT(10),
   `book_id` VARCHAR(255),
   `his_page` INT(10),
   PRIMARY KEY (`history_id`),
@@ -105,6 +105,7 @@ CREATE TABLE `Customer` (
   `history_id` INT(10),
   `fav_id` INT(10),
   `status` ENUM('R', 'NR'),
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`),
   FOREIGN KEY (`history_id`) REFERENCES `buy_history`(`history_id`),
   FOREIGN KEY (`fav_id`) REFERENCES `favorite`(`fav_id`),
@@ -149,54 +150,142 @@ CREATE TABLE `Admin` (
   KEY `UQ` (`admin_email`)
 );
 
+DROP TABLE IF EXISTS `buy_package_log`;
+CREATE TABLE `buy_package_log` (
+  `log_id` INT(10) NOT NULL AUTO_INCREMENT,
+  `pay_id` INT(10) NOT NULL,
+  `pack_id` INT(10) NOT NULL,
+  `pack_start` DATE NOT NULL,
+  `pack_end` DATE NOT NULL,
+  `customer_id` INT(10) NOT NULL,
+  `pay_bill` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`log_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `Customer`(`customer_id`),
+  FOREIGN KEY (`pack_id`) REFERENCES `package`(`pack_id`),
+  FOREIGN KEY (`pay_id`) REFERENCES `payment`(`pay_id`)
+);
+
+ALTER TABLE book ADD book_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE author ADD author_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE publisher ADD publisher_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE chapter ADD chapter_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
 INSERT INTO `Publisher` (`pub_id`, `pub_name`, `pub_phone`, `pub_url`) VALUES
 (1, 'Webtoon', '123456789', 'https://www.webtoons.com/'),
 (2, 'Kakao Page Corp.', '987654321', 'https://page.kakao.com/'),
-(3, 'Lezhin Comics', '456789123', 'https://www.lezhin.com/en/');
+(3, 'Lezhin Comics', '456789123', 'https://www.lezhin.com/en/'),
+(4, 'Naver Webtoon', '444-444-4444', 'https://www.webtoons.com/'),
+(5, 'Toomics', '777-777-7777', 'https://www.toomics.com/'),
+(6, 'Shueisha', '03-3230-5500', 'https://www.shueisha.co.jp/'),
+(7, 'Kodansha', '03-3445-8010', 'https://www.kodansha.co.jp/'),
+(8, 'Shogakukan', '03-3230-6500', 'https://www.shogakukan.co.jp/'),
+(9, 'Square Enix', '03-6376-9444', 'https://www.jp.square-enix.com/'),
+(10, 'Hakusensha', '03-3797-7622', 'https://www.hakusensha.co.jp/');
 
 INSERT INTO `Author` (`author_id`, `author_fn`, `author_ln`, `author_alias`) VALUES
 (1, 'Hyung', 'Min-Woo', NULL),
 (2, 'Kim', 'Yong-hwan', 'YongYea'),
-(3, 'Park', 'Jin-Hwan', NULL);
+(3, 'Park', 'Jin-Hwan', NULL),
+(4, 'Yongje', 'Park', 'Yongje Park'),
+(5, 'Bum-Gu', 'Kim', 'Bum-Gu Kim'),
+(6, 'Hun', 'Song', 'Hun Song'),
+(7, 'Ggamang', 'Jang', 'Ggamang Jang'),
+(8, 'Jeongseo', 'Park', 'Jeongseo Park'),
+(9, 'Koogi', NULL, 'Koogi'),
+(10, 'Yoon', 'Tae-ho', 'Yoon Tae-ho');
 
-INSERT INTO `Book` (`book_id`, `book_name`, `book_desc`, `book_img`, `author_id`, `pub_id`) VALUES
-('978-8-99-699831-2', 'Solo Leveling', '10 years ago, after “the Gate” that connected the real world with the monster world opened, some of the ordinary, everyday people received the power to hunt monsters within the Gate. They are known as "Hunters".', 'https://webtoon-phinf.pstatic.net/20210414_256/1618394097037lXNlI_JPEG/10_cover.jpg?type=q90', 2, 1),
-('978-8-98-727345-9', 'The God of High School', 'While an island half-disappearing from the face of the earth, a mysterious organization is sending out invitations for a tournament to every skilled fighter in the world. If you win you can have ANYTHING you want.', 'https://webtoon-phinf.pstatic.net/20191227_155/1577423360297wwcJM_JPEG/00_EpisodeThumbnail.jpg?type=q90', 1, 1),
-('978-8-99-660666-5', 'Killing Stalking', "Yoon Bum, a scrawny quiet boy, has a crush on one of the most popular and handsome guys in school, Sangwoo. One day, with Yoonbum's obsession towards Sangwoo reaching its peak, Yoon Bum decides to enter Sangwoo\'s home.", 'https://webtoon-phinf.pstatic.net/20191112_232/1573532961602c6fPi_JPEG/06_thumbnail.jpg?type=q90', 3, 3);
+INSERT INTO Book (book_id, book_name, book_desc, book_img, author_id, pub_id) VALUES
+('9788953934700', 'The God of High School', 'A high school martial arts tournament with a supernatural twist', 'https://www.webtoons.com/en/action/the-god-of-high-school/list?title_no=66', 1, 1),
+('9788953934465', 'Tower of God', 'A young boy attempts to climb a massive tower to find his lost love', 'https://www.webtoons.com/en/fantasy/tower-of-god/list?title_no=95', 1, 1),
+('9788953935202', 'Noblesse', 'A powerful vampire awakens after 820 years of slumber', 'https://www.webtoons.com/en/fantasy/noblesse/list?title_no=87', 1, 1),
+('9788953935646', 'Sweet Home', 'A group of survivors must fight for their lives against monstrous creatures in a world where humans are turning into monsters', 'https://www.webtoons.com/en/thriller/sweet-home/list?title_no=1285', 1, 1),
+('9788953938289', 'Save Me', 'A prequel to the popular Korean boy band BTS''s "The Most Beautiful Moment in Life" music video trilogy', 'https://www.webtoons.com/en/drama/save-me/list?title_no=1514', 1, 1),
+('9788998279684', 'Killing Stalking', 'A psychological thriller about a stalker and his victim who develop a twisted relationship', 'https://www.lezhin.com/en/comic/killingstalking', 2, 2),
+('9788998279875', 'Painter of the Night', 'A historical drama about a painter who falls in love with a nobleman', 'https://www.lezhin.com/en/comic/painterofthenight', 2, 2),
+('9788998279905', 'Blood Bank', 'A vampire and a human become unlikely allies in a world where vampires must drink human blood to survive', 'https://www.lezhin.com/en/comic/bloodbank', 2, 2),
+('9788998281656', 'The Lady and Her Butler', 'A romantic comedy about a woman who hires a butler to help her recover from a painful breakup', 'https://www.lezhin.com/en/comic/ladyandbutler', 2, 2),
+('9788998274801', 'Gatabutata', 'A comedy about two friends and their wacky adventures', 'https://www.webtoons.com/en/comedy/gatabutata/list?title_no=1692', 1, 1),
+('9791190995292', 'Solo Leveling', 'After a portal to a parallel world opens, hunters begin to awaken in humans, giving them supernatural powers. Jinwoo Sung is one such hunter, but he is known as the "weakest" because he is constantly struggling to make ends meet. One day, a mission goes wrong and Jinwoo finds himself trapped in a double dungeon, where he discovers his true potential and begins his journey to become the world''s strongest hunter.', 'https://www.webnovel.com/book/solo-leveling_11917920705230505', 3, 3);
 
-INSERT INTO `favorite` (`fav_id`, `user_id`, `book_id`) VALUES
-(1, 1, '978-8-99-699831-2'),
-(2, 2, '978-8-98-727345-9'),
-(3, 3, '978-8-99-660666-5');
+INSERT INTO `favorite` (`customer_id`, `book_id`) VALUES
+(1, '9788953934465'),
+(2, '9788953934465'),
+(2, '9788953934700'),
+(4, '9788953934700'),
+(5, '9788953934700'),
+(6, '9788953934700'),
+(7, '9788953934700'),
+(8, '9788953934700'),
+(9, '9788953934700'),
+(10, '9788953934700');
+
+
 
 INSERT INTO `Chapter` (`chapter_id`, `book_id`, `chapter_content`) VALUES
-(1, '978-8-99-699831-2', 'Chapter 1: It\'s Solo'),
-(2, '978-8-99-699831-2', 'Chapter 2: Strongest'),
-(3, '978-8-98-727345-9', 'Chapter 1: Invincible');
+(1, '9791190995292', 'Chapter 1: It\'s Solo'),
+(2, '9791190995292', 'Chapter 2: Strongest'),
+(3, '9788953934700', 'Chapter 1: The God of High School'),
+(4, '9788953934700', 'Chapter 2: Renewal/Soul'),
+(5, '9788953934465', 'Chapter 1: Headon''s Floor'),
+(6, '9788953934465', 'Chapter 2: Three Four-Hundredths'),
+(7, '9788953935202', 'Chapter 1: Prologue'),
+(8, '9788953935202', 'Chapter 2: The Noblesse'),
+(9, '9788953935646', 'Chapter 1: Episode 0'),
+(10, '9788953935646', 'Chapter 2: Episode 1');
 
-INSERT INTO `book_type` (`book_type_id`, `book_type_name`) VALUES
+INSERT INTO book_type (book_type_id, book_type_name) VALUES
 (1, 'Fiction'),
 (2, 'Non-Fiction'),
 (3, 'Biography'),
-(4, 'Memoir');
+(4, 'Memoir'),
+(5, 'Mystery'),
+(6, 'Romance'),
+(7, 'Horror'),
+(8, 'Thriller'),
+(9, 'Science Fiction'),
+(10, 'Fantasy');
 
 
 INSERT INTO Book_with_Type (book_id, book_type_id) VALUES
 ('1', 1 ),
+('1', 3 ),
+('1', 6 ),
+('2', 1 ),
 ('2', 2 ),
 ('3', 3 ),
 ('4', 4 ),
-('5', 5);
+('5', 3),
+('5', 5),
+('5', 10);
 
-INSERT INTO buy_history (history_id, user_id, book_id, his_page) VALUES
-(1, 1, '1', 2),
-(2, 2, '3', 1),
-(3, 3, '5', 3);
+
+INSERT INTO buy_history (customer_id, book_id, his_page) VALUES
+( 1, '1', 2),
+( 2, '1', 1),
+( 3, '1', 2),
+( 4, '1', 1),
+( 5, '1', 2),
+( 6, '1', 2),
+( 7, '1', 2),
+( 8, '1', 2),
+( 9, '1', 2),
+( 10, '2', 2);
 
 INSERT INTO Customer (customer_password, customer_firstN, customer_lastN, customer_email, customer_phone, customer_pic, customer_displayname, package_id, payment_id, history_id, fav_id, status) VALUES
 ('password1', 'John', 'Smith', 'john@example.com', '1234567890', NULL, 'JohnS', 2, NULL, 1, NULL, 'NR'),
 ('password2', 'Jane', 'Doe', 'jane@example.com', '0987654321', NULL, 'JaneD', 1, NULL, 2, NULL, 'NR'),
-('password3', 'Bob', 'Johnson', 'bob@example.com', '5551234567', NULL, 'BobJ', 3, NULL, 3, NULL, 'R');
+('password3', 'Bob', 'Johnson', 'bob@example.com', '5551234567', NULL, 'BobJ', 3, NULL, 3, NULL, 'R'),
+('password4', 'Alice', 'Jones', 'alice@example.com', '5555555555', NULL, 'AliceJ', 1, NULL, 4, NULL, 'R'),
+('password5', 'Tom', 'Smith', 'tom@example.com', '1112223333', NULL, 'TomS', 2, NULL, 5, NULL, 'NR'),
+('password6', 'Sarah', 'Lee', 'sarah@example.com', '4443332222', NULL, 'SarahL', 1, NULL, 6, NULL, 'NR'),
+('password7', 'James', 'Brown', 'james@example.com', '7778889999', NULL, 'JamesB', 3, NULL, 7, NULL, 'R'),
+('password8', 'Emily', 'Taylor', 'emily@example.com', '2221114444', NULL, 'EmilyT', 1, NULL, 8, NULL, 'NR'),
+('password9', 'David', 'Martin', 'david@example.com', '6667778888', NULL, 'DavidM', 2, NULL, 9, NULL, 'R'),
+('password10', 'Olivia', 'Wilson', 'olivia@example.com', '3334445555', NULL, 'OliviaW', 1, NULL, 10, NULL, 'NR');
 
 INSERT INTO package (pack_id, price, pack_name) VALUES
 (1, 25, 'Basic'),
@@ -206,11 +295,51 @@ INSERT INTO package (pack_id, price, pack_name) VALUES
 INSERT INTO buy_package (pay_id, pack_id, pack_start, pack_end, customer_id, pay_bill) VALUES
 (1, 2, '2022-04-01', '2022-09-30', 1, NULL),
 (2, 1, '2022-04-15', '2022-07-14', 2, NULL),
-(3, 3, '2022-05-01', '2022-06-30', 3, NULL);
+(3, 3, '2022-05-01', '2022-06-30', 3, NULL),
+(4, 1, '2022-06-01', '2022-08-31', 4, NULL),
+(5, 2, '2022-06-15', '2022-11-14', 5, NULL),
+(6, 3, '2022-07-01', '2022-12-31', 6, NULL),
+(7, 1, '2022-08-01', '2022-10-31', 7, NULL),
+(8, 2, '2022-08-15', '2023-01-14', 8, NULL),
+(9, 3, '2022-09-01', '2023-02-28', 9, NULL),
+(10, 1, '2022-10-01', '2023-03-31', 10, NULL);
 
-INSERT INTO Admin (admin_username, admin_password, admin_email) VALUES
+INSERT INTO Admin (admin_username, admin_password, admin_email)
+VALUES
 ('admin', 'adminpassword', 'admin@example.com'),
-('superadmin', 'superadminpassword', 'superadmin@example.com');
+('superadmin', 'superadminpassword', 'superadmin@example.com'),
+('johndoe', 'johndoepassword', 'johndoe@example.com'),
+('janedoe', 'janedoepassword', 'janedoe@example.com'),
+('bobsmith', 'bobsmithpassword', 'bobsmith@example.com'),
+('sarahlee', 'sarahleepassword', 'sarahlee@example.com'),
+('michaelbrown', 'michaelbrownpassword', 'michaelbrown@example.com'),
+('jenniferwang', 'jenniferwangpassword', 'jenniferwang@example.com'),
+('davidchen', 'davidchenpassword', 'davidchen@example.com'),
+('oliviali', 'olivialipassword', 'oliviali@example.com');
+
+INSERT INTO buy_package_log (pay_id, pack_id, pack_start, pack_end, customer_id, pay_bill)
+VALUES
+(1, 2, '2022-04-01', '2022-09-30', 1, NULL),
+(2, 1, '2022-04-15', '2022-07-14', 2, NULL),
+(3, 3, '2022-05-01', '2022-06-30', 3, NULL),
+(4, 1, '2022-06-01', '2022-08-31', 4, NULL),
+(5, 2, '2022-06-15', '2022-11-14', 5, NULL),
+(6, 3, '2022-07-01', '2022-12-31', 6, NULL),
+(7, 1, '2022-08-01', '2022-10-31', 7, NULL),
+(8, 2, '2022-08-15', '2023-01-14', 8, NULL),
+(9, 3, '2022-09-01', '2023-02-28', 9, NULL),
+(10, 1, '2022-10-01', '2023-03-31', 10, NULL),
+(11, 2, '2022-11-01', '2023-04-30', 1, NULL),
+(12, 1, '2022-12-01', '2023-05-31', 2, NULL),
+(13, 3, '2023-01-01', '2023-06-30', 3, NULL),
+(14, 1, '2023-02-01', '2023-07-31', 4, NULL),
+(15, 2, '2023-03-01', '2023-08-31', 5, NULL),
+(16, 3, '2023-04-01', '2023-09-30', 6, NULL),
+(17, 1, '2023-05-01', '2023-10-31', 7, NULL),
+(18, 2, '2023-06-01', '2023-11-30', 8, NULL),
+(19, 3, '2023-07-01', '2023-12-31', 9, NULL),
+(20, 1, '2023-08-01', '2024-01-31', 10, NULL);
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

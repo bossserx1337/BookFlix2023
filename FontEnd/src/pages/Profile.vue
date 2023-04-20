@@ -1,85 +1,107 @@
 
 <template>
-   <div v-for="user in userinfo" :key="user.customer_id">
+  <div v-for="user in userinfo" :key="(user.customer_displayname) ? user.customer_displayname : user.admin_username">
     <!-- component -->
-<div class="flex items-center h-screen w-full justify-center">
+    <div class="flex items-center h-screen w-full justify-center">
 
-<div class="max-w-xs">
-    <div class="bg-white shadow-xl rounded-lg py-3">
-        <div class="photo-wrapper p-2">
-            <img class="w-32 h-32 rounded-full mx-auto"  :src=" user.customer_pic" alt="John Doe">
-        </div>
-        <div class="p-2">
+      <div class="max-w-xs">
+        <div class="bg-white shadow-xl rounded-lg py-3">
+          <div class="photo-wrapper p-2">
+            <img class="w-32 h-32 rounded-full mx-auto" :src="(user.customer_pic) ? user.customer_pic : 'https://pbs.twimg.com/profile_images/1545631138953437184/Bky7FePS_400x400.jpg'" alt="John Doe">
+          </div>
+          <div class="p-2" v-if="user.customer_firstN">
             <h3 class="text-center text-xl text-gray-900 font-medium leading-8">{{ user.customer_firstN }}</h3>
             <div class="text-center text-gray-400 text-xs font-semibold">
-                <p>Web Developer</p>
+              <p>Web Developer</p>
             </div>
             <table class="text-xs my-3">
-                <tbody><tr>
-                    <td class="px-2 py-2 text-gray-500 font-semibold">fullname</td>
-                    <td class="px-2 py-2"> {{ user.customer_firstN}}  {{ user.customer_lastN }}</td>
+              <tbody>
+                <tr>
+                  <td class="px-2 py-2 text-gray-500 font-semibold">fullname</td>
+                  <td class="px-2 py-2"> {{ user.customer_firstN }} {{ user.customer_lastN }}</td>
                 </tr>
                 <tr>
-                    <td class="px-2 py-2 text-gray-500 font-semibold">Phone</td>
-                    <td class="px-2 py-2">+66 {{ user.customer_phone }}</td>
+                  <td class="px-2 py-2 text-gray-500 font-semibold">Phone</td>
+                  <td class="px-2 py-2">+66 {{ user.customer_phone }}</td>
                 </tr>
                 <tr>
-                    <td class="px-2 py-2 text-gray-500 font-semibold">Email</td>
-                    <td class="px-2 py-2">{{ user.customer_email }}</td>
+                  <td class="px-2 py-2 text-gray-500 font-semibold">Email</td>
+                  <td class="px-2 py-2">{{ user.customer_email }}</td>
                 </tr>
-            </tbody></table>
+              </tbody>
+            </table>
 
             <div class="text-center my-3">
-                <a class="text-xl text-indigo-500 hover:underline hover:text-indigo-600 font-medium" @click="logout()">logout</a>
+              <a class="text-xl text-indigo-500 hover:underline hover:text-indigo-600 font-medium"
+                @click="logout()">logout</a>
             </div>
 
+          </div>
+          <div class="p-2" v-else>
+            <h3 class="text-center text-xl text-gray-900 font-medium leading-8">มึงคือ Admin</h3>
+            <div class="text-center text-gray-400 text-xs font-semibold">
+              <p>Web Developer</p>
+            </div>
+            <table class="text-xs my-3">
+              <tbody>
+                <tr>
+                  <td class="px-2 py-2 text-gray-500 font-semibold">fullname</td>
+                  <td class="px-2 py-2"> มึงจะเอา full name ไปทำไม</td>
+                </tr>
+                <tr>
+                  <td class="px-2 py-2 text-gray-500 font-semibold">Phone</td>
+                  <td class="px-2 py-2">ยังต้องการอะไรอีก</td>
+                </tr>
+                <tr>
+                  <td class="px-2 py-2 text-gray-500 font-semibold">Email</td>
+                  <td class="px-2 py-2">{{ user.admin_email }}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="text-center my-3">
+              <a class="text-xl text-indigo-500 hover:underline hover:text-indigo-600 font-medium"
+                @click="logout()">logout</a>
+            </div>
+
+          </div>
         </div>
+      </div>
+
     </div>
-</div>
-
-</div>
   </div>
+</template>
 
-  </template>
-
-  <script>
-  import navbar from '../components/Navbar.vue'
-  import axios from 'axios';
-  export default {
-    name: 'App',
-    components: {
-      navbar
-    },
-    data () {
-      return {
-        userinfo : null
-      }
-    },
-    methods: {
-      logout(){
-        localStorage.clear()
-        this.$router.push('/sign');
-      }
-    },
-    created(){
+<script>
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      userinfo: null
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.clear()
+      this.$router.push('/sign');
+    }
+  },
+  async created() {
+    try {
       this.email = localStorage.getItem("email");
-    axios.get(`http://localhost:3001/userinfo/${this.email}`)
-      .then((response) => {
-        this.userinfo = response.data.userinfo;
-        console.log(this.email);
-        console.log(this.userinfo);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      const response = await axios.get(`http://localhost:3001/userinfo/${this.email}`);
+      this.userinfo = response.data.userinfo;
+      console.log(this.email);
+      console.log(this.userinfo);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-
-          }
 
 }
 
-  </script>
+</script>
 
-  <style>
-
-  </style>
+<style>
+</style>

@@ -7,8 +7,7 @@ const multer = require('multer')
 // SET STORAGE
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, 'C:/Users/Bossserx/Documents/GitHub/Project-WebPro-RomeBoss/Backend/static/uploads')
-  },
+    callback(null, path.dirname(__dirname) + '/uploads')},
   filename: function (req, file, callback) {
     callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
