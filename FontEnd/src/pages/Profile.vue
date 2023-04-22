@@ -77,13 +77,17 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      userinfo: null
+      userinfo: null,
+      customer_pic: null
     }
   },
   methods: {
     logout() {
       localStorage.clear()
       this.$router.push('/sign');
+    },
+    uploadImage() {
+      this.$refs.fileInput.click();
     }
   },
   async created() {

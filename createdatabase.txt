@@ -102,13 +102,9 @@ CREATE TABLE `Customer` (
   `customer_displayname` VARCHAR(20),
   `package_id` INT(10),
   `payment_id` INT(10),
-  `history_id` INT(10),
-  `fav_id` INT(10),
   `status` ENUM('R', 'NR'),
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`),
-  FOREIGN KEY (`history_id`) REFERENCES `buy_history`(`history_id`),
-  FOREIGN KEY (`fav_id`) REFERENCES `favorite`(`fav_id`),
   KEY `AUTO_INCREMENT` (`customer_id`),
   KEY `NN` (`customer_password`, `customer_firstN`, `customer_lastN`, `customer_email`, `customer_phone`, `customer_displayname`, `status`),
   KEY `UQ` (`customer_email`)
@@ -275,17 +271,17 @@ INSERT INTO buy_history (customer_id, book_id, his_page) VALUES
 ( 9, '1', 2),
 ( 10, '2', 2);
 
-INSERT INTO Customer (customer_password, customer_firstN, customer_lastN, customer_email, customer_phone, customer_pic, customer_displayname, package_id, payment_id, history_id, fav_id, status) VALUES
-('password1', 'John', 'Smith', 'john@example.com', '1234567890', NULL, 'JohnS', 2, NULL, 1, NULL, 'NR'),
-('password2', 'Jane', 'Doe', 'jane@example.com', '0987654321', NULL, 'JaneD', 1, NULL, 2, NULL, 'NR'),
-('password3', 'Bob', 'Johnson', 'bob@example.com', '5551234567', NULL, 'BobJ', 3, NULL, 3, NULL, 'R'),
-('password4', 'Alice', 'Jones', 'alice@example.com', '5555555555', NULL, 'AliceJ', 1, NULL, 4, NULL, 'R'),
-('password5', 'Tom', 'Smith', 'tom@example.com', '1112223333', NULL, 'TomS', 2, NULL, 5, NULL, 'NR'),
-('password6', 'Sarah', 'Lee', 'sarah@example.com', '4443332222', NULL, 'SarahL', 1, NULL, 6, NULL, 'NR'),
-('password7', 'James', 'Brown', 'james@example.com', '7778889999', NULL, 'JamesB', 3, NULL, 7, NULL, 'R'),
-('password8', 'Emily', 'Taylor', 'emily@example.com', '2221114444', NULL, 'EmilyT', 1, NULL, 8, NULL, 'NR'),
-('password9', 'David', 'Martin', 'david@example.com', '6667778888', NULL, 'DavidM', 2, NULL, 9, NULL, 'R'),
-('password10', 'Olivia', 'Wilson', 'olivia@example.com', '3334445555', NULL, 'OliviaW', 1, NULL, 10, NULL, 'NR');
+INSERT INTO Customer (customer_password, customer_firstN, customer_lastN, customer_email, customer_phone, customer_pic, customer_displayname, package_id, payment_id, status) VALUES
+('123', 'Kamapanat', 'Konklong', 'kakakasmile@outlook.com', '1234567890', NULL, 'JohnS', 2, NULL, 'NR'),
+('password2', 'Jane', 'Doe', 'jane@example.com', '0987654321', NULL, 'JaneD', 1, NULL, 'NR'),
+('password3', 'Bob', 'Johnson', 'bob@example.com', '5551234567', NULL, 'BobJ', 3, NULL,'R'),
+('password4', 'Alice', 'Jones', 'alice@example.com', '5555555555', NULL, 'AliceJ', 1, NULL, 'R'),
+('password5', 'Tom', 'Smith', 'tom@example.com', '1112223333', NULL, 'TomS', 2, NULL, 'NR'),
+('password6', 'Sarah', 'Lee', 'sarah@example.com', '4443332222', NULL, 'SarahL', 1, NULL,'NR'),
+('password7', 'James', 'Brown', 'james@example.com', '7778889999', NULL, 'JamesB', 3, NULL,'R'),
+('password8', 'Emily', 'Taylor', 'emily@example.com', '2221114444', NULL, 'EmilyT', 1, NULL,'NR'),
+('password9', 'David', 'Martin', 'david@example.com', '6667778888', NULL, 'DavidM', 2, NULL,'R'),
+('password10', 'Olivia', 'Wilson', 'olivia@example.com', '3334445555', NULL, 'OliviaW', 1, NULL, 'NR');
 
 INSERT INTO package (pack_id, price, pack_name) VALUES
 (1, 25, 'Basic'),
@@ -293,16 +289,16 @@ INSERT INTO package (pack_id, price, pack_name) VALUES
 (3, 75, 'Ultimate');
 
 INSERT INTO buy_package (pay_id, pack_id, pack_start, pack_end, customer_id, pay_bill) VALUES
-(1, 2, '2022-04-01', '2022-09-30', 1, NULL),
-(2, 1, '2022-04-15', '2022-07-14', 2, NULL),
-(3, 3, '2022-05-01', '2022-06-30', 3, NULL),
-(4, 1, '2022-06-01', '2022-08-31', 4, NULL),
-(5, 2, '2022-06-15', '2022-11-14', 5, NULL),
-(6, 3, '2022-07-01', '2022-12-31', 6, NULL),
-(7, 1, '2022-08-01', '2022-10-31', 7, NULL),
-(8, 2, '2022-08-15', '2023-01-14', 8, NULL),
-(9, 3, '2022-09-01', '2023-02-28', 9, NULL),
-(10, 1, '2022-10-01', '2023-03-31', 10, NULL);
+(1, 2, '2023-04-01', '2023-09-28', 1, NULL),
+(2, 1, '2023-04-15', '2023-10-12', 2, NULL),
+(3, 3, '2023-04-01', '2024-04-01', 3, NULL),
+(4, 1, '2023-03-01', '2023-03-31', 4, NULL),
+(5, 2, '2023-03-15', '2023-09-30', 5, NULL),
+(6, 3, '2023-03-01', '2024-02-29', 6, NULL),
+(7, 1, '2023-03-20', '2023-04-19', 7, NULL),
+(8, 2, '2023-02-15', '2023-08-14', 8, NULL),
+(9, 3, '2023-02-01', '2024-02-01', 9, NULL),
+(10, 1, '2023-04-01', '2023-05-01', 10, NULL);
 
 INSERT INTO Admin (admin_username, admin_password, admin_email)
 VALUES
