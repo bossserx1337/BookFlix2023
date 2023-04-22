@@ -2,6 +2,17 @@ const express = require("express");
 const pool = require("../config");
 
 router = express.Router();
+router.get("/checkadmin/:email", async function (req, res, next) {
+  try {
+
+    let [rows , fields] = await pool.query(`SELECT * FROM admin where admin_email = ?`, req.params.email)
+    if (admin.length > 0) {
+      return res.send('Yes');
+    }
+  } catch (err) {
+    return next(err)
+  }
+});
 
 router.get("/admin", async function (req, res, next) {
   try {

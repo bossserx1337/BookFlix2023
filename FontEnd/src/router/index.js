@@ -11,6 +11,7 @@ import approve from  "../pages/approve.vue";
 import editbook from "../pages/editbook.vue";
 import DetailBook from "../pages/DetailBook.vue";
 import DetailChapter from "../pages/DetailChapter.vue";
+import admin from "../pages/admin.vue";
 const routes = [
     {
         path: '/',
@@ -71,7 +72,13 @@ const routes = [
         path: '/DetailChapter',
         name: 'DetailChapter',
         component: DetailChapter
-    }
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: admin
+    },
+
 
 
 
@@ -82,6 +89,7 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+
 })
 
 export default router

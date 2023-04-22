@@ -4,34 +4,38 @@
     <form @submit.prevent="updateBook">
       <div class="mb-4">
         <label class="block font-bold mb-2">Book ID</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="book.id">
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="bookid">
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Book Name</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="book.title">
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="bookname">
+      </div>
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Book Description</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="bookdesc">
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Book img</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="book.title">
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="bookimg">
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Author</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="book.author">
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="authorid">
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Publisher</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="book.publisher">
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="pubid">
       </div>
-      <div class="mb-4">
+      <!-- <div class="mb-4">
         <label class="block font-bold mb-2">Genre</label>
         <select class="border rounded w-full py-2 px-3" v-model="book.Genre">
           <option value="">-- Select a type --</option>
           <option v-for="type in types" :value="type">{{ type }}</option>
         </select>
         <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" type="submit">Add more genre</button>
-      </div>
+      </div> -->
       <div class="mt-8">
-        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" type="submit">Add Book</button>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" type="submit" @click="submit">Add Book</button>
       </div>
     </form>
   </div>
@@ -52,11 +56,13 @@ export default {
     },
     submit() {
       var formData = new FormData();
+      formData.append("bookid", this.bookid)
       formData.append("bookname", this.bookname)
       formData.append("bookdesc", this.bookdesc)
       formData.append("bookimg", this.bookimg);
       formData.append("authorid", this.authorid);
       formData.append("pubid", this.pubid);
+
 
       console.log(formData);
       axios.post('http://localhost:3001/addbook', formData, {

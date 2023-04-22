@@ -25,7 +25,7 @@
               <MenuButton
                 class=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="sr-only">Open user menu</span>
-                <img :src='(userdata.prof_img) ? userdata.prof_img: "https://pbs.twimg.com/profile_images/1545631138953437184/Bky7FePS_400x400.jpg"' class="h-8 w-8 rounded-full">
+                <img :src='(userdata.prof_img) ? userdata.prof_img: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"' class="h-8 w-8 rounded-full">
               </MenuButton>
             </div>
             <transition enter-active-class="transition ease-out duration-100"
