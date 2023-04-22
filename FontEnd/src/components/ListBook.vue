@@ -2,11 +2,13 @@
   <div class="text-2xl font-semibold pl-3 ">Trending now</div>
   <div class="flex ml-2 gap-x-4 pl-4">
     <div v-for="book in books " :key="book.book_id">
-      <div class="card w-40 bg-base-100 shadow-xl ">
+      <div class="card w-40 bg-base-100 shadow-xl">
         <figure><img :src="book.book_img" /></figure>
       </div>
+      <router-link :to="`/book/chapter/${book.book_id}`">read</router-link>
     </div>
-  </div> <h1 v-for="user in userinfo" :key="user.customer_id"> welcome {{  user.customer_firstN}}</h1>
+  </div>
+
 
 </template>
 
@@ -43,14 +45,7 @@ export default {
         console.log(err);
       });
     this.email = localStorage.getItem("email");
-    // axios.get(`http://localhost:3000/userinfo/${this.email}`)
-    //   .then((response) => {
-    //     this.userinfo = response.data.userinfo;
-    //     console.log(this.userinfo[0].customer_id);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+
 
   },
   components: { RouterLink }

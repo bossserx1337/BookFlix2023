@@ -30,7 +30,7 @@
     data() {
       return {
         book: {
-          id: 1,
+          id: null,
           title: "My Hero Academia",
           author: "Kohei Horikoshi",
           publisher: "Shueisha",
@@ -64,6 +64,17 @@
             }
           ]
         }
+      }
+    },
+    mounted() {
+      // this.getBlogDetail(this.$route.params.id);
+    },
+    methods: {
+      getBlogDetail(id) {
+        axios.get(`http://localhost:3000/book/${id}`).then((response) => {
+          this.blog = response.data.blog;
+          console.log(this.blog);
+        });
       }
     }
   }

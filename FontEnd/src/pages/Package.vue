@@ -51,7 +51,7 @@
               <div class="control">
                 <input type="button" class="button is-link" value="submit" @click="submit()">
               </div>
-             
+
             </div>
     </form>
   </div>
@@ -105,7 +105,7 @@ export default {
       }
   },
   async created() {
-    
+
     this.$store.commit('initializeStore')
      this.email = localStorage.getItem("email");
     await axios.get(`http://localhost:3001/userinfo/${this.email}`)

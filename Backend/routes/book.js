@@ -15,6 +15,20 @@ router.get("/book", async function (req, res, next) {
     return next(err)
   }
 });
+
+router.get("/book/:bookid", async function (req, res, next) {
+  try {
+
+    let [rows , fields] = await pool.query(`SELECT * FROM book where book_id = ${req.params.bookid}`)
+
+    return res.json( {
+      book: rows
+    });
+  } catch (err) {
+    return next(err)
+  }
+});
+
 router.post('/addbook' , async function (req, res, next) {
   console.log(req.body)
   const bookid = req.body.bookid;
