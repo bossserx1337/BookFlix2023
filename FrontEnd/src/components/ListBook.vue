@@ -1,11 +1,11 @@
 <template>
-  <div class="text-2xl font-semibold pl-3 ">Trending now</div>
+
   <div class="flex ml-2 gap-x-4 pl-4">
     <div v-for="book in books " :key="book.book_id">
       <div class="card w-40 bg-base-100 shadow-xl">
         <figure><img :src="book.book_img" /></figure>
       </div>
-      <router-link :to="`/book/chapter/${book.book_id}`">read</router-link>
+      <router-link :to="`/book/${book.book_id}/chapter/`">read</router-link>
     </div>
   </div>
 

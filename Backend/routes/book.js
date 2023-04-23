@@ -16,13 +16,34 @@ router.get("/book", async function (req, res, next) {
   }
 });
 
-router.get("/book/:bookid", async function (req, res, next) {
+router.get("/book/:bookid/chapter/", async function (req, res, next) {
   try {
 
-    let [rows , fields] = await pool.query(`SELECT * FROM book where book_id = ${req.params.bookid}`)
+    let [book , _] = await pool.query(`SELECT * FROM book where book_id = ${req.params.bookid}`)
+    let [chapter , fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
+    console.log(book, chapter)
+    // console.log(chapter)
+    return res.json( {
+      book: book,
+      chapter: chapter
+    });
+  } catch (err) {
+    return next(err)
+  }
+});
+router.get("/book/:bookid/chapter/:chapterid", async function (req, res, next) {
+  try {
+    let [chapter , _] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid} LIMIT 1  OFFSET ${req.params.chapterid - 1}`)
+    if(chapter == undefined){
+      res.status(404).send('Not found')
+    }
+
+    let [image , fields] = await pool.query(`SELECT * FROM chapter_image join chapter using (chapter_id)   where book_id = ${req.params.bookid} and chapter_id = ${chapter[0].chapter_id} `)
 
     return res.json( {
-      book: rows
+      image: image,
+      chapter: chapter
+
     });
   } catch (err) {
     return next(err)

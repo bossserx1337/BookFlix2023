@@ -64,12 +64,12 @@ const routes = [
         component: editbook
     },
     {
-        path: '/book/chapter/:bookid',
+        path: '/book/:bookid/chapter/',
         name: 'DetailBook',
         component: DetailBook
     },
     {
-        path: '/DetailChapter',
+        path: '/book/:bookid/chapter/:chapterid',
         name: 'DetailChapter',
         component: DetailChapter
     },

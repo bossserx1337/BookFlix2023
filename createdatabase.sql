@@ -37,7 +37,7 @@ CREATE TABLE `Book` (
   `book_img` VARCHAR(255),
   `author_id` INT(10),
   `pub_id` INT(10),
-  
+
   PRIMARY KEY (`book_id`),
   FOREIGN KEY (`pub_id`) REFERENCES `Publisher`(`pub_id`),
   FOREIGN KEY (`author_id`) REFERENCES `Author`(`author_id`),
@@ -175,7 +175,7 @@ ALTER TABLE author ADD author_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAM
 
 ALTER TABLE publisher ADD publisher_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE chapter ADD chapter_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE chapter_image ADD chapter_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 INSERT INTO `Publisher` (`pub_id`, `pub_name`, `pub_phone`, `pub_url`) VALUES
 (1, 'Webtoon', '123456789', 'https://www.webtoons.com/'),
@@ -238,7 +238,8 @@ INSERT INTO `Chapter` (`book_id`, `chapter_content`) VALUES
 ( '9788953935202', 'Chapter 1: Prologue'),
 ( '9788953935202', 'Chapter 2: The Noblesse'),
 ( '9788953935646', 'Chapter 1: Episode 0'),
-( '9788953935646', 'Chapter 2: Episode 1');
+( '9788953935646', 'Chapter 2: Episode 1'),
+( '9791190995292', 'Chapter 3:');
 
 INSERT INTO book_type (book_type_id, book_type_name) VALUES
 (1, 'Fiction'),
@@ -342,6 +343,22 @@ VALUES
 (18, 2, '2023-06-01', '2023-11-30', 8, NULL),
 (19, 3, '2023-07-01', '2023-12-31', 9, NULL),
 (20, 1, '2023-08-01', '2024-01-31', 10, NULL);
+
+INSERT INTO chapter_image (image_id, chapter_id, image_url)
+VALUES
+(1, 1, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605091272630312/solo-leveling-1-1-202300011.png'),
+(2, 1, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605271317319721/solo-leveling-1-1-202300012.png'),
+(3, 1, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605452934893568/solo-leveling-1-1-202300013.png'),
+(4, 2, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605091272630312/solo-leveling-1-1-202300011.png'),
+(5, 2, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624303537958943/solo-leveling-1-1-202300027.png'),
+(6, 2, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624427051814972/solo-leveling-1-1-202300028.png'),
+(7, 11, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605091272630312/solo-leveling-1-1-202300011.png'),
+(8, 11, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624791096434708/solo-leveling-1-1-202300040.png'),
+(9, 11, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624848818454528/solo-leveling-1-1-202300041.png'),
+(10, 3, 'https://cdn.discordapp.com/attachments/920661114935726130/1099634618552033330/aHR0cHM6Ly93d3cubWFuZ2FyZWFkLm9yZy9tYW5nYS90aGUtZ29kLW9mLWhpZ2gtc2Nob29sLW1hbmdhLw3D3D.png'),
+(11, 3, 'https://cdn.discordapp.com/attachments/920661114935726130/1099634760864759848/aHR0cHM6Ly93d3cubWFuZ2FyZWFkLm9yZy9tYW5nYS90aGUtZ29kLW9mLWhpZ2gtc2Nob29sLW1hbmdhLw3D3D.png'),
+(12, 3, 'https://cdn.discordapp.com/attachments/920661114935726130/1099634829101895780/aHR0cHM6Ly93d3cubWFuZ2FyZWFkLm9yZy9tYW5nYS90aGUtZ29kLW9mLWhpZ2gtc2Nob29sLW1hbmdhLw3D3D.png');
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -55,12 +55,21 @@ CREATE TABLE `favorite` (
 
 DROP TABLE IF EXISTS `Chapter`;
 CREATE TABLE `Chapter` (
-  `chapter_id` INT(10),
+  `chapter_id` INT(10) auto_increment,
   `book_id` VARCHAR(255),
   `chapter_content` VARCHAR(255),
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`chapter_id`),
   FOREIGN KEY (`book_id`) REFERENCES `Book`(`book_id`),
   KEY `NN` (`chapter_content`)
+);
+DROP TABLE IF EXISTS `Chapter_Image`;
+CREATE TABLE `Chapter_Image` (
+  `image_id` INT(10) AUTO_INCREMENT,
+  `chapter_id` INT(10),
+  `image_url` VARCHAR(255),
+  PRIMARY KEY (`image_id`),
+  FOREIGN KEY (`chapter_id`) REFERENCES `Chapter`(`chapter_id`)
 );
 
 DROP TABLE IF EXISTS `Book_Type`;
@@ -100,8 +109,6 @@ CREATE TABLE `Customer` (
   `customer_phone` VARCHAR(10),
   `customer_pic` VARCHAR(255),
   `customer_displayname` VARCHAR(20),
-  `package_id` INT(10),
-  `payment_id` INT(10),
   `status` ENUM('R', 'NR'),
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`),
@@ -168,7 +175,7 @@ ALTER TABLE author ADD author_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAM
 
 ALTER TABLE publisher ADD publisher_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
-ALTER TABLE chapter ADD chapter_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE chapter_image ADD chapter_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 INSERT INTO `Publisher` (`pub_id`, `pub_name`, `pub_phone`, `pub_url`) VALUES
 (1, 'Webtoon', '123456789', 'https://www.webtoons.com/'),
@@ -195,17 +202,17 @@ INSERT INTO `Author` (`author_id`, `author_fn`, `author_ln`, `author_alias`) VAL
 (10, 'Yoon', 'Tae-ho', 'Yoon Tae-ho');
 
 INSERT INTO Book (book_id, book_name, book_desc, book_img, author_id, pub_id) VALUES
-('9788953934700', 'The God of High School', 'A high school martial arts tournament with a supernatural twist', 'https://www.webtoons.com/en/action/the-god-of-high-school/list?title_no=66', 1, 1),
-('9788953934465', 'Tower of God', 'A young boy attempts to climb a massive tower to find his lost love', 'https://www.webtoons.com/en/fantasy/tower-of-god/list?title_no=95', 1, 1),
-('9788953935202', 'Noblesse', 'A powerful vampire awakens after 820 years of slumber', 'https://www.webtoons.com/en/fantasy/noblesse/list?title_no=87', 1, 1),
-('9788953935646', 'Sweet Home', 'A group of survivors must fight for their lives against monstrous creatures in a world where humans are turning into monsters', 'https://www.webtoons.com/en/thriller/sweet-home/list?title_no=1285', 1, 1),
-('9788953938289', 'Save Me', 'A prequel to the popular Korean boy band BTS''s "The Most Beautiful Moment in Life" music video trilogy', 'https://www.webtoons.com/en/drama/save-me/list?title_no=1514', 1, 1),
-('9788998279684', 'Killing Stalking', 'A psychological thriller about a stalker and his victim who develop a twisted relationship', 'https://www.lezhin.com/en/comic/killingstalking', 2, 2),
-('9788998279875', 'Painter of the Night', 'A historical drama about a painter who falls in love with a nobleman', 'https://www.lezhin.com/en/comic/painterofthenight', 2, 2),
-('9788998279905', 'Blood Bank', 'A vampire and a human become unlikely allies in a world where vampires must drink human blood to survive', 'https://www.lezhin.com/en/comic/bloodbank', 2, 2),
-('9788998281656', 'The Lady and Her Butler', 'A romantic comedy about a woman who hires a butler to help her recover from a painful breakup', 'https://www.lezhin.com/en/comic/ladyandbutler', 2, 2),
-('9788998274801', 'Gatabutata', 'A comedy about two friends and their wacky adventures', 'https://www.webtoons.com/en/comedy/gatabutata/list?title_no=1692', 1, 1),
-('9791190995292', 'Solo Leveling', 'After a portal to a parallel world opens, hunters begin to awaken in humans, giving them supernatural powers. Jinwoo Sung is one such hunter, but he is known as the "weakest" because he is constantly struggling to make ends meet. One day, a mission goes wrong and Jinwoo finds himself trapped in a double dungeon, where he discovers his true potential and begins his journey to become the world''s strongest hunter.', 'https://www.webnovel.com/book/solo-leveling_11917920705230505', 3, 3);
+('9788953934700', 'The God of High School', 'A high school martial arts tournament with a supernatural twist', 'https://m.media-amazon.com/images/M/MV5BYjljYmYzNjMtZWY5YS00OGZjLTk4MTYtNDZmYzkxYjgyMDMzXkEyXkFqcGdeQXVyODM2NjQzOTA@._V1_.jpg', 1, 1),
+('9788953934465', 'Tower of God', 'A young boy attempts to climb a massive tower to find his lost love', 'https://f.ptcdn.info/795/068/000/q85vai5ajqemU3yLMaG-o.png', 1, 1),
+('9788953935202', 'Noblesse', 'A powerful vampire awakens after 820 years of slumber', 'https://m.media-amazon.com/images/M/MV5BNDZlNjJmYjEtZmI2Yy00MDY4LWFjNmItMDcxNmE3MGJlZTJiXkEyXkFqcGdeQXVyMzgxODM4NjM@._V1_FMjpg_UX1000_.jpg', 1, 1),
+('9788953935646', 'Sweet Home', 'A group of survivors must fight for their lives against monstrous creatures in a world where humans are turning into monsters', 'https://sweethomemanga.com/wp-content/uploads/2022/03/Sweet-Home-Volume-1.webp', 1, 1),
+('9788953938289', 'Save Me', 'A prequel to the popular Korean boy band BTS''s "The Most Beautiful Moment in Life" music video trilogy', 'https://cdn.myanimelist.net/images/manga/2/259420.jpg', 1, 1),
+('9788998279684', 'Killing Stalking', 'A psychological thriller about a stalker and his victim who develop a twisted relationship', 'https://m.media-amazon.com/images/I/71GOjN7YY4L._AC_UF1000,1000_QL80_.jpg', 2, 2),
+('9788998279875', 'Painter of the Night', 'A historical drama about a painter who falls in love with a nobleman', 'https://i.ebayimg.com/images/g/GeAAAOSwSFph~-wO/s-l1600.jpg', 2, 2),
+('9788998279905', 'Blood Bank', 'A vampire and a human become unlikely allies in a world where vampires must drink human blood to survive', 'https://ccdn.lezhin.com/v2/comics/6059074143125504/images/tall.jpg?updated=1611130137519&width=840', 2, 2),
+('9788998281656', 'The Lady and Her Butler', 'A romantic comedy about a woman who hires a butler to help her recover from a painful breakup', 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1617185858i/57587847.jpg', 2, 2),
+('9788998274801', 'Gatabutata', 'A comedy about two friends and their wacky adventures', 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1623397488l/58313049.jpg', 1, 1),
+('9791190995292', 'Solo Leveling', 'After a portal to a parallel world opens, hunters begin to awaken in humans, giving them supernatural powers. Jinwoo Sung is one such hunter, but he is known as the "weakest" because he is constantly struggling to make ends meet. One day, a mission goes wrong and Jinwoo finds himself trapped in a double dungeon, where he discovers his true potential and begins his journey to become the world''s strongest hunter.', 'https://upload.wikimedia.org/wikipedia/en/9/99/Solo_Leveling_Webtoon.png', 3, 3);
 
 INSERT INTO `favorite` (`customer_id`, `book_id`) VALUES
 (1, '9788953934465'),
@@ -221,17 +228,18 @@ INSERT INTO `favorite` (`customer_id`, `book_id`) VALUES
 
 
 
-INSERT INTO `Chapter` (`chapter_id`, `book_id`, `chapter_content`) VALUES
-(1, '9791190995292', 'Chapter 1: It\'s Solo'),
-(2, '9791190995292', 'Chapter 2: Strongest'),
-(3, '9788953934700', 'Chapter 1: The God of High School'),
-(4, '9788953934700', 'Chapter 2: Renewal/Soul'),
-(5, '9788953934465', 'Chapter 1: Headon''s Floor'),
-(6, '9788953934465', 'Chapter 2: Three Four-Hundredths'),
-(7, '9788953935202', 'Chapter 1: Prologue'),
-(8, '9788953935202', 'Chapter 2: The Noblesse'),
-(9, '9788953935646', 'Chapter 1: Episode 0'),
-(10, '9788953935646', 'Chapter 2: Episode 1');
+INSERT INTO `Chapter` (`book_id`, `chapter_content`) VALUES
+( '9791190995292', 'Chapter 1: It\'s Solo'),
+( '9791190995292', 'Chapter 2: Strongest'),
+( '9788953934700', 'Chapter 1: The God of High School'),
+( '9788953934700', 'Chapter 2: Renewal/Soul'),
+( '9788953934465', 'Chapter 1: Headon''s Floor'),
+( '9788953934465', 'Chapter 2: Three Four-Hundredths'),
+( '9788953935202', 'Chapter 1: Prologue'),
+( '9788953935202', 'Chapter 2: The Noblesse'),
+( '9788953935646', 'Chapter 1: Episode 0'),
+( '9788953935646', 'Chapter 2: Episode 1'),
+( '9791190995292', 'Chapter 3:');
 
 INSERT INTO book_type (book_type_id, book_type_name) VALUES
 (1, 'Fiction'),
@@ -271,17 +279,17 @@ INSERT INTO buy_history (customer_id, book_id, his_page) VALUES
 ( 9, '1', 2),
 ( 10, '2', 2);
 
-INSERT INTO Customer (customer_password, customer_firstN, customer_lastN, customer_email, customer_phone, customer_pic, customer_displayname, package_id, payment_id, status) VALUES
-('123', 'Kamapanat', 'Konklong', 'kakakasmile@outlook.com', '1234567890', NULL, 'JohnS', 2, NULL, 'NR'),
-('password2', 'Jane', 'Doe', 'jane@example.com', '0987654321', NULL, 'JaneD', 1, NULL, 'NR'),
-('password3', 'Bob', 'Johnson', 'bob@example.com', '5551234567', NULL, 'BobJ', 3, NULL,'R'),
-('password4', 'Alice', 'Jones', 'alice@example.com', '5555555555', NULL, 'AliceJ', 1, NULL, 'R'),
-('password5', 'Tom', 'Smith', 'tom@example.com', '1112223333', NULL, 'TomS', 2, NULL, 'NR'),
-('password6', 'Sarah', 'Lee', 'sarah@example.com', '4443332222', NULL, 'SarahL', 1, NULL,'NR'),
-('password7', 'James', 'Brown', 'james@example.com', '7778889999', NULL, 'JamesB', 3, NULL,'R'),
-('password8', 'Emily', 'Taylor', 'emily@example.com', '2221114444', NULL, 'EmilyT', 1, NULL,'NR'),
-('password9', 'David', 'Martin', 'david@example.com', '6667778888', NULL, 'DavidM', 2, NULL,'R'),
-('password10', 'Olivia', 'Wilson', 'olivia@example.com', '3334445555', NULL, 'OliviaW', 1, NULL, 'NR');
+INSERT INTO Customer (customer_password, customer_firstN, customer_lastN, customer_email, customer_phone, customer_pic, customer_displayname,  status) VALUES
+('123', 'Kamapanat', 'Konklong', 'kakakasmile@outlook.com', '1234567890', NULL, 'JohnS', 'NR'),
+('password2', 'Jane', 'Doe', 'jane@example.com', '0987654321', NULL, 'JaneD',  'NR'),
+('password3', 'Bob', 'Johnson', 'bob@example.com', '5551234567', NULL, 'BobJ', 'R'),
+('password4', 'Alice', 'Jones', 'alice@example.com', '5555555555', NULL, 'AliceJ', 'R'),
+('password5', 'Tom', 'Smith', 'tom@example.com', '1112223333', NULL, 'TomS', 'NR'),
+('password6', 'Sarah', 'Lee', 'sarah@example.com', '4443332222', NULL, 'SarahL', 'NR'),
+('password7', 'James', 'Brown', 'james@example.com', '7778889999', NULL, 'JamesB', 'R'),
+('password8', 'Emily', 'Taylor', 'emily@example.com', '2221114444', NULL, 'EmilyT', 'NR'),
+('password9', 'David', 'Martin', 'david@example.com', '6667778888', NULL, 'DavidM', 'R'),
+('password10', 'Olivia', 'Wilson', 'olivia@example.com', '3334445555', NULL, 'OliviaW', 'NR');
 
 INSERT INTO package (pack_id, price, pack_name) VALUES
 (1, 25, 'Basic'),
@@ -335,6 +343,22 @@ VALUES
 (18, 2, '2023-06-01', '2023-11-30', 8, NULL),
 (19, 3, '2023-07-01', '2023-12-31', 9, NULL),
 (20, 1, '2023-08-01', '2024-01-31', 10, NULL);
+
+INSERT INTO chapter_image (image_id, chapter_id, image_url)
+VALUES
+(1, 1, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605091272630312/solo-leveling-1-1-202300011.png'),
+(2, 1, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605271317319721/solo-leveling-1-1-202300012.png'),
+(3, 1, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605452934893568/solo-leveling-1-1-202300013.png'),
+(4, 2, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605091272630312/solo-leveling-1-1-202300011.png'),
+(5, 2, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624303537958943/solo-leveling-1-1-202300027.png'),
+(6, 2, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624427051814972/solo-leveling-1-1-202300028.png'),
+(7, 11, 'https://cdn.discordapp.com/attachments/920661114935726130/1099605091272630312/solo-leveling-1-1-202300011.png'),
+(8, 11, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624791096434708/solo-leveling-1-1-202300040.png'),
+(9, 11, 'https://cdn.discordapp.com/attachments/920661114935726130/1099624848818454528/solo-leveling-1-1-202300041.png'),
+(10, 3, 'https://cdn.discordapp.com/attachments/920661114935726130/1099634618552033330/aHR0cHM6Ly93d3cubWFuZ2FyZWFkLm9yZy9tYW5nYS90aGUtZ29kLW9mLWhpZ2gtc2Nob29sLW1hbmdhLw3D3D.png'),
+(11, 3, 'https://cdn.discordapp.com/attachments/920661114935726130/1099634760864759848/aHR0cHM6Ly93d3cubWFuZ2FyZWFkLm9yZy9tYW5nYS90aGUtZ29kLW9mLWhpZ2gtc2Nob29sLW1hbmdhLw3D3D.png'),
+(12, 3, 'https://cdn.discordapp.com/attachments/920661114935726130/1099634829101895780/aHR0cHM6Ly93d3cubWFuZ2FyZWFkLm9yZy9tYW5nYS90aGUtZ29kLW9mLWhpZ2gtc2Nob29sLW1hbmdhLw3D3D.png');
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

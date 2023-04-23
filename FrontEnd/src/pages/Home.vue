@@ -2,6 +2,7 @@
   <div class="bg-white">
     <nav/>
     <CarouselBar />
+    <div class="text-2xl font-semibold pl-3 ">Manhwa in Website</div>
     <ListBook />
   </div>
 </template>
@@ -9,7 +10,6 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import ListBook from "../components/ListBook.vue";
-import axios from "axios";
 
 import CarouselBar from "../components/CarouselBar.vue";
 
