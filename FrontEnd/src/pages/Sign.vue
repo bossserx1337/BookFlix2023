@@ -1,8 +1,10 @@
 <template>
-  <div class="max-w-lg mx-auto my-8 p-6 rounded-lg shadow-lg bg-white">
-    <h1 class="text-3xl font-bold mb-4">Sign In</h1>
-    <form class="max-w-md" @submit.prevent="signIn">
-      <div class="mb-4">
+  <div class="h-[97vh]">
+
+    <div class="max-w-lg mx-auto my-8 p-6 rounded-lg shadow-lg bg-white ">
+      <h1 class="text-3xl font-bold mb-4">Sign In</h1>
+      <form class="max-w-md" @submit.prevent="signIn">
+        <div class="mb-4">
         <label for="email" class="block text-gray-700 font-bold mb-2">Email:</label>
         <input type="email" id="email" v-model="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
       </div>
@@ -14,6 +16,7 @@
       <router-link to="/signup" class="ml-2 text-blue-600 hover:text-blue-800">Create an account</router-link>
     </form>
   </div>
+</div>
 </template>
 
 <script>

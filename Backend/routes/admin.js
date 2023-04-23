@@ -41,7 +41,7 @@ router.get("/favorite/:customerid", async function (req, res, next) {
 router.get("/userinfo/:email", async function (req, res, next) {
   try {
     let [customer] = await pool.query(`SELECT * FROM customer where customer_email = ? `,  req.params.email)
-    console.log(customer)
+    // console.log(customer)
     if(customer.length > 0){
       return res.json( {
         userinfo: customer

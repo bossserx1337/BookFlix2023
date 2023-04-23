@@ -1,8 +1,8 @@
-<template lang="">
-  <div class="footer absolute bottom-0 w-full">
+<template >
+  <div class="footer w-full ">
 
   <footer class="p-4 bg-white rounded-lg shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
-      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a class="hover:underline">so good</a>. All Rights Reserved.
       </span>
       <ul class="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
           <li>
@@ -24,7 +24,11 @@
 </template>
 <script>
 export default {
-
+    name: "Footer",
+    data() {
+        return {};
+    },
+    methods: {},
 };
 </script>
 <style lang=""></style>

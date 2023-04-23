@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white min-h-screen">
+  <div class="bg-white ">
     <div class="container mx-auto py-8">
       <div class="flex flex-col md:flex-row">
         <div class="md:w-1/3">
@@ -16,7 +16,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div v-for="(chapter, index) in book.chapters" :key="index" class="bg-gray-100 rounded-lg p-4">
 
-              <router-link :to="'/book/' + book.id + '/chapter/' + (index+1)"
+              <router-link :to="'/book/' + book.id + '/chapter/' + (index + 1)"
                 class="text-lg font-medium hover:text-indigo-500">{{ chapter.chapter_content }}</router-link>
               <div class="text-gray-600">{{ chapter.chapter_update }}</div>
             </div>
@@ -34,6 +34,8 @@
 
 <script>
 import axios from "axios";
+
+
 export default {
   data() {
     return {
@@ -76,7 +78,7 @@ export default {
   },
   mounted() {
     this.getBookDetail(this.$route.params.bookid);
-
+    this.scrollToTop()
   },
   methods: {
     getBookDetail(id) {
@@ -93,7 +95,17 @@ export default {
       }).catch((error) => {
         console.log(error);
       })
+    },
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
     }
-  }
+
+
+  },
+
 }
 </script>
