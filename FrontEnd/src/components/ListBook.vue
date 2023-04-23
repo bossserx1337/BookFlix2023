@@ -1,15 +1,13 @@
 <template>
-
   <div class="flex ml-2 gap-x-4 pl-4">
     <div v-for="book in books " :key="book.book_id">
-      <div class="card w-40 bg-base-100 shadow-xl">
-        <figure><img :src="book.book_img" /></figure>
-      </div>
-      <router-link :to="`/book/${book.book_id}/chapter/`">read</router-link>
+      <router-link :to="`/book/${book.book_id}/chapter/`">
+        <div class="card w-40 bg-base-100 shadow-xl">
+          <figure><img :src="book.book_img" /></figure>
+        </div>
+      </router-link>
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -20,7 +18,7 @@ export default {
     return {
       books: null,
       email: '',
-      userinfo : null// add blogs variable
+      userinfo: null// add blogs variable
 
     };
   },

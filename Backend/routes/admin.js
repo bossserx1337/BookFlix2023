@@ -29,12 +29,12 @@ router.get("/admin", async function (req, res, next) {
 router.get("/userinfo/:email", async function (req, res, next) {
   try {
     let [customer] = await pool.query(`SELECT * FROM customer where customer_email = ? `,  req.params.email)
+    console.log(customer)
     if(customer.length > 0){
       return res.json( {
         userinfo: customer
       });
     }
-
     let [admin] = await pool.query(`SELECT * FROM admin where admin_email = ? `,  req.params.email)
     if(admin.length > 0){
       return res.json( {

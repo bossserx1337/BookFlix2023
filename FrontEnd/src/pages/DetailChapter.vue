@@ -50,14 +50,14 @@ export default {
       // decrement the chapter number by 1
       const prevChapterNumber = currentChapterNumber - 1;
       // return the updated URL
-      return `/book/9791190995292/chapter/${prevChapterNumber}`;
+      return `/book/${this.$route.params.bookid}/chapter/${prevChapterNumber}`;
     },
     getNextChapterUrl() {
       const currentChapterNumber = this.getCurrentChapterNumber();
       // increment the chapter number by 1
       const nextChapterNumber = currentChapterNumber + 1;
       // return the updated URL
-      return `/book/9791190995292/chapter/${nextChapterNumber}`;
+      return `/book/${this.$route.params.bookid}/chapter/${nextChapterNumber}`;
     }
   }
 };
