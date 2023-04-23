@@ -1,33 +1,26 @@
 <template>
-    <div class="flex justify-center">
-        <div v-for="(book, index) in fav" :key="index"
-            class="flex basis-1/4 flex-col h-full scroll-smooth shadow-md rounded-md mr-15 cursor-pointer hover:shadow-lg bg-stone-100 ">
-
-            <div class="h-50 w-full rounded-lg shadow-md items-center justify-center overflow-hidden">
-                <img :src='book.image'>
-            </div>
-            <div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                    @click="addtofav(book)">
-                    favorite
-                </button>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-                    @click="removefav(book)">
-                    delete
-                </button>
-            </div>
-
+   <div class="flex ml-2 gap-x-4 pl-4">
+    <div v-for="book in favorite " :key="book.book_id">
+      <router-link :to="`/book/${book.book_id}/chapter/`">
+        <div class="card w-40 bg-base-100 shadow-xl">
+          <figure><img :src="book.book_img" /></figure>
         </div>
+      </router-link>
     </div>
+  </div>
 </template>
 
 <script >
+import axios from 'axios';
 
 export default {
     name: 'Fav',
     data() {
         return {
-            fav: []
+            fav: [],
+            userinfo : null,
+            favorite : null,
+            customerid : null,
         }
 
     },
@@ -37,6 +30,31 @@ export default {
     components: {
 
     },
+    created() {
+
+    this.email = localStorage.getItem("email");
+    axios.get(`http://localhost:3001/userinfo/${this.email}`)
+      .then((response) => {
+        this.userinfo = response.data.userinfo;
+        this.customerid = response.data.userinfo[0].customer_id;
+        console.log(this.customerid);
+        axios.get(`http://localhost:3001/favorite/${this.customerid}`)
+      .then((response) => {
+        this.favorite = response.data.favorite;
+        console.log(this.favorite[0].book_id);
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    
+
+  
+}
 }
 </script>
 
