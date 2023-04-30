@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '/plugins/axios'
+
 
 export default {
   data() {
@@ -31,25 +32,22 @@ export default {
   },
   methods: {
     async signIn() {
+      const data = {
+        email: this.email,
+        password: this.password
+      }
       try {
+        let res = await axios.post('/user/login/', data)
 
-        const response = await axios.post('http://localhost:3001/signin', {
-          email: this.email,
-          password: this.password,
-        });
-        this.$store.commit('login', this.email);
-        console.log(response.data);
+        const token = res.data.token
+        localStorage.setItem('token', token)
+        this.$emit('auth-change')
+        window.location.href = ('/')
 
-        Swal.fire({
-                            icon: 'success',
-                            title: "Congratulations! You've successfully Login",
-                            confirmButtonText: `OK`,
-                          })
-                          this.$router.push({ path: '/'});
-
-        // redirect to another page or show a success message
-      } catch (error) {
-        console.error(error.response.data);
+      }
+      catch (error) {
+        this.error = error.response.data
+        console.log(error.response.data)
       }
     },
   },

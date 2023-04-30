@@ -13,7 +13,7 @@
                 alt="Your Company" />
             </div>
           </router-link>
-          <div v-show="$store.state.email" class="hidden sm:ml-6 sm:block">
+          <div v-show="userdata" class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <router-link v-for="item in navigation" :key="item.name" :to="item.href"
                 class="text-black   hover:text-white , rounded-md px-3 py-2 text-md font-medium" aria-current='page'>{{
@@ -21,7 +21,7 @@
             </div>
           </div>
         </div>
-        <div v-show="$store.state.email"
+        <div v-show="userdata"
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
           <!-- Profile dropdown -->
@@ -30,8 +30,7 @@
               <MenuButton
                 class=" flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="sr-only">Open user menu</span>
-                <img
-                  :src='(userdata.prof_img) ? userdata.prof_img : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"'
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                   class="h-8 w-8 rounded-full">
               </MenuButton>
             </div>
@@ -64,13 +63,14 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 </script>
 <script>
+import axios from '/plugins/axios'
 import { useRoute } from 'vue-router'
 
 export default {
   name: 'Nav',
   data() {
     return {
-      userdata: [],
+      userdata: null,
       navigation: [
         { name: 'Home', href: '/', current: false },
         { name: 'MyFav', href: '/fav', current: false },
@@ -83,19 +83,32 @@ export default {
       return useRoute()
     }
   },
+  mounted() {
+    this.onAuthChange()
+  },
   methods: {
-    logout() {
-      this.$store.commit('logout')
-      this.$router.push('/sign')
+    onAuthChange() {
+      const token = localStorage.getItem('token')
+      if (token) {
+        this.getUser()
+      }
+    },
+    getUser() {
+      axios.get('/user/me').then(res => {
+        this.userdata = res.data
+      })
+    },
+    logout(){
+      localStorage.clear()
+      window.location.href = ('/sign')
     }
-  },
-  created() {
-    this.$store.commit('initializeStore')
-
-  },
-
-
+  }
 }
+
+
+
+
+
 
 </script>
 <style>.router-link-active {

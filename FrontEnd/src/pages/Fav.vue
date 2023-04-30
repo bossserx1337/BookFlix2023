@@ -13,7 +13,7 @@
 </template>
 
 <script >
-import axios from 'axios';
+import axios from '/plugins/axios'
 
 export default {
   name: 'Fav',
@@ -30,11 +30,8 @@ export default {
     async removeFromFavorites(book_id) {
 
       try {
-        const response = await axios.get(`http://localhost:3001/userinfo/${this.email}`);
-        this.userinfo = response.data.userinfo;
-        this.customerid = response.data.userinfo[0].customer_id;
-        const postResponse = await axios.delete(`http://localhost:3001/favorite/${this.customerid}/${book_id}`);
-        this.getUserInfo();
+        const postResponse = await axios.delete(`favorite/${this.userinfo.customer_id}/${book_id}`);
+        this.getFav();
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -46,14 +43,12 @@ export default {
         console.log(err);
       }
     },
-    async getUserInfo() {
+    async getFav() {
       try {
-        const response = await axios.get(`http://localhost:3001/userinfo/${this.email}`);
-        this.userinfo = response.data.userinfo;
-        this.customerid = response.data.userinfo[0].customer_id;
 
-        const favoriteResponse = await axios.get(`http://localhost:3001/favorite/${this.customerid}`);
+        const favoriteResponse = await axios.get(`/favorite/${this.userinfo.customer_id}`);
         this.favorite = favoriteResponse.data.favorite;
+        console.log(this.favorite)
       } catch (error) {
         console.log(error);
       }
@@ -63,9 +58,15 @@ export default {
 
   },
   created() {
+    const token = localStorage.getItem('token')
+      if (token) {
+        axios.get('/user/me').then(res => {
+        this.userinfo = res.data
+        console.log(this.userinfo)
+        this.getFav();
+      })
+      }
 
-    this.email = localStorage.getItem("email");
-    this.getUserInfo();
 
 
 

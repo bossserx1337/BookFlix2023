@@ -6,7 +6,7 @@
                 <label class="block text-gray-700 font-bold mb-2" for="first-name">
                     First Name
                 </label>
-                <input v-model="form.firstName" :class="{ 'border-red-500': formErrors.firstName }"
+                <input v-model="form.first_Name" :class="{ 'border-red-500': formErrors.firstName }"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="first-name" type="text" placeholder="First Name" />
                 <p v-if="formErrors.firstName" class="text-red-500 text-xs italic">{{ formErrors.firstName }}</p>
@@ -15,7 +15,7 @@
                 <label class="block text-gray-700 font-bold mb-2" for="last-name">
                     Last Name
                 </label>
-                <input v-model="form.lastName" :class="{ 'border-red-500': formErrors.lastName }"
+                <input v-model="form.last_Name" :class="{ 'border-red-500': formErrors.lastName }"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="last-name" type="text" placeholder="Last Name" />
                 <p v-if="formErrors.lastName" class="text-red-500 text-xs italic">{{ formErrors.lastName }}</p>
@@ -35,10 +35,10 @@
             <label class="block text-gray-700 font-bold mb-2" for="phone-number">
                 Phone Number
             </label>
-            <input v-model="form.phoneNumber" :class="{ 'border-red-500': formErrors.phoneNumber }"
+            <input v-model="form.mobile" :class="{ 'border-red-500': formErrors.phoneNumber }"
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="phone-number" type="text" placeholder="Phone Number" />
-            <p v-if="formErrors.phoneNumber" class="text-red-500 text-xs italic">{{ formErrors.phoneNumber }}</p>
+            <p v-if="formErrors.mobile" class="text-red-500 text-xs italic">{{ formErrors.phoneNumber }}</p>
         </div>
         <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="password">
@@ -53,10 +53,10 @@
             <label class="block text-gray-700 font-bold mb-2" for="confirm-password">
                 Confirm Password
             </label>
-            <input v-model="form.confirmPassword" :class="{ 'border-red-500': formErrors.confirmPassword }"
+            <input v-model="form.confirm_password" :class="{ 'border-red-500': formErrors.confirmPassword }"
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="confirm-password" type="password" placeholder="**********" />
-            <p v-if="formErrors.confirmPassword" class="text-red-500 text-xs italic">{{ formErrors.confirmPassword }}</p>
+            <p v-if="formErrors.confirm_password" class="text-red-500 text-xs italic">{{ formErrors.confirmPassword }}</p>
         </div>
         <div class="flex items-center justify-between">
             <button :disabled="formSubmitted"
@@ -73,7 +73,7 @@
 
 
 <script>
-import axios from 'axios';
+import axios from '/plugins/axios'
 import Swal from 'sweetalert2'
 
 
@@ -81,12 +81,12 @@ export default {
     data() {
         return {
             form: {
-                firstName: '',
-                lastName: '',
+                first_Name: '',
+                last_Name: '',
                 email: '',
-                phoneNumber: '',
+                mobile: '',
                 password: '',
-                confirmPassword: '',
+                confirm_password: '',
             },
             formErrors: {},
             formSubmitted: false,
@@ -95,25 +95,25 @@ export default {
     methods: {
         validateForm() {
             const errors = {};
-            if (!this.form.firstName) {
+            if (!this.form. first_Name) {
                 errors.firstName = 'Please enter your first name.';
             }
-            if (!this.form.lastName) {
+            if (!this.form.last_Name) {
                 errors.lastName = 'Please enter your last name.';
             }
 
             if (!this.form.email) {
                 errors.email = 'Please enter your email address.';
             }
-            if (!this.form.phoneNumber) {
+            if (!this.form.mobile) {
                 errors.phoneNumber = 'Please enter your phone number.';
             }
             if (!this.form.password) {
                 errors.password = 'Please enter a password.';
             }
-            if (!this.form.confirmPassword) {
+            if (!this.form.confirm_password) {
                 errors.confirmPassword = 'Please confirm your password.';
-            } else if (this.form.password !== this.form.confirmPassword) {
+            } else if (this.form.password !== this.form.confirm_password) {
                 errors.confirmPassword = 'Passwords do not match.';
             }
             this.formErrors = errors;
@@ -122,9 +122,10 @@ export default {
         async submitForm() {
             if (this.validateForm()) {
                 try {
-                    const response = await axios.post('http://localhost:3001/signup', this.form);
+                    console.log(this.form);
+                    const response = await axios.post('/user/signup', this.form);
                     console.log(response);
-                    if (response.status === 200) {
+                    if (response.status === 201) {
                         this.formSubmitted = true;
                         Swal.fire({
                             icon: 'success',

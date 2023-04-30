@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userinfo[0].status == 'WT'">
+  <div v-if="userinfo.status == 'WT'">
     <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
   <div class="flex">
     <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '/plugins/axios'
 export default {
   data() {
     return {
@@ -71,7 +71,7 @@ export default {
       packaged: '',
       customerid:'',
       file: null,
-      userinfo : ''
+      userinfo : null
     };
   },
   methods: {
@@ -86,12 +86,12 @@ export default {
       submit(){
           var formData = new FormData();
           formData.append("packid", this.packaged);
-          formData.append("customerid", this.userinfo[0].customer_id)
+          formData.append("customerid", this.userinfo.customer_id)
           formData.append("bill_image", this.file)
           console.log(this.packaged);
-          console.log(this.userinfo[0].customer_id);
+
           console.log(this.file);
-          axios.post('http://localhost:3001/buypackage', formData, {
+          axios.post('/buypackage', formData, {
               headers: {
               'Content-Type': 'multipart/form-data'
               }
@@ -104,27 +104,18 @@ export default {
           });
       }
   },
-  async created() {
-
-    this.$store.commit('initializeStore')
-     this.email = localStorage.getItem("email");
-    await axios.get(`http://localhost:3001/userinfo/${this.email}`)
-      .then((response) => {
-        this.userinfo = response.data.userinfo;
-        console.log(this.email);
-        console.log(this.userinfo[0].customer_id);
-        console.log(this.userinfo[0].status);
+ async created() {
+  const token = localStorage.getItem('token')
+      if (token) {
+        axios.get('/user/me').then(res => {
+        this.userinfo = res.data
+        console.log(this.userinfo)
       })
-      .catch((err) => {
-        console.log(err);
-      });
-    try {
-      const packages = await axios.get('http://localhost:3001/packages');
-      this.packages = packages.data.packages;
-      console.log(this.packages)
-    } catch (error) {
-      console.log(error)
-    }
-  },
+  }
+  const packages =  await axios.get('/packages');
+      console.log(packages.data)
+      this.packages = packages.data.packages
+}
+
 };
 </script>

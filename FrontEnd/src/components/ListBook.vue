@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from '/plugins/axios'
 import { RouterLink } from "vue-router";
 export default {
   data() {
@@ -29,10 +29,7 @@ export default {
   methods: {
     async addToFavorites(book_id) {
       try {
-        const response = await axios.get(`http://localhost:3001/userinfo/${this.email}`);
-        this.userinfo = response.data.userinfo;
-        this.customerid = response.data.userinfo[0].customer_id;
-        const postResponse = await axios.post(`http://localhost:3001/favorite/${this.customerid}`, { book_id: book_id });
+        const postResponse = await axios.post(`http://localhost:3001/favorite/${this.userinfo.customer_id}`, { book_id: book_id });
         console.log(postResponse);
         Swal.fire({
           position: 'top-end',
@@ -66,8 +63,13 @@ export default {
       .catch((err) => {
         console.log(err);
       });
-    this.email = localStorage.getItem("email");
-
+      const token = localStorage.getItem('token')
+      if (token) {
+        axios.get('/user/me').then(res => {
+        this.userinfo = res.data
+        console.log(this.userinfo)
+      })
+      }
 
   },
 }

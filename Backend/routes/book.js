@@ -159,6 +159,7 @@ router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
     )
     res.status(200).send("success!");
   } catch (err) {
+    console.log(err)
     await conn.rollback();
     next(err);
   } finally {
@@ -166,6 +167,18 @@ router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
     conn.release();
   }
 })
+router.get("/favorite/:customerid", async function (req, res, next) {
+  try {
+
+    let [rows , fields] = await pool.query(`SELECT * FROM favorite join book using(book_id) where  customer_id = ?`, req.params.customerid)
+
+    return res.json( {
+      favorite: rows
+    });
+  } catch (err) {
+    return next(err)
+  }
+});
 
 
 

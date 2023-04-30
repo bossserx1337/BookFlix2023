@@ -69,6 +69,7 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
     );
 
     await conn.commit();
+    
     res.send('success!');
   } catch (err) {
     await conn.rollback();

@@ -12,6 +12,7 @@ import editbook from "../pages/editbook.vue";
 import DetailBook from "../pages/DetailBook.vue";
 import DetailChapter from "../pages/DetailChapter.vue";
 import admin from "../pages/admin.vue";
+
 const routes = [
     {
         path: '/',
@@ -77,8 +78,7 @@ const routes = [
         path: '/admin',
         name: 'admin',
         component: admin
-    },
-
+    }
 
 
 
