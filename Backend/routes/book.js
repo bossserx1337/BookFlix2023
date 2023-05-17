@@ -147,7 +147,6 @@ router.post('/favorite/:customerid', async function (req, res, next) {
   }
 });
 
-
 router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
   const conn = await pool.getConnection()
   // Begin transaction
@@ -167,6 +166,7 @@ router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
     conn.release();
   }
 })
+
 router.get("/favorite/:customerid", async function (req, res, next) {
   try {
 

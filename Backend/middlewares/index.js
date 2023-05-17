@@ -27,7 +27,7 @@ async function isLoggedIn(req, res, next) {
 
     // Set user
     const [users] = await pool.query(
-        'SELECT customer_id, customer_password, customer_firstN, customer_lastN, customer_phone, customer_pic, customer_displayname, status FROM customer where customer_id = ?', [token.customer_id]
+        'SELECT user_id, user_password, user_first_name, user_last_name, user_phone, user_pic, user_display_name,  user_status, user_role FROM user where user_id = ?', [token.user_id]
     )
     req.user = users[0]
 

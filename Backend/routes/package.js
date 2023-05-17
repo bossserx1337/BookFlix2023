@@ -56,7 +56,7 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
   }
   console.log(req.body)
   const packid = req.body.packid;
-  const customerid = req.body.customerid;
+  const userid = req.body.userid;
   const image = "/uploads/" + req.file.filename;
 
   const conn = await pool.getConnection()
@@ -64,12 +64,12 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
   await conn.beginTransaction();
   try {
     const results = await conn.query(
-      'INSERT INTO buy_package(pack_id,customer_id, pay_bill) VALUES(?, ?, ?)',
-      [packid, customerid, image]
+      'INSERT INTO buy_package(pack_id,user_id, pay_bill, pack_start, pack_end) VALUES(?, ?, ?, ?, ?)',
+      [packid, userid, image, new Date(), new Date()+(packid  == 1 ? 30 : packid == 2 ? 180 : 360)]
     );
 
     await conn.commit();
-    
+
     res.send('success!');
   } catch (err) {
     await conn.rollback();
@@ -78,7 +78,14 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
     conn.release();
   }
 });
-
+router.get('/buypackage', async (req, res, next) => {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM buy_package');
+    return res.json({ packages: rows });
+  } catch (err) {
+    return next(err);
+  }
+});
 
 exports.router = router;
 
