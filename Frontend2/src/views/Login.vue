@@ -24,6 +24,7 @@
 
 <script>
 import axios from '/plugins/axios'
+
 export default {
   data() {
     return {
@@ -33,20 +34,15 @@ export default {
   },
   methods: {
     async signIn() {
-
-      // console.log(data)
       try {
         const data = {
           email: this.email,
           password: this.password
         };
         const res = await axios.post('/user/login/', data);
-        // console.log(res)
         const token = res.data.token;
         const user = res.data.user;
-        this.$store.dispatch('setToken', token); // เรียกใช้ action 'setToken' จาก Vuex store เพื่อกำหนดค่า token ใน state
-        this.$store.dispatch('setUser', user); // เรียกใช้ action 'setUser' จาก Vuex store เพื่อกำหนดค่า user ใน state
-        // window.location.href = '/';
+        this.$store.dispatch('setToken', { token, userInfo: user }); // เรียกใช้ action 'setToken' จาก Vuex store เพื่อกำหนดค่า token และ userInfo ใน state
         this.$router.push('/');
       } catch (error) {
         this.error = error.response.data;
@@ -55,9 +51,6 @@ export default {
     },
   },
 };
-
-
-
 </script>
 
 <style>
