@@ -67,10 +67,10 @@ export default {
   },
   methods: {
     logout() {
-      localStorage.clear();
-      this.$router.push('/login');
+      this.$store.dispatch('logout');
+      this.$router.push('/login')
     },
-  
+
   },
   async created() {
     try {
@@ -85,5 +85,4 @@ export default {
 
 </script>
 
-<style>
-</style>
+<style></style>

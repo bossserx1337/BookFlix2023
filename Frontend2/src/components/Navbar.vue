@@ -9,7 +9,7 @@
                     </div>
                 </router-link>
             </div>
-            <div class="hidden md:block relative">
+            <div v-if="this.$store.getters.getUserInfo" class="hidden md:block relative">
                 <button @click="isOpen = !isOpen"
                     class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
                     <span>Menu</span>
@@ -46,6 +46,7 @@ export default {
     methods: {
         logout() {
             this.$store.dispatch('logout');
+            this.$router.push('/login')
         },
     },
 };

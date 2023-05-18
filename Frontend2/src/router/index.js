@@ -29,6 +29,7 @@ const routes = [
     },
     {   name: 'Profile',
         path: '/profile',
+        meta: { login: true },
         component: Profile
     }
 
@@ -46,6 +47,7 @@ router.beforeEach((to, from, next) => {
     const isLoggedIn = !!localStorage.getItem('token')
 
     if (to.meta.login && !isLoggedIn) {
+        alert('Please login')
       next({ path: '/login' })
     }
 
