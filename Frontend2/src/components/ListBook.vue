@@ -1,19 +1,18 @@
 <template>
-  <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
-        <div v-for="book in books" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
-            <div
-                class="h-[200px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
-                <router-link :to="`/book/${book.book_id}/chapter/`">
-                    <figure><img :src="book.book_img" /></figure>
-                </router-link>
-                <button @click="addToFavorites(book.book_id)"
-                    class="favorite-button bg-white text-black w-full hover:bg-gray-200 font-semibold">Add
-                    Favorites</button>
-            </div>
+  <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto " @wheel="handleWheel">
+    <div v-for="book in books " :key="book.book_id">
+      <router-link :to="`/book/${book.book_id}/chapter/`">
+        <div class="card w-40 bg-base-100 shadow-xl">
+          <figure><img :src="book.book_img" /></figure>
         </div>
+      </router-link>
+      <button @click="addToFavorites(book.book_id)"> Add Favorites
+      </button>
     </div>
+
+  </div>
 </template>
-  
+
 <script>
 import axios from '/plugins/axios'
 import { RouterLink } from "vue-router";
@@ -75,7 +74,6 @@ export default {
 
 
 </script>
-  
 <style>
 ::-webkit-scrollbar {
   width: 8px;
@@ -94,4 +92,3 @@ export default {
   background-color: #999;
 }
 </style>
-  
