@@ -1,36 +1,42 @@
 <template>
-  <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto " @wheel="handleWheel">
-    <div v-for="book in books " :key="book.book_id">
-      <router-link :to="`/book/${book.book_id}/chapter/`">
-        <div class="card w-40 bg-base-100 shadow-xl">
+  <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
+    <div v-for="book in books" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
+      <div
+        class="h-[200px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
+        <router-link :to="`/book/${book.book_id}/chapter/`">
           <figure><img :src="book.book_img" /></figure>
-        </div>
-      </router-link>
-      <button @click="addToFavorites(book.book_id)"> Add Favorites
-      </button>
+        </router-link>
+        <button v-if="!isFavorite(book)" @click="addToFavorites(book)"
+          class="favorite-button bg-white text-black w-full hover:bg-gray-200 font-semibold">Add
+          Favorites</button>
+        <button v-else disabled class="favorite-button bg-gray-300 text-gray-500 w-full cursor-not-allowed">Added to
+          Favorites</button>
+      </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import axios from '/plugins/axios'
 import { RouterLink } from "vue-router";
+
 export default {
   data() {
     return {
       books: null,
       email: '',
       userinfo: null,
-      customerid: null,
+      favorites: [] // เพิ่มตัวแปร favorites เพื่อเก็บรายการหนังสือโปรด
     };
   },
 
   methods: {
-    async addToFavorites(book_id) {
+    async addToFavorites(book) {
       try {
-        const postResponse = await axios.post(`http://localhost:3001/favorite/${this.userinfo.user_id}`, { book_id: book_id });
-        console.log(postResponse);
+        const postResponse = await axios.post(`/favorite/${this.userinfo.user_id}`, { book_id: book.book_id });
+        // console.log(postResponse);
+        this.getFav(); // เรียกใช้ฟังก์ชัน getFav เพื่ออัปเดตรายการหนังสือโปรด
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -38,7 +44,6 @@ export default {
           showConfirmButton: false,
           timer: 1500
         })
-
       } catch (err) {
         console.log(err);
       }
@@ -52,43 +57,41 @@ export default {
       const delta = Math.max(-1, Math.min(1, event.deltaY || -event.detail));
       const container = event.target;
       container.scrollLeft += delta * 50; // Adjust the scrolling speed here
+    },
+
+    async getFav() {
+      try {
+        const favoriteResponse = await axios.get(`/favorite/${this.userinfo.user_id}`);
+        this.favorites = favoriteResponse.data.favorite; // อัปเดตตัวแปร favorites เมื่อได้รับข้อมูลหนังสือโปรดใหม่
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getBook() {
+      try {
+        const books = await axios.get("/book");
+        this.books = books.data.book;
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
-  async created() {
+
+  computed: {
+    isFavorite() {
+      return (book) => this.favorites.some(favBook => favBook.book_id === book.book_id);
+    },
+  },
+
+  async mounted() {
     try {
       this.userinfo = this.$store.getters.getUserInfo;
+      this.getBook();
+      this.getFav();
     } catch (err) {
       console.log(err);
-    };
-    axios.get("http://localhost:3001/book")
-      .then((response) => {
-        this.books = response.data.book;
-
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-
+    }
   },
 }
-
-
 </script>
-<style>
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: #f5f5f5;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #999;
-}
-</style>

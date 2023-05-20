@@ -32,7 +32,6 @@ export default createStore({
   },
   actions: {
     setToken({ commit },  { token, userInfo }) {
-      console.log(userInfo)
       const payload = {
         token: token,
         userInfo: userInfo,

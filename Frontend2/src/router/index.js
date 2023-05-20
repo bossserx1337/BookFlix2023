@@ -4,6 +4,9 @@ import Signup from "../views/Signup.vue";
 import Package from "../views/Package.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
+import DetailBook from "../views/DetailBook.vue";
+import DetailChapter from "../views/DetailChapter.vue";
+import Fav from "../views/Fav.vue";
 const routes = [
     {
         name: 'Home',
@@ -31,6 +34,27 @@ const routes = [
         path: '/profile',
         meta: { login: true },
         component: Profile
+    },
+    {
+        path: '/book/:bookid/chapter/',
+        name: 'DetailBook',
+        meta: { login: true },
+        component: DetailBook
+    },
+    {
+        path: '/book/:bookid/chapter/:chapterid',
+        name: 'DetailChapter',
+        meta: { login: true },
+        component: DetailChapter
+    },
+    {
+        path: '/fav',
+        meta: { login: true },
+        component: Fav
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        redirect: '/'
     }
 
 

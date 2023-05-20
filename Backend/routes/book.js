@@ -5,11 +5,12 @@ router = express.Router();
 
 router.get("/book", async function (req, res, next) {
   try {
-
-    let [rows, fields] = await pool.query(`SELECT * FROM book`)
+    let [books, fields] = await pool.query(`
+    SELECT * FROM book
+    `)
 
     return res.json({
-      book: rows
+      book: books
     });
   } catch (err) {
     return next(err)
@@ -19,7 +20,8 @@ router.get("/book", async function (req, res, next) {
 router.get("/book/:bookid/chapter/", async function (req, res, next) {
   try {
 
-    let [book, _] = await pool.query(`SELECT * FROM book where book_id = ${req.params.bookid}`)
+    let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
+    join publisher using (pub_id) where book_id = ${req.params.bookid}`)
     let [chapter, fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
     // console.log(book, chapter)
     // console.log(chapter)
@@ -112,76 +114,6 @@ router.put('/updatebook', async function (req, res, next) {
     conn.release();
   }
 })
-
-router.post('/favorite/:customerid', async function (req, res, next) {
-
-  const conn = await pool.getConnection();
-  await conn.beginTransaction();
-
-  const bookid = req.body.book_id;
-
-  try {
-    // Check if the book is already in the customer's favorites
-    const checkFavoriteQuery = `      SELECT COUNT(*) as count      FROM favorite      WHERE book_id = ? AND user_id = ?    `;
-    const [rows, fields] = await conn.execute(checkFavoriteQuery, [bookid, req.params.customerid]);
-
-    // If the book is already in the customer's favorites, return a response indicating that
-    if (rows[0].count > 0) {
-      res.status(200).json({ message: 'Book is already in favorites' });
-    } else {
-      // If the book is not in the customer's favorites, add it to the favorites table
-      const addFavoriteQuery = `
-        INSERT INTO favorite (book_id, user_id)
-        VALUES (?, ?)
-      `;
-      await conn.execute(addFavoriteQuery, [bookid, req.params.customerid]);
-
-      return res.status(200).json({ message: 'Book added to favorites' });
-    }
-  } catch (err) {
-    console.log('err')
-    await conn.rollback();
-    next(err);
-  } finally {
-    console.log('finally');
-    conn.commit();
-    conn.release();
-  }
-});
-
-router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
-  const conn = await pool.getConnection()
-  // Begin transaction
-  await conn.beginTransaction();
-  try {
-    let results = await conn.query(
-      "DELETE FROM favorite WHERE book_id = ? and user_id = ?;",
-      [req.params.bookid, req.params.customerid]
-    )
-    res.status(200).send("success!");
-  } catch (err) {
-    console.log(err)
-    await conn.rollback();
-    next(err);
-  } finally {
-    console.log('finally')
-    conn.release();
-  }
-})
-
-router.get("/favorite/:customerid", async function (req, res, next) {
-  try {
-
-    let [rows , fields] = await pool.query(`SELECT * FROM favorite join book using(book_id) where  user_id = ?`, req.params.customerid)
-
-    return res.json( {
-      favorite: rows
-    });
-  } catch (err) {
-    return next(err)
-  }
-});
-
 
 
 

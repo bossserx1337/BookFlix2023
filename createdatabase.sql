@@ -127,7 +127,7 @@ CREATE TABLE `book_with_type` (
 
 LOCK TABLES `book_with_type` WRITE;
 /*!40000 ALTER TABLE `book_with_type` DISABLE KEYS */;
-INSERT INTO `book_with_type` VALUES ('1',1),('1',3),('1',6),('2',1),('2',2),('3',3),('4',4),('5',3),('5',5),('5',10);
+INSERT INTO `book_with_type` VALUES ('9788953934465',1),('9788953934465',3),('9788953934465',6),('9791190995292',1),('9791190995292',2),('9791190995292',3),('9788998279905',4),('9788953934700',3),('9788953934700',5),('5',10);
 /*!40000 ALTER TABLE `book_with_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -425,7 +425,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'password1','John','Doe','johndoe@example.com','1234567890',NULL,'johndoe','customer','R','2023-04-30 08:01:48'),(2,'password2','Jane','Doe','janedoe@example.com','0987654321',NULL,'janedoe','customer','R','2023-04-30 08:01:48'),(3,'password3','Admin','Doe','admindoe@example.com','5555555555',NULL,'admindoe','admin','R','2023-04-30 08:01:48');
+INSERT INTO `user` VALUES (1,'password1','John','Doe','johndoe@example.com','1234567890',NULL,'johndoe','customer','R','2023-04-30 08:01:48'),(2,'password2','Jane','Doe','janedoe@example.com','0987654321',NULL,'janedoe','customer','R','2023-04-30 08:01:48'),(3,'password3','Admin','Doe','admindoe@example.com','5555555555',NULL,'admindoe','admin','R','2023-04-30 08:01:48'),(4,'$2b$05$Iie4i3tV7pYM9/ZQwzoOXu4Uy0S/FH8fG1nQC.3eh03BJYQx0pIEa','koonrome', 'rome', 'kakakasmile@outlook.com', '0950026551', NULL, NULL, 'customer', 'NR', '2023-04-30 18:53:06');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
