@@ -92,9 +92,9 @@ export default {
           formData.append("packid", this.packaged);
           formData.append("userid", this.userinfo.user_id)
           formData.append("bill_image", this.file)
-          console.log(this.packaged);
+          // console.log(this.packaged);
 
-          console.log(this.file);
+          // console.log(this.file);
           axios.post('/buypackage', formData, {
               headers: {
               'Content-Type': 'multipart/form-data'

@@ -32,7 +32,7 @@ const routes = [
     {
         name: 'Login',
         path: '/login',
-
+        meta: {available: true},
         component: Login
     },
     {   name: 'Profile',
@@ -94,14 +94,17 @@ router.beforeEach((to, from, next) => {
         if (to.meta.admin && !isAdmin) {
             next({ path: '/' })
           }
-      
+
     }
 
-    
+
 
     if (to.meta.login && !isLoggedIn) {
         alert('Please login')
       next({ path: '/login' })
+    }
+    if (to.meta.available && isLoggedIn) {
+      next({ path: '/' })
     }
 
     next()

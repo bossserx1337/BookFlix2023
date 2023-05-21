@@ -4,6 +4,18 @@ const bcrypt = require('bcrypt')
 const Joi = require('joi')
 const { generateToken } = require("../utils/token");
 const { isLoggedIn } = require('../middlewares')
+const path = require('path');
+const multer = require('multer');
+// SET STORAGE
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./static/uploads")
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({ storage: storage })
 
 router = express.Router();
 const passwordValidator = (value, helpers) => {
@@ -143,33 +155,74 @@ router.post('/user/login', async (req, res, next) => {
 })
 
 
-
-
-
-
-//ไม่ได้ใช้
-router.get('/user/me', isLoggedIn, async (req, res, next) => {
-    // req.user ถูก save ข้อมูล user จาก database ใน middleware function "isLoggedIn"
-    res.json(req.user)
-})
-router.get("/userinfo/:email", async function (req, res, next) {
+router.put('/user/update/', isLoggedIn, upload.single('user_pic'), async (req, res, next) => {
     try {
-        let [customer] = await pool.query(`SELECT * FROM customer where customer_email = ? `, req.params.email)
-        // console.log(customer)
-        if (customer.length > 0) {
-            return res.json({
-                userinfo: customer
-            });
+        // ดึงข้อมูลจาก req.body
+        const { user_first_name, user_last_name, user_phone, user_email } = req.body;
+        const user_id = req.user.user_id
+
+        // ดึงข้อมูลจาก req.file (ถ้ามีการอัปโหลดไฟล์)
+        const user_pic = req.file;
+        console.log(user_pic)
+        if (user_pic) {
+            const conn = await pool.getConnection()
+            await conn.beginTransaction()
+            try {
+                // อัปโหลดไฟล์
+                const [results, _] = await conn.query(
+                    'UPDATE user SET user_first_name = ?, user_last_name = ?, user_phone = ?, user_email = ?, user_pic = ? WHERE user_id = ?',
+                    [user_first_name, user_last_name, user_phone, user_email, "/uploads/" + user_pic.filename, user_id]
+                )
+                conn.commit()
+                return res.status(201).send('Updated succesful')
+            } catch (err) {
+                conn.rollback()
+                return res.status(400).json(err.toString());
+            } finally {
+
+                conn.release()
+
+            }
         }
-        let [admin] = await pool.query(`SELECT * FROM admin where admin_email = ? `, req.params.email)
-        if (admin.length > 0) {
-            return res.json({
-                userinfo: admin
-            });
+        const conn = await pool.getConnection()
+        await conn.beginTransaction()
+        try {
+            // อัปโหลดไฟล์
+            const [results, _] = await conn.query(
+                'UPDATE user SET user_first_name = ?, user_last_name = ?, user_phone = ?, user_email = ? WHERE user_id = ?',
+                [user_first_name, user_last_name, user_phone, user_email, user_id]
+            )
+            console.log(results)
+            conn.commit()
+            return res.status(201).send('Updated succesful')
+        } catch (err) {
+            conn.rollback()
+            return res.status(400).json(err.toString());
+        } finally {
+            conn.release()
         }
-      return res.status(400).json({ message: 'User not found' });
+
     } catch (err) {
-        return next(err)
+        console.log(err);
+        res.status(500).json({ error: 'Failed to update profile.' });
     }
 });
+
+router.get('/user/profile', isLoggedIn, async (req, res, next) => {
+    try {
+        const user_id = req.user.user_id
+        const [users] = await pool.query(
+            'SELECT * FROM user WHERE user_id=?',
+            [user_id]
+        )
+        const user = users[0]
+        return res.status(200).json({
+            'user': user
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error.toString())
+    }
+})
+
 exports.router = router

@@ -22,13 +22,24 @@ export default {
       chapterImg: [
         "https://w0.peakpx.com/wallpaper/368/441/HD-wallpaper-cute-anime-girl-anime-cat-girl-anime-girl-cartoon-cat-girl-cute-anime-thumbnail.jpg",
       ],
+      maxChapter: 0,
     };
   },
   mounted() {
     this.getBookDetail(this.$route.params.bookid, this.$route.params.chapterid);
+    this.getMaxChapter(this.$route.params.bookid);
 
   },
   methods: {
+    getMaxChapter(bookid) {
+      axios.get(`http://localhost:3001/book/${bookid}/chapter`).then((response) => {
+        this.maxChapter = response.data.chapter.length;
+
+      }).catch((error) => {
+        console.log(error);
+        // this.$router.push(`/book/${bookid}/chapter/`);
+      })
+    },
     getBookDetail(bookid, chapterid) {
       axios.get(`http://localhost:3001/book/${bookid}/chapter/${chapterid}`).then((response) => {
         this.chapterTitle = response.data.chapter[0].chapter_content
@@ -50,6 +61,11 @@ export default {
       // decrement the chapter number by 1
       const prevChapterNumber = currentChapterNumber - 1;
       // return the updated URL
+      if (prevChapterNumber == 0){
+        return `/book/${this.$route.params.bookid}/chapter/`;
+      }
+
+
       return `/book/${this.$route.params.bookid}/chapter/${prevChapterNumber}`;
     },
     getNextChapterUrl() {
@@ -57,6 +73,9 @@ export default {
       // increment the chapter number by 1
       const nextChapterNumber = currentChapterNumber + 1;
       // return the updated URL
+      if (nextChapterNumber >= this.maxChapter){
+        return `/book/${this.$route.params.bookid}/chapter/`;
+      }
       return `/book/${this.$route.params.bookid}/chapter/${nextChapterNumber}`;
     }
   }

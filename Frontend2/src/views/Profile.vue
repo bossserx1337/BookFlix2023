@@ -4,14 +4,8 @@
     <div class="flex items-center h-screen w-full justify-center">
 
       <div class="max-w-xs">
-        <div class="bg-white shadow-xl rounded-lg py-3">
+        <form class="bg-white shadow-xl rounded-lg py-3">
 
-          <label class="flex photo-wrapper p-2" for="file-upload">
-            <img class="w-32 h-32 rounded-full mx-auto hover:opacity-50"
-              :src="(userinfo.user_pic) ? userinfo.user_pic : 'https://pbs.twimg.com/profile_images/1545631138953437184/Bky7FePS_400x400.jpg'"
-              alt="John Doe">
-          </label>
-          <input id="file-upload" type="file" @change="handleFileUpload()" class="hidden">
 
           <div class="p-2">
             <h3 class="text-center text-xl text-gray-900 font-medium leading-8">{{ userinfo.user_first_name }}</h3>
@@ -22,23 +16,31 @@
               <tbody>
                 <tr>
                   <td class="px-2 py-2 text-gray-500 font-semibold">Fullname</td>
-                  <td class="px-2 py-2">{{ userinfo.user_first_name }} {{ userinfo.user_last_name }}</td>
+                  <td class="px-2 py-2">
+                    <input v-model="userinfo.user_first_name" class="border border-gray-400 px-2 py-1 rounded">
+                    <input v-model="userinfo.user_last_name" class="border border-gray-400 px-2 py-1 rounded">
+                  </td>
                 </tr>
                 <tr>
                   <td class="px-2 py-2 text-gray-500 font-semibold">Phone</td>
-                  <td class="px-2 py-2">+66 {{ userinfo.user_phone }}</td>
+                  <td class="px-2 py-2">
+                    <input v-model="userinfo.user_phone" class="border border-gray-400 px-2 py-1 rounded">
+                  </td>
                 </tr>
                 <tr>
                   <td class="px-2 py-2 text-gray-500 font-semibold">Email</td>
-                  <td class="px-2 py-2">{{ userinfo.user_email }}</td>
+                  <td class="px-2 py-2">
+                    <input v-model="userinfo.user_email" class="border border-gray-400 px-2 py-1 rounded">
+                  </td>
                 </tr>
               </tbody>
             </table>
 
             <div class="text-center my-3 flex-col">
               <div>
-                <button class="text-xl text-indigo-500 hover:underline hover:text-indigo-600 font-medium">
-                  Edit Profile
+                <button @click="saveProfile()"
+                  class="text-xl text-indigo-500 hover:underline hover:text-indigo-600 font-medium">
+                  Save Profile
                 </button>
               </div>
               <div>
@@ -47,10 +49,10 @@
                   Logout
                 </button>
               </div>
-              <button @click="get()">get</button>
+              <!-- <button @click="get()">get</button> -->
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -63,26 +65,52 @@ export default {
   data() {
     return {
       userinfo: null,
+      file: null,
     };
   },
   methods: {
+
+    async saveProfile() {
+      try {
+        const formData = new FormData();
+        formData.append('user_first_name', this.userinfo.user_first_name);
+        formData.append('user_last_name', this.userinfo.user_last_name);
+        formData.append('user_phone', this.userinfo.user_phone);
+        formData.append('user_email', this.userinfo.user_email);
+        await axios.put(`/user/update/`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        alert('Profile saved successfully.');
+      } catch (err) {
+        console.log(err);
+        alert('Failed to save profile.');
+      }
+    },
+
+
+
     logout() {
       this.$store.dispatch('logout');
-      this.$router.push('/login')
+      this.$router.push('/login');
     },
+    get() {
+      alert(JSON.stringify(this.userinfo))
+    }
 
   },
   async created() {
     try {
-      this.userinfo = this.$store.getters.getUserInfo;
+      this.userinfo = { ...this.$store.getters.getUserInfo };
     } catch (err) {
       console.log(err);
     }
-  }
-
-
-}
-
+  },
+};
 </script>
+<style>
+</style>
 
-<style></style>
+

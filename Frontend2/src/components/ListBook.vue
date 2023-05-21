@@ -3,13 +3,20 @@
     <h1 class="">Manhwa</h1>
     <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
       <div v-for="book in books" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
+
         <div
-          class="h-[200px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
-          <figure><img :src="book.book_img" /></figure>
+          class="h-[275px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
+
+          <figure><img :src="book.book_img" /> </figure>
           <div v-if="userinfo.user_status == 'R'">
             <router-link :to="`/book/${book.book_id}/chapter/`">
               <figure><img :src="book.book_img" /></figure>
             </router-link>
+          </div>
+          <div>
+
+            {{ book.book_name }}
+
           </div>
           <div v-if="userinfo.user_status == 'R'">
             <button v-if="!isFavorite(book)" @click="addToFavorites(book)"
@@ -23,21 +30,24 @@
     </div>
     <h1 class="">Sort by tag</h1>
     <!-- dropdown tag -->
-    <select id="tag" v-model="selectedTag"
-      class="block w-full border border-gray-400 p-2 rounded mb-4 text-black">
+    <select id="tag" v-model="selectedTag" class="block w-full border border-gray-400 p-2 rounded mb-4 text-black">
       <option selected value="">Select a tag</option>
-      <option v-for="(tag,index) in tags" :value="tag.tag" :key="index">{{ tag.tag}}</option>
+      <option v-for="(tag, index) in tags" :value="tag.tag" :key="index">{{ tag.tag }}</option>
     </select>
     <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
-      <div v-for="book in books_sort" :key="book.book_id"  class="flex-shrink-0" style="width: 200px">
-        {{ book.tag }}
+      <div v-for="book in books_sort" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
+
+
         <div
-          class="h-[200px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
+          class="h-[275px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
           <figure><img :src="book.book_img" /></figure>
           <div v-if="userinfo.user_status == 'R'">
             <router-link :to="`/book/${book.book_id}/chapter/`">
               <figure><img :src="book.book_img" /></figure>
             </router-link>
+          </div>
+          <div>
+            {{ book.book_name }}
           </div>
           <div v-if="userinfo.user_status == 'R'">
             <button v-if="!isFavorite(book)" @click="addToFavorites(book)"
@@ -64,7 +74,7 @@ export default {
       email: '',
       userinfo: null,
       favorites: [], // เพิ่มตัวแปร favorites เพื่อเก็บรายการหนังสือโปรด
-      tags:[],
+      tags: [],
       selectedTag: '',
 
     };
@@ -111,7 +121,7 @@ export default {
         const books = await axios.get("/book");
         this.books = books.data.book;
         this.tags = books.data.tag;
-        console.log(this.tags);
+        // console.log(this.tags);
       } catch (error) {
         console.log(error);
       }
@@ -124,11 +134,12 @@ export default {
     },
     books_sort() {
       if (this.selectedTag === '') {
-        return this.books
+        return this.books;
       } else {
-        return this.books.filter(book => book.tag.include(this.selectedTag))
+        return this.books.filter(book => book.tag.includes(this.selectedTag));
       }
     }
+
   },
 
   async mounted() {

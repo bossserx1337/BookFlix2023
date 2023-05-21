@@ -47,7 +47,7 @@ router.get("/book/:bookid/chapter/:chapterid", async function (req, res, next) {
   try {
     let [chapter, _] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid} LIMIT 1  OFFSET ${req.params.chapterid - 1}`)
     if (chapter == undefined) {
-      res.status(404).send('Not found')
+      return res.status(404).send('Not found')
     }
 
     let [image, fields] = await pool.query(`SELECT * FROM chapter_image join chapter using (chapter_id)   where book_id = ${req.params.bookid} and chapter_id = ${chapter[0].chapter_id} `)
@@ -125,6 +125,14 @@ router.put('/updatebook', async function (req, res, next) {
   }
 })
 
+router.post('/addchapter', async function (req, res, next) {
+  console.log(req.body)
+  const bookid = req.body.bookid;
+  const chapterid = req.body.chapterid;
+  const chaptername = req.body.chaptername;
+  const chapterdesc = req.body.chapterdesc;
+  const chapterimg = req.body.chapterimg;
+});
 
 
 exports.router = router;

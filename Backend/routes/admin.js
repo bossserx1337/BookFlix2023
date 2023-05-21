@@ -43,6 +43,7 @@ router.delete('/buypackage/:payid', async (req, res) => {
   }
 
 })
+
 router.get('/author', async (req, res, next) => {
   try {
     const [rows, fields] = await pool.query('SELECT * FROM author');

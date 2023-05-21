@@ -10,13 +10,7 @@
                 </router-link>
             </div>
             <div v-if="this.$store.getters.getUserInfo" class="hidden md:block relative">
-                <!-- <button
-                    class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
-                    <span>Status : {{ userinfo.user_status  }}  </span>
-                    <svg class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 
-                    </svg>
-                </button> -->
                 <button @click="isOpen = !isOpen"
                     class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
                     <span>Menu</span>
@@ -29,6 +23,9 @@
                     <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <router-link to="/profile" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">
                             Your Profile
+                        </router-link>
+                        <router-link to="/fav" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">
+                            Favorite List
                         </router-link>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" @click="logout()">
                             Logout
