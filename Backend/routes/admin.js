@@ -1,7 +1,19 @@
 const express = require("express");
 const pool = require("../config");
+const Joi = require('joi')
 
 router = express.Router();
+
+const PublisherSchema = Joi.object({
+  pubname: Joi.string().required(),
+  pubphone: Joi.string().required().regex(/^0\d{9}$/),
+  puburl : Joi.string().uri().required()
+})
+const AuthorSchema = Joi.object({
+  authfname: Joi.string().required(),
+  authlname: Joi.string().required(),
+  authalias : Joi.string().required()
+})
 
 router.put('/customer', async (req, res, next) => {
   console.log(req.body)
@@ -43,7 +55,6 @@ router.delete('/buypackage/:payid', async (req, res) => {
   }
 
 })
-
 router.get('/author', async (req, res, next) => {
   try {
     const [rows, fields] = await pool.query('SELECT * FROM author');
@@ -62,10 +73,17 @@ router.get('/publisher', async (req, res, next) => {
 });
 
 router.post('/addpub', async function (req, res, next) {
+  try {
+    await PublisherSchema.validateAsync(req.body, { abortEarly: false })
+    console.log(req.body)
+} catch (err) {
+    console.log(err)
+    return res.status(400).json(err.toString())
+}
   console.log(req.body)
   const pubname = req.body.pubname;
   const pubphone = req.body.pubphone;
-  const puburl = req.body.puburlc;
+  const puburl = req.body.puburl;
 
   const conn = await pool.getConnection()
   // Begin transaction
@@ -91,10 +109,17 @@ router.post('/addpub', async function (req, res, next) {
 });
 
 router.post('/addauthor', async function (req, res, next) {
+  try {
+    await AuthorSchema.validateAsync(req.body, { abortEarly: false })
+    console.log(req.body)
+} catch (err) {
+    console.log(err)
+    return res.status(400).json(err.toString())
+}
   console.log(req.body)
   const authfname = req.body.authfname;
   const authlname = req.body.authlname;
-  const authalias = req.body.authlias;
+  const authalias = req.body.authalias;
 
   const conn = await pool.getConnection()
   // Begin transaction

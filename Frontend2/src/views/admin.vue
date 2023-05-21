@@ -388,6 +388,12 @@ export default {
       authors: null,
       authorid: null,
       publishers: null,
+      authfname : '',
+      authlname : '',
+      authalias : '',
+      pubname : '',
+      pubphone : '',
+      puburl : '',
     }
   },
   computed: {
