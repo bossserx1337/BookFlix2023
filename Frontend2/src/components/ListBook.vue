@@ -1,6 +1,8 @@
 <template>
+<div class=" mt-14">
+  <h1 class="">Manhwa</h1>
   <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
-  
+
     <div v-for="book in books" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
       <div
         class="h-[200px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
@@ -20,6 +22,7 @@
     </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>

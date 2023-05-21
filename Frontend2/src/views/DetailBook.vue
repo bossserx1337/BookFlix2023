@@ -12,6 +12,10 @@
             <div class="text-gray-600 text-sm"><a :href="book.pub_url">publisher: {{ book.publisher }}</a></div>
           </div>
           <p class="text-gray-700 mb-4">{{ book.description }}</p>
+          <div class="flex flex-cols items-center space-x-4 mb-4">
+            <div class="text-gray-600 text-sm">Tags:</div>
+            <div class="text-gray-600 text-sm" v-for="(tag, index) in book.tags" :key="index">{{ tag.tag }}</div>
+          </div>
           <h3 class="text-xl font-bold mb-4">Chapters</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div v-for="(chapter, index) in book.chapters" :key="index" class="bg-gray-100 rounded-lg p-4">
@@ -96,7 +100,8 @@ export default {
         this.book.description = response.data.book[0].book_desc;
         this.book.img = response.data.book[0].book_img;
         this.book.chapters = response.data.chapter;
-
+        this.book.tags = response.data.tag;
+        console.log(this.book.tags);
       }).catch((error) => {
         console.log(error);
       })

@@ -100,7 +100,7 @@ CREATE TABLE `book_type` (
 
 LOCK TABLES `book_type` WRITE;
 /*!40000 ALTER TABLE `book_type` DISABLE KEYS */;
-INSERT INTO `book_type` VALUES (3,'Biography'),(10,'Fantasy'),(1,'Fiction'),(7,'Horror'),(4,'Memoir'),(5,'Mystery'),(2,'Non-Fiction'),(6,'Romance'),(9,'Science Fiction'),(8,'Thriller');
+INSERT INTO `book_type` VALUES (3,'Biography'),(10,'Fantasy'),(1,'Fiction'),(7,'Horror'),(4,'Memoir'),(5,'Mystery'),(2,'Non-Fiction'),(6,'Romance'),(9,'Science Fiction'),(8,'Thriller'),(11,'Action') ;
 /*!40000 ALTER TABLE `book_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,17 +109,13 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `book_with_type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `book_with_type` (
-  `book_id` varchar(255) DEFAULT NULL,
-  `book_type_id` int DEFAULT NULL,
-  KEY `book_id` (`book_id`),
-  KEY `book_type_id` (`book_type_id`),
-  CONSTRAINT `book_with_type_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
-  CONSTRAINT `book_with_type_ibfk_2` FOREIGN KEY (`book_type_id`) REFERENCES `book_type` (`book_type_id`)
+  `book_id` VARCHAR(255) DEFAULT NULL,
+  `book_type_id` INT DEFAULT NULL,
+  FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`),
+  FOREIGN KEY (`book_type_id`) REFERENCES `book_type` (`book_type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `book_with_type`
@@ -127,7 +123,17 @@ CREATE TABLE `book_with_type` (
 
 LOCK TABLES `book_with_type` WRITE;
 /*!40000 ALTER TABLE `book_with_type` DISABLE KEYS */;
-INSERT INTO `book_with_type` VALUES ('9788953934465',1),('9788953934465',3),('9788953934465',6),('9791190995292',1),('9791190995292',2),('9791190995292',3),('9788998279905',4),('9788953934700',3),('9788953934700',5),('5',10);
+INSERT INTO `book_with_type` VALUES ('9788953934465', 1),('9788953934465', 5),('9788953934465', 8),
+('9788953934700', 1),('9788953934700', 3),('9788953934700', 5),('9788953934700', 10),('9788953934700', 11),
+('9788953935202', 1),('9788953935202', 5),('9788953935202', 9),
+('9788953935646', 1),('9788953935646', 5),('9788953935646', 7),('9788953935646', 11),
+('9788953938289', 1),
+('9788998274801', 3),('9788998274801', 6),
+('9788998279684', 2),('9788998279684', 4),
+('9788998279875', 2),('9788998279875', 6),('9788998279875', 9),
+('9788998279905', 2),('9788998279905', 4),('9788998279905', 9),
+('9788998281656', 2),('9788998281656', 6),
+('9791190995292', 1),('9791190995292', 2),('9791190995292', 3),('9791190995292', 10),('9791190995292', 11) ;
 /*!40000 ALTER TABLE `book_with_type` ENABLE KEYS */;
 UNLOCK TABLES;
 

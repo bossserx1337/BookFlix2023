@@ -23,11 +23,14 @@ router.get("/book/:bookid/chapter/", async function (req, res, next) {
     let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
     join publisher using (pub_id) where book_id = ${req.params.bookid}`)
     let [chapter, fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
+    let [tag, fields2] = await pool.query(`SELECT  book_type_name as 'tag', book_name FROM project.book join author using (author_id)
+    join publisher using (pub_id) join book_with_type using (book_id) join book_type using (book_type_id) where book_id =  ${req.params.bookid}`)
     // console.log(book, chapter)
     // console.log(chapter)
     return res.json({
       book: book,
-      chapter: chapter
+      chapter: chapter,
+      tag: tag
     });
   } catch (err) {
     return next(err)

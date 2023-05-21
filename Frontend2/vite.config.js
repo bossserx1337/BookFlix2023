@@ -7,4 +7,7 @@ export default defineConfig({
     WindiCSS(),
     vue()
   ],
+  server: {
+    hmr: true,
+  },
 })
