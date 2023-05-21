@@ -29,6 +29,7 @@ export default createStore({
         state.token = localStorage.getItem('token');
       }
     },
+
   },
   actions: {
     setToken({ commit },  { token, userInfo }) {
@@ -53,16 +54,20 @@ export default createStore({
   plugins: [
     store => {
       window.addEventListener('storage', event => {
-        if (event.key === 'token') {
-          const newToken = event.newValue || '';
+        if (event.key === 'token' || event.key === 'userInfo') {
+          const prevtoken = store.state.token
+          const prevuserInfo = store.state.userInfo
           const payload = {
-            token: newToken,
-            editable: true
+            token: prevtoken,
+            userInfo: prevuserInfo,
+            editable: false,
           };
           store.commit('login', payload);
         }
+
       });
     }
+
   ],
   modules: {}
 });

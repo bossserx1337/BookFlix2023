@@ -78,7 +78,7 @@ export default {
             date: "August 3, 2015"
           }
         ],
-        tags:[
+        tags: [
           {}
         ]
       }
@@ -89,8 +89,9 @@ export default {
     this.scrollToTop()
   },
   methods: {
-    getBookDetail(id) {
-      axios.get(`http://localhost:3001/book/${id}/chapter/`).then((response) => {
+    async getBookDetail(id) {
+      try {
+        const response = await axios.get(`http://localhost:3001/book/${id}/chapter/`);
         console.log(response.data.book[0]);
         this.book.id = response.data.book[0].book_id;
         this.book.title = response.data.book[0].book_name;
@@ -102,10 +103,11 @@ export default {
         this.book.chapters = response.data.chapter;
         this.book.tags = response.data.tag;
         console.log(this.book.tags);
-      }).catch((error) => {
+      } catch (error) {
         console.log(error);
-      })
-    },
+      }
+    }
+    ,
     scrollToTop() {
       window.scrollTo({
         top: 0,

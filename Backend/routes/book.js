@@ -6,11 +6,18 @@ router = express.Router();
 router.get("/book", async function (req, res, next) {
   try {
     let [books, fields] = await pool.query(`
-    SELECT * FROM book
+    SELECT book.book_id, book.book_name, book.book_img , GROUP_CONCAT(book_type.book_type_name) AS 'tag'
+    FROM book
+    JOIN book_with_type ON book.book_id = book_with_type.book_id
+    JOIN book_type ON book_with_type.book_type_id = book_type.book_type_id
+    GROUP BY book.book_id;
+
     `)
+    let [tags, fields2] = await pool.query(`SELECT  book_type_name as 'tag' FROM  book_type`)
 
     return res.json({
-      book: books
+      book: books,
+      tag: tags
     });
   } catch (err) {
     return next(err)
@@ -25,8 +32,7 @@ router.get("/book/:bookid/chapter/", async function (req, res, next) {
     let [chapter, fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
     let [tag, fields2] = await pool.query(`SELECT  book_type_name as 'tag', book_name FROM project.book join author using (author_id)
     join publisher using (pub_id) join book_with_type using (book_id) join book_type using (book_type_id) where book_id =  ${req.params.bookid}`)
-    // console.log(book, chapter)
-    // console.log(chapter)
+
     return res.json({
       book: book,
       chapter: chapter,
@@ -104,7 +110,7 @@ router.put('/updatebook', async function (req, res, next) {
       "UPDATE book SET book_name = ? , book_desc = ? , book_img = ? , author_id = ?, pub_id = ? WHERE book_id = ?;",
       [bookname, bookdesc, bookimg, authorid, pubid, bookid]
     )
-    
+
 
 
     await conn.commit()

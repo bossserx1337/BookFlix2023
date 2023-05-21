@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 pt-5">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ chapterTitle }}</h1>
     <div v-for="image in chapterImg">
-      <img class="max-w-lg w-full" :src="image.image_url" alt="Manhwa chapter image">
+      <img class="max-w-lg w-full" :src="(image.image_url) ? image.image_url : 'https://miro.medium.com/v2/resize:fit:691/1*W6sDVrsrLBYHP881a8COQA.jpeg'" alt="Manhwa chapter image">
     </div>
     <div class="flex justify-between w-full mb-8">
       <a :href="getPrevChapterUrl()"
