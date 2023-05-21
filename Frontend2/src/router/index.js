@@ -7,6 +7,8 @@ import Profile from "../views/Profile.vue";
 import DetailBook from "../views/DetailBook.vue";
 import DetailChapter from "../views/DetailChapter.vue";
 import Fav from "../views/Fav.vue";
+import admin from "../views/admin.vue";
+import approve from  "../views/approve.vue";
 const routes = [
     {
         name: 'Home',
@@ -55,7 +57,19 @@ const routes = [
     {
         path: '/:pathMatch(.*)*',
         redirect: '/'
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: admin
+    },
+    {
+        path: '/approve',
+        name: 'approve',
+        component: approve
     }
+
+
 
 
 ]
@@ -69,11 +83,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isLoggedIn = !!localStorage.getItem('token')
+    
 
     if (to.meta.login && !isLoggedIn) {
         alert('Please login')
       next({ path: '/login' })
     }
+
 
     next()
   })

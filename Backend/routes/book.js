@@ -101,7 +101,7 @@ router.put('/updatebook', async function (req, res, next) {
       "UPDATE book SET book_name = ? , book_desc = ? , book_img = ? , author_id = ?, pub_id = ? WHERE book_id = ?;",
       [bookname, bookdesc, bookimg, authorid, pubid, bookid]
     )
-    console.log(results)
+    
 
 
     await conn.commit()

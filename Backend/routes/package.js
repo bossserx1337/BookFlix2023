@@ -58,6 +58,7 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
   const packid = req.body.packid;
   const userid = req.body.userid;
   const image = "/uploads/" + req.file.filename;
+  const mydate = new Date()
 
   const conn = await pool.getConnection()
   // Begin transaction
@@ -65,7 +66,7 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
   try {
     const results = await conn.query(
       'INSERT INTO buy_package(pack_id,user_id, pay_bill, pack_start, pack_end) VALUES(?, ?, ?, ?, ?)',
-      [packid, userid, image, new Date(), new Date()+(packid  == 1 ? 30 : packid == 2 ? 180 : 360)]
+      [packid, userid, image, mydate , mydate]
     );
 
     await conn.commit();

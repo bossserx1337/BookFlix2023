@@ -10,6 +10,13 @@
                 </router-link>
             </div>
             <div v-if="this.$store.getters.getUserInfo" class="hidden md:block relative">
+                <!-- <button
+                    class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
+                    <span>Status : {{ userinfo.user_status  }}  </span>
+                    <svg class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                       
+                    </svg>
+                </button> -->
                 <button @click="isOpen = !isOpen"
                     class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
                     <span>Menu</span>
@@ -39,6 +46,7 @@
 export default {
     data() {
         return {
+            userinfo : null,
             isOpen: false,
         };
     },
@@ -48,5 +56,12 @@ export default {
             this.$router.push('/login')
         },
     },
+    async mounted() {
+    try {
+      this.userinfo = this.$store.getters.getUserInfo;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 };
 </script>

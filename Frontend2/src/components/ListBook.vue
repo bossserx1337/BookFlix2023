@@ -1,17 +1,23 @@
 <template>
   <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
+  
     <div v-for="book in books" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
       <div
         class="h-[200px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
+        <figure><img :src="book.book_img" /></figure>
+        <div v-if="userinfo.user_status == 'R'">
         <router-link :to="`/book/${book.book_id}/chapter/`">
           <figure><img :src="book.book_img" /></figure>
         </router-link>
+        </div>
+        <div v-if="userinfo.user_status == 'R'">
         <button v-if="!isFavorite(book)" @click="addToFavorites(book)"
           class="favorite-button bg-white text-black w-full hover:bg-gray-200 font-semibold">Add
           Favorites</button>
         <button v-else disabled class="favorite-button bg-gray-300 text-gray-500 w-full cursor-not-allowed">Added to
           Favorites</button>
-      </div>
+        </div>
+    </div>
     </div>
   </div>
 </template>
