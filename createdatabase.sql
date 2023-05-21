@@ -354,7 +354,7 @@ DROP TABLE IF EXISTS `publisher`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `publisher` (
-  `pub_id` int NOT NULL,
+  `pub_id` int NOT NULL AUTO_INCREMENT,
   `pub_name` varchar(255) DEFAULT NULL,
   `pub_phone` varchar(255) DEFAULT NULL,
   `pub_url` varchar(255) DEFAULT NULL,
