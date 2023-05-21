@@ -43,6 +43,82 @@ router.delete('/buypackage/:payid', async (req, res) => {
   }
 
 })
+router.get('/author', async (req, res, next) => {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM author');
+    return res.json({ authors: rows });
+  } catch (err) {
+    return next(err);
+  }
+});
+router.get('/publisher', async (req, res, next) => {
+  try {
+    const [rows, fields] = await pool.query('SELECT * FROM publisher');
+    return res.json({ publisher: rows });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post('/addpub', async function (req, res, next) {
+  console.log(req.body)
+  const pubname = req.body.pubname;
+  const pubphone = req.body.pubphone;
+  const puburl = req.body.puburlc;
+
+  const conn = await pool.getConnection()
+  // Begin transaction
+  await conn.beginTransaction();
+
+  try {
+    let results = await conn.query(
+      "INSERT INTO publisher(pub_name, pub_phone, pub_url) VALUES(?, ?, ?);",
+      [pubname,pubphone, puburl]
+    )
+    console.log(results)
+
+
+    await conn.commit()
+    res.send("success!");
+  } catch (err) {
+    await conn.rollback();
+    next(err);
+  } finally {
+    console.log('finally')
+    conn.release();
+  }
+});
+
+router.post('/addauthor', async function (req, res, next) {
+  console.log(req.body)
+  const authfname = req.body.authfname;
+  const authlname = req.body.authlname;
+  const authalias = req.body.authlias;
+
+  const conn = await pool.getConnection()
+  // Begin transaction
+  await conn.beginTransaction();
+
+  try {
+    let results = await conn.query(
+      "INSERT INTO author(author_fn, author_ln,author_alias) VALUES(?, ?, ?);",
+      [authfname, authlname, authalias]
+    )
+    console.log(results)
+
+
+    await conn.commit()
+    res.send("success!");
+  } catch (err) {
+    await conn.rollback();
+    next(err);
+  } finally {
+    console.log('finally')
+    conn.release();
+  }
+});
+
+
 
 
 

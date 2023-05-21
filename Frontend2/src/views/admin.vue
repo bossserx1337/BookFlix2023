@@ -4,9 +4,52 @@
 <div class="container max-w-7xl mx-auto mt-8">
   <div class="mb-4">
     <h1 class="font-serif text-3xl font-bold underline decoration-gray-400"> </h1>
+    
     <div class="flex justify-end">
-      <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600">Add book</button>
+      <button data-modal-target="addpublisherModal" data-modal-toggle="addpublisherModal" class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">📰 Add Publisher</button>
+      <button data-modal-target="addauthorModal" data-modal-toggle="addauthorModal" class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">👨 Add Author</button>
+      <button data-modal-target="defaultModal" data-modal-toggle="defaultModal" class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600">🕮 Add Book</button>
+
+      <div id="addpublisherModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
+                  📰  Add publisher
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form @submit.prevent="addPublisher">
+              <div class="ml-4">
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Publisher Name</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="pubname">
+      </div>
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Publisher phone</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="pubphone">
+      </div>
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Publisher URL</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="puburl">
+      </div>
       
+    </div>
+      <div class="mt-8 ml-4">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit" @click="addPub">Add publisher</button>
+      </div>
+    </form>
+            <!-- Modal footer -->
+            
+        </div>
+    </div>
+</div>
       <div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-2xl max-h-full">
         <!-- Modal content -->
@@ -25,8 +68,8 @@
             <form @submit.prevent="updateBook">
               <div class="ml-4">
       <div class="mb-4">
-        <label class="block font-bold mb-2" >Book ID</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="bookid"> 
+        <label class="block font-bold mb-2 mr-5" >Book ID</label>
+        <input class="border rounded w-full py-2 px-3 " type="text" v-model="bookid"> 
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Book Name</label>
@@ -42,15 +85,63 @@
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Author</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="authorid">
+        <select id="package" v-model="authorid" required
+        class="block w-full border border-gray-400 p-2 rounded mb-4 text-black">
+        <option value="">Select a Author</option>
+        <option v-for="author in authors" :value="author.author_id" :key="author.author_id">{{ author.author_id }}  {{ author.author_fn }} {{ author.author_ln }}</option>
+      </select>
       </div>
       <div class="mb-4">
         <label class="block font-bold mb-2">Publisher</label>
-        <input class="border rounded w-full py-2 px-3" type="text" v-model="pubid">
+        <select id="package" v-model="pubid" required
+        class="block w-full border border-gray-400 p-2 rounded mb-4 text-black">
+        <option value="">Select a Publisher</option>
+        <option v-for="pub in publishers" :value="pub.pub_id" :key="pub.pub_id">{{ pub.pub_id }} {{ pub.pub_name }}</option>
+      </select>
       </div>
     </div>
       <div class="mt-8 ml-4">
-        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" type="submit" @click="submit">Add Book</button>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit" @click="submit">Add Book</button>
+      </div>
+    </form>
+            <!-- Modal footer -->
+            
+        </div>
+    </div>
+</div>
+<div id="addauthorModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
+                  👨  Add Author
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form @submit.prevent="addPublisher">
+              <div class="ml-4">
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Author FirstName</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="authfname">
+      </div>
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Author LastName</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="authlname">
+      </div>
+      <div class="mb-4">
+        <label class="block font-bold mb-2">Author Alias</label>
+        <input class="border rounded w-full py-2 px-3" type="text" v-model="authalias">
+      </div>
+      
+    </div>
+      <div class="mt-8 ml-4">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit" @click="addAuthor">Add Author</button>
       </div>
     </form>
             <!-- Modal footer -->
@@ -148,7 +239,7 @@
           items-center
           justify-center
           bg-gray-700 bg-opacity-10
-
+            h-full
         "
       >
       <form @submit.prevent="update(newbook)">
@@ -207,7 +298,10 @@ export default {
     return {
       books : null,
       isOpen: false,
-      newbook : null
+      newbook : null,
+      authors : null,
+      authorid:null,
+      publishers : null,
     }
   },
   computed: {
@@ -242,7 +336,65 @@ export default {
           response.data,
           'Add Book Already',
           'success'
-        )
+        ).then (response => location.reload())
+      })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+          })
+          console.log(error.message);
+        });
+    },
+    addPub() {
+      var formData = new FormData();
+      formData.append("pubname", this.pubname)
+      formData.append("pubphone", this.pubphone)
+      formData.append("puburl", this.puburl)
+
+
+      console.log(formData);
+      axios.post('http://localhost:3001/addpub', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log(response)
+        Swal.fire(
+          response.data,
+          'Add Publisher Already',
+          'success'
+        ).then (response => location.reload())
+      })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+          })
+          console.log(error.message);
+        });
+    },
+    addAuthor() {
+      var formData = new FormData();
+      formData.append("authfname", this.authfname)
+      formData.append("authlname", this.authlname)
+      formData.append("authalias", this.authalias)
+
+
+      console.log(formData);
+      axios.post('http://localhost:3001/addauthor', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log(response)
+        Swal.fire(
+          response.data,
+          'Add Author Already',
+          'success'
+        ).then (response => location.reload())
       })
         .catch(error => {
           Swal.fire({
@@ -288,7 +440,7 @@ export default {
         });
     },
   },
-  created() {
+ async created() {
     axios.get("http://localhost:3001/book")
       .then((response) => {
         this.books = response.data.book;
@@ -307,7 +459,13 @@ export default {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-
+    const author =  await axios.get('http://localhost:3001/author');
+      console.log(author.data)
+      this.authors = author.data.authors
+      const publishers =  await axios.get('http://localhost:3001/publisher');
+      console.log(publishers.data)
+      this.publishers = publishers.data.publisher
+      
   
 }}
 </script>

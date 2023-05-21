@@ -9,6 +9,8 @@ import DetailChapter from "../views/DetailChapter.vue";
 import Fav from "../views/Fav.vue";
 import admin from "../views/admin.vue";
 import approve from  "../views/approve.vue";
+// import { store } from '../store'; // Import the Vuex store instance
+
 const routes = [
     {
         name: 'Home',
@@ -30,6 +32,7 @@ const routes = [
     {
         name: 'Login',
         path: '/login',
+
         component: Login
     },
     {   name: 'Profile',
@@ -61,11 +64,13 @@ const routes = [
     {
         path: '/admin',
         name: 'admin',
+        meta: { admin: true, login:true },
         component: admin
     },
     {
         path: '/approve',
         name: 'approve',
+        meta: { admin: true, login:true },
         component: approve
     }
 
@@ -83,13 +88,21 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isLoggedIn = !!localStorage.getItem('token')
+    if (isLoggedIn) {
+        const isAdmin = JSON.parse(localStorage.getItem('userInfo')).user_role == 'admin' ? true : false
+        console.log(isAdmin)
+        if (to.meta.admin && !isAdmin) {
+            next({ path: '/' })
+          }
+      
+    }
+
     
 
     if (to.meta.login && !isLoggedIn) {
         alert('Please login')
       next({ path: '/login' })
     }
-
 
     next()
   })
