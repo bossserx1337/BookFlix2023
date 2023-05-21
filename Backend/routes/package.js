@@ -58,15 +58,15 @@ router.post('/buypackage', upload.single('bill_image'), async function (req, res
   const packid = req.body.packid;
   const userid = req.body.userid;
   const image = "/uploads/" + req.file.filename;
-  const mydate = new Date()
+  const mydate = packid == 1 ? "DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH)" : packid == 2 ? "DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 6 MONTH)" : "DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 12 MONTH)";
 
   const conn = await pool.getConnection()
   // Begin transaction
   await conn.beginTransaction();
   try {
     const results = await conn.query(
-      'INSERT INTO buy_package(pack_id,user_id, pay_bill, pack_start, pack_end) VALUES(?, ?, ?, ?, ?)',
-      [packid, userid, image, mydate , mydate]
+      'INSERT INTO buy_package(pack_id,user_id, pay_bill, pack_start, pack_end) VALUES(?, ?, ?, CURRENT_TIMESTAMP(), ?)',
+      [packid, userid, image , mydate]
     );
 
     await conn.commit();
