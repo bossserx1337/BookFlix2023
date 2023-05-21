@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `author`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `author` (
-  `author_id` int NOT NULL,
+  `author_id` int NOT NULL AUTO_INCREMENT,
   `author_fn` varchar(255) DEFAULT NULL,
   `author_ln` varchar(255) DEFAULT NULL,
   `author_alias` varchar(255) DEFAULT NULL,
