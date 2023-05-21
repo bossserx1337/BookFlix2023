@@ -43,7 +43,7 @@ export default {
         const token = res.data.token;
         const user = res.data.user;
         this.$store.dispatch('setToken', { token, userInfo: user }); // เรียกใช้ action 'setToken' จาก Vuex store เพื่อกำหนดค่า token และ userInfo ใน state
-        this.$router.push('/');
+        window.location.href = '/';
       } catch (error) {
         this.error = error.response.data;
         console.log(error.response.data);

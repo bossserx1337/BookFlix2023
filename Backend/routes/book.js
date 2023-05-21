@@ -1,12 +1,30 @@
 const express = require("express");
 const pool = require("../config");
+const multer = require('multer')
+const path = require('path')
 
+var storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, "./static/uploads");
+  },
+  filename: function (req, file, callback) {
+    callback(
+      null,
+      file.originalname
+    );
+  },
+});
+const upload = multer(
+  {
+    storage: storage,
+
+  });
 router = express.Router();
 
 router.get("/book", async function (req, res, next) {
   try {
     let [books, fields] = await pool.query(`
-    SELECT book.book_id, book.book_name, book.book_img, book.book_desc, book.author_id, book.pub_id , GROUP_CONCAT(book_type.book_type_name) AS 'tag'
+    SELECT distinct book.book_id, book.book_name, book.book_img, book.book_desc, book.author_id, book.pub_id , GROUP_CONCAT(book_type.book_type_name) AS 'tag'
     FROM book
     JOIN book_with_type ON book.book_id = book_with_type.book_id
     JOIN book_type ON book_with_type.book_type_id = book_type.book_type_id
@@ -125,14 +143,47 @@ router.put('/updatebook', async function (req, res, next) {
   }
 })
 
-router.post('/addchapter', async function (req, res, next) {
-  console.log(req.body)
-  const bookid = req.body.bookid;
-  const chapterid = req.body.chapterid;
-  const chaptername = req.body.chaptername;
-  const chapterdesc = req.body.chapterdesc;
-  const chapterimg = req.body.chapterimg;
+router.post('/addchapter', upload.array('myImage', 5), async function (req, res, next) {
+  console.log(req.body);
+  const bookId = req.body.book_id;
+  const chapterContent = req.body.chapter_content;
+  const files = req.files;
+
+  // Process the files here and store them as needed
+  let pathArray = [];
+
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const filePath = file.filename;
+    pathArray.push(filePath);
+  }
+  console.log(pathArray)
+  // Perform any additional operations you need with the data
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+
+  const chapterinsert =  await conn.query('INSERT INTO chapter(chapter_content, book_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP() )', [chapterContent, bookId]);
+  const chapterId = chapterinsert[0].insertId;
+
+  for (let i = 0; i < pathArray.length; i++) {
+    console.log(chapterId, pathArray[i])
+    await conn.query('INSERT INTO chapter_image (chapter_id, image_url, chapter_update) VALUES (?, ?, CURRENT_TIMESTAMP())', [chapterId, pathArray[i]]);
+  }
+
+    await conn.commit();
+  } catch (err) {
+    console.log(err)
+    await conn.rollback();
+    next(err);
+  }finally{
+    conn.release();
+  }
+  // Send response back to the client
+  res.send('Chapter added successfully');
 });
+
 
 
 exports.router = router;

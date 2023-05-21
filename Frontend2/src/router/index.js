@@ -68,7 +68,7 @@ const routes = [
         component: admin
     },
     {
-        path: '/approve',
+        path: '/admin/approve',
         name: 'approve',
         meta: { admin: true, login:true },
         component: approve

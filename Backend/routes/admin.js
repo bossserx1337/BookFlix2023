@@ -147,6 +147,15 @@ router.post('/addauthor', async function (req, res, next) {
 
 
 
-
+router.delete('/book/:bookid', async (req, res, next) => {
+  try {
+    await pool.query('SET FOREIGN_KEY_CHECKS = 0')
+    const [rows, fields] = await pool.query('DELETE FROM book WHERE book_id = ?', req.params.bookid);
+    await pool.query('SET FOREIGN_KEY_CHECKS = 1')
+    return res.status(200).json({ Book : rows});
+  } catch (err) {
+    return next(err);
+  }
+});
 
 exports.router = router;

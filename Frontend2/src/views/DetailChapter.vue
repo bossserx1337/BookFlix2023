@@ -2,13 +2,15 @@
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 pt-5">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ chapterTitle }}</h1>
     <div v-for="image in chapterImg">
-      <img class="max-w-lg w-full" :src="(image.image_url) ? image.image_url : 'https://miro.medium.com/v2/resize:fit:691/1*W6sDVrsrLBYHP881a8COQA.jpeg'" alt="Manhwa chapter image">
+      <img class="max-w-lg w-full"
+        :src="isValidHttpUrl(image.image_url) ? image.image_url : ('http://localhost:3001/uploads/' + image.image_url)"
+        alt="Manhwa chapter image">
     </div>
     <div class="flex justify-between w-full mb-8">
       <a :href="getPrevChapterUrl()"
         class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg focus:outline-none">Previous Chapter</a>
-      <a :href="getNextChapterUrl()"
-        class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg focus:outline-none"> Next Chapter </a>
+      <a :href="getNextChapterUrl()" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded-lg focus:outline-none"> Next
+        Chapter </a>
     </div>
   </div>
 </template>
@@ -33,7 +35,7 @@ export default {
   methods: {
     getMaxChapter(bookid) {
       axios.get(`http://localhost:3001/book/${bookid}/chapter`).then((response) => {
-        this.maxChapter = response.data.chapter.length;
+        this.maxChapter = response.data.chapter.length + 1;
 
       }).catch((error) => {
         console.log(error);
@@ -61,7 +63,7 @@ export default {
       // decrement the chapter number by 1
       const prevChapterNumber = currentChapterNumber - 1;
       // return the updated URL
-      if (prevChapterNumber == 0){
+      if (prevChapterNumber == 0) {
         return `/book/${this.$route.params.bookid}/chapter/`;
       }
 
@@ -73,10 +75,21 @@ export default {
       // increment the chapter number by 1
       const nextChapterNumber = currentChapterNumber + 1;
       // return the updated URL
-      if (nextChapterNumber >= this.maxChapter){
+      if (nextChapterNumber >= this.maxChapter) {
         return `/book/${this.$route.params.bookid}/chapter/`;
       }
       return `/book/${this.$route.params.bookid}/chapter/${nextChapterNumber}`;
+    },
+    isValidHttpUrl(string) {
+      let url;
+
+      try {
+        url = new URL(string);
+      } catch (_) {
+        return false;
+      }
+
+      return url.protocol === "http:" || url.protocol === "https:";
     }
   }
 };

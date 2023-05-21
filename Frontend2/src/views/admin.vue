@@ -5,7 +5,13 @@
     <div class="mb-4">
       <h1 class="font-serif text-3xl font-bold underline decoration-gray-400"> </h1>
 
+
       <div class="flex justify-end">
+        <router-link to="/admin/approve"><button
+            class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">💸 Approve
+            Payment</button>
+        </router-link>
+
         <button data-modal-target="addpublisherModal" data-modal-toggle="addpublisherModal"
           class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">📰 Add Publisher</button>
         <button data-modal-target="addauthorModal" data-modal-toggle="addauthorModal"
@@ -28,8 +34,8 @@
                   📰 Add publisher
                 </h3>
                 <button type="button"
-                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="defaultModal">
+                  class="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="addpublisherModal">
                   <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -77,7 +83,7 @@
                   Add Book
                 </h3>
                 <button type="button"
-                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  class="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                   data-modal-hide="defaultModal">
                   <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
@@ -147,8 +153,8 @@
                   👨 Add Author
                 </h3>
                 <button type="button"
-                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="defaultModal">
+                  class="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="addauthorModal">
                   <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -196,8 +202,8 @@
                   👨 Add Chapter
                 </h3>
                 <button type="button"
-                  class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  data-modal-hide="defaultModal">
+                  class="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="addChapterModal">
                   <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -208,29 +214,29 @@
                 </button>
               </div>
               <!-- Modal body -->
-              <form @submit.prevent="addChapterModal">
+              <form @submit.prevent="addChapter">
                 <div class="mx-4">
                   <div class="mb-4">
                     <label class="block font-bold mb-2">Book</label>
-                    <select name="book_id" id="book_id">
-                      <option v-for="book in books" :value="book.book_id">{{ book.book_name }}</option>
+                    <select name="book_id" v-model="selectedBook">
+                      <option v-for="book in books" :value="book.book_id" :key="book.book_id">{{ book.book_name }}
+                      </option>
                     </select>
                   </div>
                   <div class="mb-4">
                     <label class="block font-bold mb-2">Chapter content</label>
-                    <input class="border rounded w-full py-2 px-3" type="text" v-model="authlname">
+                    <input class="border rounded w-full py-2 px-3" type="text" v-model="chapterContent">
                   </div>
                   <div class="mb-4">
-                    <label class="block font-bold mb-2">Chapter image</label>
+                    <label class="block font-bold mb-2">Chapter images</label>
                     <input class="mb-5" multiple type="file" accept="image/png, image/jpeg, image/webp"
-                      @change="selectImages" />
-
+                      ref="imageInput" />
                   </div>
-
                 </div>
                 <div class="mt-8 mx-4">
-                  <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit"
-                    @click="addChapter">Add Chapter</button>
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit">
+                    Add Chapter
+                  </button>
                 </div>
               </form>
               <!-- Modal footer -->
@@ -240,9 +246,12 @@
         </div>
       </div>
     </div>
+
+    <!-- edit book -->
     <div class="flex flex-col">
       <div class="overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
+        <div
+          class="inline-block min-w-full overflow-hidden align-midabsolute inset-0 items-center justify-center bg-gray-700 bg-opacity-10 h-fulldle border-b border-gray-200 shadow sm:rounded-lg">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -262,8 +271,7 @@
                   Action</th>
               </tr>
             </thead>
-
-            <tbody class="bg-white">
+            <tbody>
               <tr v-for="book in books" :key="book.book_id">
                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                   <div class="flex items-center">
@@ -311,7 +319,7 @@
                 </td>
                 <td class="text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200 ">
                   <a href="#"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-600 hover:text-red-800"
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" @click="dropbook(book.book_id)">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg></a>
@@ -329,7 +337,7 @@
             h-full
         ">
                   <form @submit.prevent="update(newbook)">
-                    <div class="mx-4">
+                    <div class="mx-4 bg-white px-9 py-6">
                       <div class="mb-4">
                         <label class="block font-bold mb-2">Book ID</label>
                         <input class="border rounded w-full py-2 px-3" type="text" v-model="newbook.book_id" readonly>
@@ -358,6 +366,8 @@
                     <div class="mt-8 mx-4">
                       <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" type="submit"
                         @click="update(newbook)">update</button>
+                      <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded ml-4" type="button"
+                        @click="closeModal">Close</button>
 
                     </div>
                   </form>
@@ -373,7 +383,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from '/plugins/axios'
 import Swal from 'sweetalert2';
 export default {
   name: 'App',
@@ -388,12 +398,15 @@ export default {
       authors: null,
       authorid: null,
       publishers: null,
-      authfname : '',
-      authlname : '',
-      authalias : '',
-      pubname : '',
-      pubphone : '',
-      puburl : '',
+      authfname: '',
+      authlname: '',
+      authalias: '',
+      pubname: '',
+      pubphone: '',
+      puburl: '',
+      images: [], // array of image
+      selectedBook: '',
+      chapterContent: '',
     }
   },
   computed: {
@@ -532,6 +545,30 @@ export default {
         });
     },
     addChapter() {
+      const formData = new FormData();
+      formData.append('book_id', this.selectedBook);
+      formData.append('chapter_content', this.chapterContent);
+
+      // Get the files from the file input
+      const files = this.$refs.imageInput.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        formData.append('myImage', file);
+      }
+
+      axios.post('/addChapter', formData)
+        .then((response) => {
+          // Handle success
+          Swal.fire(
+          response.data,
+          'Update Book Already',
+          'success'
+        ).then(response => location.reload())
+        })
+        .catch(error => {
+          // Handle error
+          console.error(error);
+        });
     },
     selectImages(event) {
       this.checkfilesize = 0;
@@ -541,6 +578,39 @@ export default {
       });
       this.$v.checkfilesize.$touch();
 
+    },
+    closeModal() {
+      this.isOpen = false; // เมื่อคลิกที่ปุ่มปิด modal ให้ปิด modal
+    },
+    async dropbook(bookid) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then( async(result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await axios.delete(
+              `http://localhost:3001/book/${bookid}`,
+              {
+                bookid: bookid,
+              }
+            );
+            if (response.status == 200) {
+              Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          ).then(response => location.reload())
+
+            }
+          } catch (error) { }
+        }
+      })
     }
   },
   async created() {

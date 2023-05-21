@@ -27,6 +27,11 @@
                         <router-link to="/fav" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">
                             Favorite List
                         </router-link>
+                        <div v-if="userinfo.user_role == 'admin'">
+                            <router-link to="/admin" class="block px-4 py-2 text-sm text-gray-700" role="menuitem">
+                                Admin
+                            </router-link>
+                        </div>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" @click="logout()">
                             Logout
                         </a>

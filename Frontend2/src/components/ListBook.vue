@@ -7,11 +7,14 @@
         <div
           class="h-[275px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
 
-          <figure><img :src="book.book_img" /> </figure>
+
           <div v-if="userinfo.user_status == 'R'">
             <router-link :to="`/book/${book.book_id}/chapter/`">
               <figure><img :src="book.book_img" /></figure>
             </router-link>
+          </div>
+          <div v-else>
+            <figure><img :src="book.book_img" /></figure>
           </div>
           <div>
 
@@ -28,36 +31,42 @@
         </div>
       </div>
     </div>
-    <h1 class="">Sort by tag</h1>
-    <!-- dropdown tag -->
-    <select id="tag" v-model="selectedTag" class="block w-full border border-gray-400 p-2 rounded mb-4 text-black">
-      <option selected value="">Select a tag</option>
-      <option v-for="(tag, index) in tags" :value="tag.tag" :key="index">{{ tag.tag }}</option>
-    </select>
-    <div class="ml-2 gap-x-4 pl-4 flex overflow-x-auto" @wheel="handleWheel">
-      <div v-for="book in books_sort" :key="book.book_id" class="flex-shrink-0" style="width: 200px">
 
 
-        <div
-          class="h-[275px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
-          <figure><img :src="book.book_img" /></figure>
-          <div v-if="userinfo.user_status == 'R'">
-            <router-link :to="`/book/${book.book_id}/chapter/`">
+
+    <div class=" px-52 mt-16">
+
+
+      <h1 class="">Sort by tag</h1>
+      <!-- dropdown tag -->
+      <select id="tag" v-model="selectedTag" class="block w-full border border-gray-400 p-2 rounded mb-4 text-black">
+        <option selected value="">Select a tag</option>
+        <option v-for="(tag, index) in tags" :value="tag.tag" :key="index">{{ tag.tag }}</option>
+      </select>
+      <div class="ml-2 gap-x-4 pl-4 grid grid-cols-5 grid-flow-row auto-cols-max overflow-x-auto" @wheel="handleWheel">
+        <div v-for="book in books_sort" :key="book.book_id" class="flex-shrink-0 w-40">
+          <div
+            class="h-[150] bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
+
+            <div v-if="userinfo.user_status == 'R'">
+              <router-link :to="`/book/${book.book_id}/chapter/`">
+                <figure><img :src="book.book_img" /></figure>
+              </router-link>
+            </div>
+            <div v-else>
               <figure><img :src="book.book_img" /></figure>
-            </router-link>
-          </div>
-          <div>
-            {{ book.book_name }}
-          </div>
-          <div v-if="userinfo.user_status == 'R'">
-            <button v-if="!isFavorite(book)" @click="addToFavorites(book)"
-              class="favorite-button bg-white text-black w-full hover:bg-gray-200 font-semibold">Add
-              Favorites</button>
-            <button v-else disabled class="favorite-button bg-gray-300 text-gray-500 w-full cursor-not-allowed">Added to
-              Favorites</button>
+            </div>
+            <div>{{ book.book_name }}</div>
+            <div v-if="userinfo.user_status == 'R'">
+              <button v-if="!isFavorite(book)" @click="addToFavorites(book)"
+                class="favorite-button bg-white text-black w-full hover:bg-gray-200 font-semibold">Add Favorites</button>
+              <button v-else disabled class="favorite-button bg-gray-300 text-gray-500 w-full cursor-not-allowed">Added to
+                Favorites</button>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -121,7 +130,7 @@ export default {
         const books = await axios.get("/book");
         this.books = books.data.book;
         this.tags = books.data.tag;
-        // console.log(this.tags);
+        console.log(this.books);
       } catch (error) {
         console.log(error);
       }

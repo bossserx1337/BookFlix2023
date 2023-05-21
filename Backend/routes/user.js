@@ -115,6 +115,10 @@ router.post('/user/login', async (req, res, next) => {
             'SELECT * FROM user WHERE user_email=?',
             [email]
         )
+        const [users_use] = await conn.query(
+            'SELECT user_pic, user_first_name, user_last_name, user_phone, user_role , user_status , user_email FROM user WHERE user_email=?',
+            [email]
+        )
         const user = users[0]
         if (!user) {
             throw new Error('Incorrect Email or password')
@@ -143,7 +147,7 @@ router.post('/user/login', async (req, res, next) => {
         conn.commit()
         return res.status(200).json({
             'token': token,
-            'user': user
+            'user': users_use[0]
         })
     } catch (error) {
         conn.rollback()
