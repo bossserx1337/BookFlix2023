@@ -41,7 +41,7 @@
               </div>
               <!-- Modal body -->
               <form @submit.prevent="addPublisher">
-                <div class="ml-4">
+                <div class="mx-4">
                   <div class="mb-4">
                     <label class="block font-bold mb-2">Publisher Name</label>
                     <input class="border rounded w-full py-2 px-3" type="text" v-model="pubname">
@@ -56,7 +56,7 @@
                   </div>
 
                 </div>
-                <div class="mt-8 ml-4">
+                <div class="mt-8 mx-4">
                   <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit"
                     @click="addPub">Add publisher</button>
                 </div>
@@ -90,7 +90,7 @@
               </div>
               <!-- Modal body -->
               <form @submit.prevent="updateBook">
-                <div class="ml-4">
+                <div class="mx-4">
                   <div class="mb-4">
                     <label class="block font-bold mb-2 mr-5">Book ID</label>
                     <input class="border rounded w-full py-2 px-3 " type="text" v-model="bookid">
@@ -126,7 +126,7 @@
                     </select>
                   </div>
                 </div>
-                <div class="mt-8 ml-4">
+                <div class="mt-8 mx-4">
                   <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit"
                     @click="submit">Add Book</button>
                 </div>
@@ -160,7 +160,7 @@
               </div>
               <!-- Modal body -->
               <form @submit.prevent="addPublisher">
-                <div class="ml-4">
+                <div class="mx-4">
                   <div class="mb-4">
                     <label class="block font-bold mb-2">Author FirstName</label>
                     <input class="border rounded w-full py-2 px-3" type="text" v-model="authfname">
@@ -175,7 +175,7 @@
                   </div>
 
                 </div>
-                <div class="mt-8 ml-4">
+                <div class="mt-8 mx-4">
                   <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit"
                     @click="addAuthor">Add Author</button>
                 </div>
@@ -209,7 +209,7 @@
               </div>
               <!-- Modal body -->
               <form @submit.prevent="addChapterModal">
-                <div class="ml-4">
+                <div class="mx-4">
                   <div class="mb-4">
                     <label class="block font-bold mb-2">Book</label>
                     <select name="book_id" id="book_id">
@@ -228,7 +228,7 @@
                   </div>
 
                 </div>
-                <div class="mt-8 ml-4">
+                <div class="mt-8 mx-4">
                   <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit"
                     @click="addChapter">Add Chapter</button>
                 </div>
@@ -329,7 +329,7 @@
             h-full
         ">
                   <form @submit.prevent="update(newbook)">
-                    <div class="ml-4">
+                    <div class="mx-4">
                       <div class="mb-4">
                         <label class="block font-bold mb-2">Book ID</label>
                         <input class="border rounded w-full py-2 px-3" type="text" v-model="newbook.book_id" readonly>
@@ -355,7 +355,7 @@
                         <input class="border rounded w-full py-2 px-3" type="text" v-model="newbook.pub_id">
                       </div>
                     </div>
-                    <div class="mt-8 ml-4">
+                    <div class="mt-8 mx-4">
                       <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" type="submit"
                         @click="update(newbook)">update</button>
 
