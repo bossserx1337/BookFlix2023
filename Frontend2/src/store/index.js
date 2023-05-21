@@ -24,15 +24,17 @@ export default createStore({
       localStorage.removeItem('token');
       localStorage.removeItem('userInfo');
     },
-    initializeStore(state, payload) {
-      if (!payload.editable && localStorage.getItem('token')) {
-        state.token = localStorage.getItem('token');
-      }
+    updateUser(state, payload) {
+      state.userInfo.user_first_name = payload.user_first_name;
+      state.userInfo.user_last_name = payload.user_last_name;
+      state.userInfo.user_phone = payload.user_phone;
+      state.userInfo.user_email = payload.user_email;
+      state.userInfo.user_pic = payload.user_pic;
+      localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
     },
-
   },
   actions: {
-    setToken({ commit },  { token, userInfo }) {
+    setToken({ commit }, { token, userInfo }) {
       const payload = {
         token: token,
         userInfo: userInfo,
@@ -49,7 +51,16 @@ export default createStore({
     logout({ commit }) {
       commit('logout');
     },
-
+    updateProfile({ commit }, { user_first_name, user_last_name, user_phone, user_email, user_pic}) {
+      const payload = {
+        user_first_name: user_first_name,
+        user_last_name: user_last_name,
+        user_phone: user_phone,
+        user_email: user_email,
+        user_pic:user_pic
+      };
+      commit('updateUser', payload);
+    },
   },
   plugins: [
     store => {

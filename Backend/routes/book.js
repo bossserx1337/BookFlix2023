@@ -164,26 +164,64 @@ router.post('/addchapter', upload.array('myImage', 5), async function (req, res,
   await conn.beginTransaction();
   try {
 
-  const chapterinsert =  await conn.query('INSERT INTO chapter(chapter_content, book_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP() )', [chapterContent, bookId]);
-  const chapterId = chapterinsert[0].insertId;
+    const chapterinsert = await conn.query('INSERT INTO chapter(chapter_content, book_id, created_at) VALUES (?, ?, CURRENT_TIMESTAMP() )', [chapterContent, bookId]);
+    const chapterId = chapterinsert[0].insertId;
 
-  for (let i = 0; i < pathArray.length; i++) {
-    console.log(chapterId, pathArray[i])
-    await conn.query('INSERT INTO chapter_image (chapter_id, image_url, chapter_update) VALUES (?, ?, CURRENT_TIMESTAMP())', [chapterId, pathArray[i]]);
-  }
+    for (let i = 0; i < pathArray.length; i++) {
+      console.log(chapterId, pathArray[i])
+      await conn.query('INSERT INTO chapter_image (chapter_id, image_url, chapter_update) VALUES (?, ?, CURRENT_TIMESTAMP())', [chapterId, pathArray[i]]);
+    }
 
     await conn.commit();
   } catch (err) {
     console.log(err)
     await conn.rollback();
     next(err);
-  }finally{
+  } finally {
     conn.release();
   }
   // Send response back to the client
   res.send('Chapter added successfully');
 });
 
+router.delete('/deletechapter/:chapterId', async function (req, res, next) {
+  const chapterId = req.params.chapterId;
 
+  // Perform any additional operations you need with the data
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+  try {
+    await conn.query('DELETE FROM chapter_image WHERE chapter_id = ?', [chapterId]);
+    await conn.query('DELETE FROM chapter WHERE chapter_id = ?', [chapterId]);
+
+    await conn.commit();
+  } catch (err) {
+    console.log(err)
+    await conn.rollback();
+    next(err);
+  } finally {
+    conn.release();
+  }
+  // Send response back to the client
+  res.send('Chapter deleted successfully');
+});
+router.get("/book/:bookid/chapter/", async function (req, res, next) {
+  try {
+
+    let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
+    join publisher using (pub_id) where book_id = ${req.params.bookid}`)
+    let [chapter, fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
+    let [tag, fields2] = await pool.query(`SELECT  book_type_name as 'tag', book_name FROM project.book join author using (author_id)
+    join publisher using (pub_id) join book_with_type using (book_id) join book_type using (book_type_id) where book_id =  ${req.params.bookid}`)
+
+    return res.json({
+      book: book,
+      chapter: chapter,
+      tag: tag
+    });
+  } catch (err) {
+    return next(err)
+  }
+});
 
 exports.router = router;

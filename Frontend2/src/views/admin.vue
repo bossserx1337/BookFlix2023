@@ -19,7 +19,10 @@
         <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
           class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">🕮 Add Book</button>
         <button data-modal-target="addChapterModal" data-modal-toggle="addChapterModal"
-          class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600">🕮 Add Chapter</button>
+          class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">🕮 Add Chapter</button>
+        <button data-modal-target="removeChapterModal" data-modal-toggle="removeChpaterModal"
+          class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600">🕮 Remove Chapter</button>
+
 
 
 
@@ -244,6 +247,59 @@
             </div>
           </div>
         </div>
+        <div id="removeChpaterModal" tabindex="-1" aria-hidden="true"
+          class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <!-- Modal header -->
+              <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
+                  👨 Remove Chapter
+                </h3>
+                <button type="button"
+                  class="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="removeChpaterModal">
+                  <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+              <!-- Modal body -->
+              <form @submit.prevent="removeChapter">
+                <div class="mx-4">
+                  <div class="mb-4">
+                    <label class="block font-bold mb-2">Book</label>
+                    <select name="book_id" v-model="selectedBookid">
+                      <option v-for="book in books" :value="book.book_id" :key="book.book_id">{{ book.book_name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label class="block font-bold mb-2">Chapter</label>
+                    <select name="book_id" v-model="selectChapter">
+                      <option v-for="chapter in chapters" :value="chapter.chapter_id" :key="chapter.chapter_id">{{
+                        chapter.chapter_id }} {{ chapter.chapter_content }}
+                      </option>
+                    </select>
+                  </div>
+
+                </div>
+                <div class="mt-8 mx-4">
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit">
+                    Delete Chapter
+                  </button>
+                </div>
+              </form>
+              <!-- Modal footer -->
+
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -405,13 +461,21 @@ export default {
       pubphone: '',
       puburl: '',
       images: [], // array of image
-      selectedBook: '',
       chapterContent: '',
+      selectedBook: '',
+      selectedBookid: '',
+      selectChapter: '',
+      chapters: []
     }
   },
   computed: {
     isModalVisible() {
       return this.isOpen;
+    },
+
+  }, watch: {
+    selectedBookid() {
+      this.getChapters();
     }
   },
   methods: {
@@ -560,10 +624,10 @@ export default {
         .then((response) => {
           // Handle success
           Swal.fire(
-          response.data,
-          'Update Book Already',
-          'success'
-        ).then(response => location.reload())
+            response.data,
+            'Update Book Already',
+            'success'
+          ).then(response => location.reload())
         })
         .catch(error => {
           // Handle error
@@ -591,7 +655,7 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
-      }).then( async(result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
           try {
             const response = await axios.delete(
@@ -602,44 +666,60 @@ export default {
             );
             if (response.status == 200) {
               Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          ).then(response => location.reload())
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              ).then(response => location.reload())
 
             }
           } catch (error) { }
         }
       })
+    },
+    removeChapter() {
+      // กระบวนการลบ Chapter ที่เลือกออกจากฐานข้อมูลของคุณ
+      axios.delete(`/deletechapter/${this.selectChapter}`)
+        .then(response => {
+          Swal.fire(
+            response.data,
+            'Delete Chapter Already',
+            'success'
+          ).then(response => location.reload())
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getChapters() {
+      if (this.selectedBookid) {
+        axios.get(`/book/${this.selectedBookid}/chapter/`)
+          .then((response) => {
+            this.chapters = response.data.chapter;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   },
   async created() {
-    axios.get("http://localhost:3001/book")
+    axios.get("/book")
       .then((response) => {
         this.books = response.data.book;
-        console.log(this.books);
 
       })
       .catch((err) => {
         console.log(err);
       });
-    this.email = localStorage.getItem("email");
-    // axios.get(`http://localhost:3000/userinfo/${this.email}`)
-    //   .then((response) => {
-    //     this.userinfo = response.data.userinfo;
-    //     console.log(this.userinfo[0].customer_id);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    const author = await axios.get('http://localhost:3001/author');
+
+    const author = await axios.get('/author');
     console.log(author.data)
     this.authors = author.data.authors
-    const publishers = await axios.get('http://localhost:3001/publisher');
+    const publishers = await axios.get('/publisher');
     console.log(publishers.data)
     this.publishers = publishers.data.publisher
 
 
-  }
+  },
 }
 </script>

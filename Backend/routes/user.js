@@ -9,12 +9,15 @@ const multer = require('multer');
 // SET STORAGE
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, "./static/uploads")
+        callback(null, "./static/uploads");
     },
     filename: function (req, file, callback) {
-        callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-    }
-})
+        callback(
+            null,
+            file.originalname
+        );
+    },
+});
 const upload = multer({ storage: storage })
 
 router = express.Router();
@@ -175,11 +178,13 @@ router.put('/user/update/', isLoggedIn, upload.single('user_pic'), async (req, r
                 // อัปโหลดไฟล์
                 const [results, _] = await conn.query(
                     'UPDATE user SET user_first_name = ?, user_last_name = ?, user_phone = ?, user_email = ?, user_pic = ? WHERE user_id = ?',
-                    [user_first_name, user_last_name, user_phone, user_email, "/uploads/" + user_pic.filename, user_id]
+                    [user_first_name, user_last_name, user_phone, user_email, user_pic.filename, user_id]
                 )
+                console.log(results)
                 conn.commit()
                 return res.status(201).send('Updated succesful')
             } catch (err) {
+                console.log(err)
                 conn.rollback()
                 return res.status(400).json(err.toString());
             } finally {
