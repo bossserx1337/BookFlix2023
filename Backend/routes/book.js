@@ -6,11 +6,12 @@ router = express.Router();
 router.get("/book", async function (req, res, next) {
   try {
     let [books, fields] = await pool.query(`
-    SELECT book.book_id, book.book_name, book.book_img , GROUP_CONCAT(book_type.book_type_name) AS 'tag'
+    SELECT book.book_id, book.book_name, book.book_img, book.book_desc, book.author_id, book.pub_id , GROUP_CONCAT(book_type.book_type_name) AS 'tag'
     FROM book
     JOIN book_with_type ON book.book_id = book_with_type.book_id
     JOIN book_type ON book_with_type.book_type_id = book_type.book_type_id
     GROUP BY book.book_id;
+
 
     `)
     let [tags, fields2] = await pool.query(`SELECT  book_type_name as 'tag' FROM  book_type`)
