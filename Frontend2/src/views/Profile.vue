@@ -105,6 +105,7 @@ export default {
           user_last_name: this.userinfo.user_last_name,
           user_phone: this.userinfo.user_phone,
           user_email: this.userinfo.user_email,
+          user_role: this.userinfo.user_role,
           //ชื่อไฟล์รูป
           user_pic: this.file.name,
 

@@ -26,7 +26,7 @@ router.get('/packages', async (req, res, next) => {
   }
 });
 
-// Add a package
+// Add a package ไม่ได้ใช้
 router.post('/packages', async (req, res, next) => {
   const { packageName, packagePrice, packageDescription } = req.body;
 
@@ -48,6 +48,8 @@ router.post('/packages', async (req, res, next) => {
     conn.release();
   }
 });
+
+
 router.post('/buypackage', isLoggedIn ,upload.single('bill_image'), async function (req, res, next) {
   const file = req.file;
   if (!file) {
@@ -55,10 +57,10 @@ router.post('/buypackage', isLoggedIn ,upload.single('bill_image'), async functi
     error.httpStatusCode = 400;
     return next(error);
   }
-  
+
   const packid = req.body.packid;
   const image = "/uploads/" + req.file.filename;
-  
+
   let mydate;
   if (packid == 1) {
     mydate = 'DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH)';
@@ -67,7 +69,7 @@ router.post('/buypackage', isLoggedIn ,upload.single('bill_image'), async functi
   } else {
     mydate = 'DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 12 MONTH)';
   }
-  
+
   const conn = await pool.getConnection()
   // Begin transaction
   await conn.beginTransaction();
@@ -77,9 +79,9 @@ router.post('/buypackage', isLoggedIn ,upload.single('bill_image'), async functi
       'INSERT INTO buy_package(pack_id, user_id, pay_bill, pack_start, pack_end) VALUES (?, ?, ?, CURRENT_TIMESTAMP(), ' + mydate + ')',
       [packid, req.user.user_id, image]
     );
-  
+
     await conn.commit();
-  
+
     res.send('success!');
   } catch (err) {
     await conn.rollback();
@@ -88,7 +90,7 @@ router.post('/buypackage', isLoggedIn ,upload.single('bill_image'), async functi
     conn.release();
   }
 });
-router.get('/buypackage', async (req, res, next) => {
+router.get('/buypackage',  isLoggedIn ,async (req, res, next) => {
   try {
     const [rows, fields] = await pool.query('SELECT * FROM buy_package');
     return res.json({ packages: rows });

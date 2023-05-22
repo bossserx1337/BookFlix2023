@@ -1,7 +1,7 @@
 const express = require("express");
 const pool = require("../config");
 const Joi = require('joi')
-
+const { isLoggedIn } = require("../middlewares");
 router = express.Router();
 
 const PublisherSchema = Joi.object({
@@ -15,7 +15,7 @@ const AuthorSchema = Joi.object({
   authalias : Joi.string().required()
 })
 
-router.put('/customer', async (req, res, next) => {
+router.put('/customer',isLoggedIn , async (req, res, next) => {
   console.log(req.body)
   const conn = await pool.getConnection();
   await conn.beginTransaction();
@@ -40,7 +40,7 @@ router.put('/customer', async (req, res, next) => {
     conn.release();
   }
 });
-router.delete('/buypackage/:payid', async (req, res) => {
+router.delete('/buypackage/:payid', isLoggedIn ,async (req, res) => {
   const conn = await pool.getConnection();
   await conn.beginTransaction();
   console.log(req.params)
@@ -55,7 +55,7 @@ router.delete('/buypackage/:payid', async (req, res) => {
   }
 
 })
-router.get('/author', async (req, res, next) => {
+router.get('/author', isLoggedIn ,async (req, res, next) => {
   try {
     const [rows, fields] = await pool.query('SELECT * FROM author');
     return res.json({ authors: rows });
@@ -63,7 +63,7 @@ router.get('/author', async (req, res, next) => {
     return next(err);
   }
 });
-router.get('/publisher', async (req, res, next) => {
+router.get('/publisher', isLoggedIn ,async (req, res, next) => {
   try {
     const [rows, fields] = await pool.query('SELECT * FROM publisher');
     return res.json({ publisher: rows });
@@ -72,7 +72,7 @@ router.get('/publisher', async (req, res, next) => {
   }
 });
 
-router.post('/addpub', async function (req, res, next) {
+router.post('/addpub', isLoggedIn ,async function (req, res, next) {
   try {
     await PublisherSchema.validateAsync(req.body, { abortEarly: false })
     console.log(req.body)
@@ -108,7 +108,7 @@ router.post('/addpub', async function (req, res, next) {
   }
 });
 
-router.post('/addauthor', async function (req, res, next) {
+router.post('/addauthor', isLoggedIn ,async function (req, res, next) {
   try {
     await AuthorSchema.validateAsync(req.body, { abortEarly: false })
     console.log(req.body)
@@ -144,7 +144,7 @@ router.post('/addauthor', async function (req, res, next) {
   }
 });
 
-router.post('/addtype', async function (req, res, next) {
+router.post('/addtype', isLoggedIn ,async function (req, res, next) {
 
   const bookid = req.body.bookid;
   const booktypeid = req.body.booktypeid;
@@ -183,8 +183,7 @@ router.post('/addtype', async function (req, res, next) {
 });
 
 
-
-router.delete('/book/:bookid', async (req, res, next) => {
+router.delete('/book/:bookid',isLoggedIn , async (req, res, next) => {
   try {
     await pool.query('SET FOREIGN_KEY_CHECKS = 0')
     const [rows, fields] = await pool.query('DELETE FROM book WHERE book_id = ?', req.params.bookid);
@@ -195,7 +194,7 @@ router.delete('/book/:bookid', async (req, res, next) => {
   }
 });
 
-router.get('/nonapprove', async (req, res, next) => {
+router.get('/nonapprove',isLoggedIn , async (req, res, next) => {
   try {
     const [rows, fields] = await pool.query("SELECT pay_id, pack_id, user_id, user_status,pay_bill FROM project.buy_package join user  using (user_id) where user_status = 'WT' and user_role != 'admin';");
     return res.json({ packages: rows });

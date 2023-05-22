@@ -2,7 +2,7 @@ const express = require("express");
 const pool = require("../config");
 const multer = require('multer')
 const path = require('path')
-
+const { isLoggedIn } = require("../middlewares");
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, "./static/uploads");
@@ -22,7 +22,7 @@ const upload = multer(
 router = express.Router();
 
 
-router.get("/book", async function (req, res, next) {
+router.get("/book", isLoggedIn ,async function (req, res, next) {
   try {
     let [books, fields] = await pool.query(`
     SELECT distinct book.book_id, book.book_name, book.book_img, book.book_desc, book.author_id, book.pub_id , GROUP_CONCAT(book_type.book_type_name) AS 'tag'
@@ -44,7 +44,7 @@ router.get("/book", async function (req, res, next) {
   }
 });
 
-router.get("/book/:bookid/chapter/", async function (req, res, next) {
+router.get("/book/:bookid/chapter/", isLoggedIn , async function (req, res, next) {
   try {
 
     let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
@@ -81,7 +81,7 @@ router.get("/book/:bookid/chapter/:chapterid", async function (req, res, next) {
   }
 });
 
-router.post('/addbook', async function (req, res, next) {
+router.post('/addbook', isLoggedIn ,async function (req, res, next) {
   console.log(req.body)
   const bookid = req.body.bookid;
   const bookname = req.body.bookname;
@@ -112,7 +112,7 @@ router.post('/addbook', async function (req, res, next) {
     conn.release();
   }
 });
-router.put('/updatebook', async function (req, res, next) {
+router.put('/updatebook', isLoggedIn ,async function (req, res, next) {
   console.log(req.body)
   const bookid = req.body.bookid;
   const bookname = req.body.bookname;
@@ -144,7 +144,7 @@ router.put('/updatebook', async function (req, res, next) {
   }
 })
 
-router.post('/addchapter', upload.array('myImage', 5), async function (req, res, next) {
+router.post('/addchapter', isLoggedIn ,upload.array('myImage', 5), async function (req, res, next) {
   console.log(req.body);
   const bookId = req.body.book_id;
   const chapterContent = req.body.chapter_content;
@@ -185,7 +185,7 @@ router.post('/addchapter', upload.array('myImage', 5), async function (req, res,
   res.send('Chapter added successfully');
 });
 
-router.delete('/deletechapter/:chapterId', async function (req, res, next) {
+router.delete('/deletechapter/:chapterId', isLoggedIn ,async function (req, res, next) {
   const chapterId = req.params.chapterId;
 
   // Perform any additional operations you need with the data
@@ -206,7 +206,7 @@ router.delete('/deletechapter/:chapterId', async function (req, res, next) {
   // Send response back to the client
   res.send('Chapter deleted successfully');
 });
-router.get("/book/:bookid/chapter/", async function (req, res, next) {
+router.get("/book/:bookid/chapter/", isLoggedIn ,async function (req, res, next) {
   try {
 
     let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)

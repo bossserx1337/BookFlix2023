@@ -30,6 +30,7 @@ export default createStore({
       state.userInfo.user_phone = payload.user_phone;
       state.userInfo.user_email = payload.user_email;
       state.userInfo.user_pic = payload.user_pic;
+      state.userInfo.user_role = payload.user_role;
       localStorage.setItem('userInfo', JSON.stringify(state.userInfo));
     },
   },
@@ -51,13 +52,14 @@ export default createStore({
     logout({ commit }) {
       commit('logout');
     },
-    updateProfile({ commit }, { user_first_name, user_last_name, user_phone, user_email, user_pic}) {
+    updateProfile({ commit }, { user_first_name, user_last_name, user_phone, user_email, user_pic, user_role}) {
       const payload = {
         user_first_name: user_first_name,
         user_last_name: user_last_name,
         user_phone: user_phone,
         user_email: user_email,
-        user_pic:user_pic
+        user_pic:user_pic,
+        user_role: user_role
       };
       commit('updateUser', payload);
     },
