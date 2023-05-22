@@ -91,7 +91,7 @@ export default {
   methods: {
     async addToFavorites(book) {
       try {
-        const postResponse = await axios.post(`/favorite`);
+        const postResponse = await axios.post(`/favorite/${book.book_id}`);
         // console.log(postResponse);
         this.getFav(); // เรียกใช้ฟังก์ชัน getFav เพื่ออัปเดตรายการหนังสือโปรด
         Swal.fire({

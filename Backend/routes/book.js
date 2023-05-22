@@ -44,7 +44,7 @@ router.get("/book", isLoggedIn ,async function (req, res, next) {
   }
 });
 
-router.get("/book/:bookid/chapter/", isLoggedIn , async function (req, res, next) {
+router.get("/book/:bookid/chapter/" , async function (req, res, next) {
   try {
 
     let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
@@ -185,7 +185,7 @@ router.post('/addchapter', isLoggedIn ,upload.array('myImage', 5), async functio
   res.send('Chapter added successfully');
 });
 
-router.delete('/deletechapter/:chapterId', isLoggedIn ,async function (req, res, next) {
+router.delete('/deletechapter/:chapterId' ,async function (req, res, next) {
   const chapterId = req.params.chapterId;
 
   // Perform any additional operations you need with the data
@@ -206,23 +206,23 @@ router.delete('/deletechapter/:chapterId', isLoggedIn ,async function (req, res,
   // Send response back to the client
   res.send('Chapter deleted successfully');
 });
-router.get("/book/:bookid/chapter/", isLoggedIn ,async function (req, res, next) {
-  try {
+// router.get("/book/:bookid/chapter/" ,async function (req, res, next) {
+//   try {
 
-    let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
-    join publisher using (pub_id) where book_id = ${req.params.bookid}`)
-    let [chapter, fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
-    let [tag, fields2] = await pool.query(`SELECT  book_type_name as 'tag', book_name FROM project.book join author using (author_id)
-    join publisher using (pub_id) join book_with_type using (book_id) join book_type using (book_type_id) where book_id =  ${req.params.bookid}`)
+//     let [book, _] = await pool.query(`SELECT *, concat(author_fn,' ',author_ln) as 'author_name' FROM project.book join author using (author_id)
+//     join publisher using (pub_id) where book_id = ${req.params.bookid}`)
+//     let [chapter, fields] = await pool.query(`SELECT * FROM chapter where book_id = ${req.params.bookid}`)
+//     let [tag, fields2] = await pool.query(`SELECT  book_type_name as 'tag', book_name FROM project.book join author using (author_id)
+//     join publisher using (pub_id) join book_with_type using (book_id) join book_type using (book_type_id) where book_id =  ${req.params.bookid}`)
 
-    return res.json({
-      book: book,
-      chapter: chapter,
-      tag: tag
-    });
-  } catch (err) {
-    return next(err)
-  }
-});
+//     return res.json({
+//       book: book,
+//       chapter: chapter,
+//       tag: tag
+//     });
+//   } catch (err) {
+//     return next(err)
+//   }
+// });
 
 exports.router = router;

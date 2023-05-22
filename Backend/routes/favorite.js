@@ -4,12 +4,14 @@ const { isLoggedIn } = require("../middlewares");
 
 router = express.Router();
 
-router.post('/favorite', isLoggedIn, async function (req, res, next) {
+router.post('/favorite/:bookid', isLoggedIn, async function (req, res, next) {
 
   const conn = await pool.getConnection();
   await conn.beginTransaction();
 
-  const bookid = req.body.book_id;
+  console.log(req.params.bookid)
+  console.log(req.user.user_id)
+  const bookid = req.params.bookid
 
   try {
     // Check if the book is already in the customer's favorites
@@ -25,7 +27,7 @@ router.post('/favorite', isLoggedIn, async function (req, res, next) {
         INSERT INTO favorite (book_id, user_id)
         VALUES (?, ?)
       `;
-      await conn.query(addFavoriteQuery, [bookid, req.params.customerid]);
+      await conn.query(addFavoriteQuery, [bookid, req.user.user_id]);
 
      return res.status(200).json({ message: 'Book added to favorites' });
     }

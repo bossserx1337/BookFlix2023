@@ -50,7 +50,7 @@
     </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "/plugins/axios";
 import Swal from "sweetalert2";
 export default {
     data() {
@@ -136,7 +136,7 @@ export default {
     },
     async created() {
         try {
-            const packages = await axios.get("http://localhost:3001/nonapprove");
+            const packages = await axios.get("/nonapprove");
             this.packages = packages.data.packages;
             console.log(this.packages);
         } catch (error) {

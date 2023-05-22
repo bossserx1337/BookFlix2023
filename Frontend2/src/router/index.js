@@ -102,6 +102,7 @@ router.beforeEach((to, from, next) => {
           if (to.meta.rdy && rdy) {
             next({ path: '/' })
           }
+        
 
 
     }
