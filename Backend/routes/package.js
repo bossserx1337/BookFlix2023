@@ -3,7 +3,8 @@ const pool = require('../config');
 
 const path = require("path")
 const router = express.Router();
-const multer = require('multer')
+const multer = require('multer');
+const { isLoggedIn } = require('../middlewares');
 // SET STORAGE
 var storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -47,30 +48,38 @@ router.post('/packages', async (req, res, next) => {
     conn.release();
   }
 });
-router.post('/buypackage', upload.single('bill_image'), async function (req, res, next) {
+router.post('/buypackage', isLoggedIn ,upload.single('bill_image'), async function (req, res, next) {
   const file = req.file;
   if (!file) {
     const error = new Error("Please upload a file");
     error.httpStatusCode = 400;
     return next(error);
   }
-  console.log(req.body)
+  
   const packid = req.body.packid;
-  const userid = req.body.userid;
   const image = "/uploads/" + req.file.filename;
-  const mydate = packid == 1 ? "DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH)" : packid == 2 ? "DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 6 MONTH)" : "DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 12 MONTH)";
-
+  
+  let mydate;
+  if (packid == 1) {
+    mydate = 'DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 MONTH)';
+  } else if (packid == 2) {
+    mydate = 'DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 6 MONTH)';
+  } else {
+    mydate = 'DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 12 MONTH)';
+  }
+  
   const conn = await pool.getConnection()
   // Begin transaction
   await conn.beginTransaction();
   try {
+    const response_wt = await conn.query("update user set user_status = 'WT' where user_id = ?", req.user.user_id)
     const results = await conn.query(
-      'INSERT INTO buy_package(pack_id,user_id, pay_bill, pack_start, pack_end) VALUES(?, ?, ?, CURRENT_TIMESTAMP(), ?)',
-      [packid, userid, image , mydate]
+      'INSERT INTO buy_package(pack_id, user_id, pay_bill, pack_start, pack_end) VALUES (?, ?, ?, CURRENT_TIMESTAMP(), ' + mydate + ')',
+      [packid, req.user.user_id, image]
     );
-
+  
     await conn.commit();
-
+  
     res.send('success!');
   } catch (err) {
     await conn.rollback();
@@ -87,6 +96,5 @@ router.get('/buypackage', async (req, res, next) => {
     return next(err);
   }
 });
-
 exports.router = router;
 

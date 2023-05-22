@@ -77,8 +77,8 @@ router.post('/addpub', async function (req, res, next) {
     await PublisherSchema.validateAsync(req.body, { abortEarly: false })
     console.log(req.body)
 } catch (err) {
-    console.log(err)
-    return res.status(400).json(err.toString())
+    console.log(err.message)
+    return res.status(400).json(err.message)
 }
   console.log(req.body)
   const pubname = req.body.pubname;
@@ -114,7 +114,7 @@ router.post('/addauthor', async function (req, res, next) {
     console.log(req.body)
 } catch (err) {
     console.log(err)
-    return res.status(400).json(err.toString())
+    return res.status(400).json(err.message)
 }
   console.log(req.body)
   const authfname = req.body.authfname;
@@ -144,6 +144,43 @@ router.post('/addauthor', async function (req, res, next) {
   }
 });
 
+router.post('/addtype', async function (req, res, next) {
+
+  const bookid = req.body.bookid;
+  const booktypeid = req.body.booktypeid;
+
+
+  const conn = await pool.getConnection()
+  // Begin transaction
+  await conn.beginTransaction();
+
+  try {
+    let check1 = await conn.query(
+      "select * from book_with_type where book_id  = ? and book_type_id = ?  ",
+      [bookid,booktypeid]
+    )
+    console.log(check1[0])
+    if ((check1[0].length == 0)) {
+      await conn.query(
+        "INSERT INTO book_with_type (book_id, book_type_id) values(?,?)",
+        [bookid,booktypeid])
+    }
+    else{
+      return res.status(401).send('This Tags alrdy in Book')
+    }
+
+
+
+    await conn.commit()
+    res.send("success!");
+  } catch (err) {
+    await conn.rollback();
+    next(err);
+  } finally {
+    console.log('finally')
+    conn.release();
+  }
+});
 
 
 
@@ -153,6 +190,15 @@ router.delete('/book/:bookid', async (req, res, next) => {
     const [rows, fields] = await pool.query('DELETE FROM book WHERE book_id = ?', req.params.bookid);
     await pool.query('SET FOREIGN_KEY_CHECKS = 1')
     return res.status(200).json({ Book : rows});
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get('/nonapprove', async (req, res, next) => {
+  try {
+    const [rows, fields] = await pool.query("SELECT pay_id, pack_id, user_id, user_status,pay_bill FROM project.buy_package join user  using (user_id) where user_status = 'WT' and user_role != 'admin';");
+    return res.json({ packages: rows });
   } catch (err) {
     return next(err);
   }

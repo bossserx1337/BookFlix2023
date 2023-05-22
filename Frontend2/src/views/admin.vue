@@ -18,6 +18,8 @@
           class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">👨 Add Author</button>
         <button data-modal-target="defaultModal" data-modal-toggle="defaultModal"
           class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">🕮 Add Book</button>
+          <button data-modal-target="addTypeModal" data-modal-toggle="addTypeModal"
+          class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">📰 Add Type</button>
         <button data-modal-target="addChapterModal" data-modal-toggle="addChapterModal"
           class="px-4 py-2 rounded-md bg-sky-500 text-sky-100 hover:bg-sky-600 mr-5">🕮 Add Chapter</button>
         <button data-modal-target="removeChapterModal" data-modal-toggle="removeChpaterModal"
@@ -25,7 +27,60 @@
 
 
 
+          <div id="addTypeModal" tabindex="-1" aria-hidden="true"
+          class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+          <div class="relative w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <!-- Modal header -->
+              <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-black">
+                  📰 Add Type
+                </h3>
+                <button type="button"
+                  class="text-gray-400 bg-white hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-hide="addChapterModal">
+                  <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="sr-only">Close modal</span>
+                </button>
+              </div>
+              <!-- Modal body -->
+              <form @submit.prevent="addtype">
+                <div class="mx-4">
+                  <div class="mb-4">
+                    <label class="block font-bold mb-2">Book</label>
+                    <select name="book_id" v-model="selectedBook">
+                      <option v-for="book in books" :value="book.book_id" :key="book.book_id">{{ book.book_name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label class="block font-bold mb-2">Choose Type</label>
+                    <select name="book_id" v-model="selectedtag">
+                      <option value="" selected>Select Type</option>
+                      <option v-for="mytag in tags" :value="mytag.book_type_id" :key="mytag.book_type_id">{{mytag.tag }}
+                      </option>
+                    </select>
+                  </div>
+                  
+                 
+                </div>
+                <div class="mt-8 mx-4">
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-5" type="submit">
+                    Add Type
+                  </button>
+                </div>
+              </form>
+              <!-- Modal footer -->
 
+            </div>
+          </div>
+        </div>
         <div id="addpublisherModal" tabindex="-1" aria-hidden="true"
           class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
           <div class="relative w-full max-w-2xl max-h-full">
@@ -465,7 +520,9 @@ export default {
       selectedBook: '',
       selectedBookid: '',
       selectChapter: '',
-      chapters: []
+      chapters: [],
+    tags : null,
+    selectedtag : ''
     }
   },
   computed: {
@@ -516,6 +573,34 @@ export default {
           console.log(error.message);
         });
     },
+    addtype() {
+      var formData = new FormData();
+      formData.append("bookid", this.selectedBook)
+      formData.append("booktypeid", this.selectedtag)
+
+
+      console.log(formData);
+      axios.post('http://localhost:3001/addtype', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        console.log(response)
+        Swal.fire(
+          response.data,
+          'Add Type Already',
+          'success'
+        ).then(response => location.reload())
+      })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `${error.response.data}`,
+          })
+          console.log(error);
+        });
+    },
     addPub() {
       var formData = new FormData();
       formData.append("pubname", this.pubname)
@@ -540,9 +625,9 @@ export default {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something went wrong!',
+            text: `${error.response.data}`,
           })
-          console.log(error.message);
+          console.log(error);
         });
     },
     addAuthor() {
@@ -569,7 +654,7 @@ export default {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something went wrong!',
+            text: `${error.response.data}`,
           })
           console.log(error.message);
         });
@@ -603,7 +688,7 @@ export default {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something went wrong!',
+            text: `${error.response.data}`,
           })
           console.log(error.message);
         });
@@ -706,6 +791,7 @@ export default {
     axios.get("/book")
       .then((response) => {
         this.books = response.data.book;
+        this.tags = response.data.tag;
 
       })
       .catch((err) => {

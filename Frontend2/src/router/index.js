@@ -15,7 +15,7 @@ const routes = [
     {
         name: 'Home',
         path: '/',
-        meta: { login: true },
+        meta: { login: true , notrdy : true},
         component: Home
     },
     {
@@ -26,7 +26,7 @@ const routes = [
     {
         name: 'Package',
         path: '/package',
-        meta: { login: true },
+        meta: { login: true, rdy : true},
         component: Package
     },
     {
@@ -43,13 +43,13 @@ const routes = [
     {
         path: '/book/:bookid/chapter/',
         name: 'DetailBook',
-        meta: { login: true },
+        meta: { login: true, rdy : true },
         component: DetailBook
     },
     {
         path: '/book/:bookid/chapter/:chapterid',
         name: 'DetailChapter',
-        meta: { login: true },
+        meta: { login: true , rdy : true},
         component: DetailChapter
     },
     {
@@ -94,6 +94,15 @@ router.beforeEach((to, from, next) => {
         if (to.meta.admin && !isAdmin) {
             next({ path: '/' })
           }
+        const notready =  JSON.parse(localStorage.getItem('userInfo')).user_status == 'NR' 
+        const rdy =  JSON.parse(localStorage.getItem('userInfo')).user_status == 'R' || JSON.parse(localStorage.getItem('userInfo')).user_status == 'WT'
+        if (to.meta.notrdy && notready && !isAdmin) {
+            next({ path: '/package' })
+          }
+          if (to.meta.rdy && rdy) {
+            next({ path: '/' })
+          }
+
 
     }
 

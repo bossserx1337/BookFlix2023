@@ -1,9 +1,10 @@
 const express = require("express");
 const pool = require("../config");
+const { isLoggedIn } = require("../middlewares");
 
 router = express.Router();
 
-router.post('/favorite/:customerid', async function (req, res, next) {
+router.post('/favorite', isLoggedIn, async function (req, res, next) {
 
   const conn = await pool.getConnection();
   await conn.beginTransaction();
@@ -13,7 +14,7 @@ router.post('/favorite/:customerid', async function (req, res, next) {
   try {
     // Check if the book is already in the customer's favorites
     const checkFavoriteQuery = `      SELECT COUNT(*) as count      FROM favorite      WHERE book_id = ? AND user_id = ?    `;
-    const [rows, fields] = await conn.query(checkFavoriteQuery, [bookid, req.params.customerid]);
+    const [rows, fields] = await conn.query(checkFavoriteQuery, [bookid, req.user.user_id]);
 
     // If the book is already in the customer's favorites, return a response indicating that
     if (rows[0].count > 0) {
@@ -38,12 +39,12 @@ router.post('/favorite/:customerid', async function (req, res, next) {
   }
 });
 
-router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
+router.delete('/favorite/:bookid',  isLoggedIn,async function (req, res, next) {
   const conn = await pool.getConnection()
   // Begin transaction
   await conn.beginTransaction();
   try {
-    await conn.query("DELETE FROM favorite WHERE book_id = ? and user_id = ?;",   [req.params.bookid, req.params.customerid])
+    await conn.query("DELETE FROM favorite WHERE book_id = ? and user_id = ?;",   [req.params.bookid, req.user.user_id])
     return res.status(200).send("success!");
   } catch (err) {
     console.log(err)
@@ -56,10 +57,10 @@ router.delete('/favorite/:customerid/:bookid', async function (req, res, next) {
   }
 })
 
-router.get("/favorite/:customerid", async function (req, res, next) {
+router.get("/favorite",isLoggedIn, async function (req, res, next) {
   try {
 
-    let [rows , fields] = await pool.query(`SELECT * FROM favorite join book using(book_id) where  user_id = ?`, req.params.customerid)
+    let [rows , fields] = await pool.query(`SELECT * FROM favorite join book using(book_id) where  user_id = ?`, req.user.user_id)
 
     return res.json( {
       favorite: rows

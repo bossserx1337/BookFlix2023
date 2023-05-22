@@ -8,7 +8,7 @@
           class="h-[275px] w-40 bg-base-100 flex flex-col justify-end transition-transform transform hover:scale-105 hover:shadow-xl">
 
 
-          <div v-if="userinfo.user_status == 'R'">
+          <div v-if="userinfo.user_status == 'R' || userinfo.user_role == 'admin'">
             <router-link :to="`/book/${book.book_id}/chapter/`">
               <figure><img :src="book.book_img" /></figure>
             </router-link>
@@ -91,7 +91,7 @@ export default {
   methods: {
     async addToFavorites(book) {
       try {
-        const postResponse = await axios.post(`/favorite/${this.userinfo.user_id}`, { book_id: book.book_id });
+        const postResponse = await axios.post(`/favorite`);
         // console.log(postResponse);
         this.getFav(); // เรียกใช้ฟังก์ชัน getFav เพื่ออัปเดตรายการหนังสือโปรด
         Swal.fire({
@@ -118,7 +118,7 @@ export default {
 
     async getFav() {
       try {
-        const favoriteResponse = await axios.get(`/favorite/${this.userinfo.user_id}`);
+        const favoriteResponse = await axios.get(`/favorite`);
         this.favorites = favoriteResponse.data.favorite; // อัปเดตตัวแปร favorites เมื่อได้รับข้อมูลหนังสือโปรดใหม่
       } catch (error) {
         console.log(error);

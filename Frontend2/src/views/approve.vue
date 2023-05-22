@@ -9,7 +9,9 @@
                                 <th scope="col" class="px-6 py-4">Payment ID</th>
                                 <th scope="col" class="px-6 py-4">User ID</th>
                                 <th scope="col" class="px-6 py-4">Bill Image</th>
+                                <th scope="col" class="px-6 py-4">Status</th>
                                 <th scope="col" class="px-6 py-4">Handle</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -25,6 +27,9 @@
                                     <button type="button" @click="checkImage(pack)">
                                         {{ pack.pay_bill }}
                                     </button>
+                                </td>
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    {{ pack.user_status}}
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4 text-center flex gap-x-3 justify-center">
                                     <div class="bg-green-400 rounded-xl p-2 font-normal hover:bg-green-600 hover:text-gray-300 hover:drop-shadow-xl"
@@ -81,20 +86,7 @@ export default {
                 const response = await axios.put("http://localhost:3001/customer", {
                     customerid: customer_id,
                     payid: pay_id,
-                });
-                if (response.status == 200) {
-                    try {
-                        const response = await axios.delete(
-                            `http://localhost:3001/buypackage/${pay_id}`,
-                            {
-                                payid: pay_id,
-                            }
-                        );
-                        if (response.status == 200) {
-                            location.reload();
-                        }
-                    } catch (error) { }
-                }
+                }).then(location.reload())
             } catch (error) { }
         },
         checkImage(pack) {
@@ -144,7 +136,7 @@ export default {
     },
     async created() {
         try {
-            const packages = await axios.get("http://localhost:3001/buypackage");
+            const packages = await axios.get("http://localhost:3001/nonapprove");
             this.packages = packages.data.packages;
             console.log(this.packages);
         } catch (error) {

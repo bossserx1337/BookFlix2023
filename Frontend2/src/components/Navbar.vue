@@ -10,6 +10,12 @@
                 </router-link>
             </div>
             <div v-if="this.$store.getters.getUserInfo" class="hidden md:block relative">
+                <button
+                    class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
+                    <span v-if="status == 'WT'" class="text-yellow-500">Status : Wait for Approve</span>
+                    <span v-if="status == 'R'" class="text-green-700">Status : Ready</span>
+                
+                </button>
 
                 <button @click="isOpen = !isOpen"
                     class="bg-white hover:bg-slate-300 text-gray-700 font-bold py-2 px-4 rounded inline-flex items-center">
@@ -50,6 +56,7 @@ export default {
         return {
             userinfo : null,
             isOpen: false,
+            status : '',
         };
     },
     methods: {
@@ -61,6 +68,7 @@ export default {
     async mounted() {
     try {
       this.userinfo = this.$store.getters.getUserInfo;
+      this.status = this.userinfo.user_status
     } catch (err) {
       console.log(err);
     }

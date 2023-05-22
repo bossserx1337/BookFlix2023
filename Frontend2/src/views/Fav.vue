@@ -30,7 +30,7 @@ export default {
     async removeFromFavorites(book_id) {
 
       try {
-        await axios.delete(`favorite/${this.userinfo.user_id}/${book_id}`);
+        await axios.delete(`favorite/${book_id}`);
         this.getFav();
         Swal.fire({
           position: 'top-end',
@@ -46,7 +46,7 @@ export default {
     async getFav() {
       try {
 
-        const favoriteResponse = await axios.get(`/favorite/${this.userinfo.user_id}`);
+        const favoriteResponse = await axios.get(`/favorite`);
         this.favorite = favoriteResponse.data.favorite;
         console.log(this.favorite)
       } catch (error) {

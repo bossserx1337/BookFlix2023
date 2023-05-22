@@ -111,10 +111,7 @@ export default {
  async created() {
   const token = localStorage.getItem('token')
       if (token) {
-        axios.get('/user/me').then(res => {
-        this.userinfo = res.data
-        console.log(this.userinfo)
-      })
+        this.userinfo = { ...this.$store.getters.getUserInfo }
   }
   const packages =  await axios.get('/packages');
       console.log(packages.data)
